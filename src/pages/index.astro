@@ -1,40 +1,86 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 ---
 
-<html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Mi Sitio Web</title>
-		<style>
-			body {
-				font-family: system-ui, -apple-system, sans-serif;
-				max-width: 800px;
-				margin: 0 auto;
-				padding: 2rem;
-				line-height: 1.6;
-				color: #333;
-			}
-			h1 { color: #2563eb; }
-			.card {
-				background: #f8fafc;
-				border: 1px solid #e2e8f0;
-				border-radius: 8px;
-				padding: 1.5rem;
-				margin: 1rem 0;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>¡Hola, Mundo!</h1>
-		<p>Mi sitio web desplegado con <strong>Astro</strong> y <strong>GitHub Pages</strong>.</p>
-		<div class="card">
-			<h2>🚀 Próximamente</h2>
-			<p>Este sitio está en construcción. Vuelve pronto para ver el contenido.</p>
-		</div>
-	</body>
-</html>
+<Layout>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="noise-overlay"></div>
+  
+  <Navbar />
+  <main>
+    <Hero />
+    <About />
+    <Projects />
+    <Skills />
+    <Contact />
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorDot = document.getElementById('cursorDot');
+  
+  document.addEventListener('mousemove', (e) => {
+    if (cursor && cursorDot) {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+      cursorDot.style.left = `${e.clientX}px`;
+      cursorDot.style.top = `${e.clientY}px`;
+    }
+  });
+
+  // Cursor hover effect on interactive elements
+  const interactiveElements = document.querySelectorAll('a, button, input, textarea, .project-card, .glass-card');
+  
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor?.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor?.classList.remove('hover'));
+  });
+
+  // Scroll animations
+  const animateElements = document.querySelectorAll('.animate-on-scroll');
+  
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        scrollObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  animateElements.forEach(el => scrollObserver.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (this: HTMLElement, e: Event) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href') || '');
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  main {
+    position: relative;
+  }
+</style>
