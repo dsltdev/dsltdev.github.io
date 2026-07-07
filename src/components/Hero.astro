@@ -21,7 +21,8 @@
       <h2 class="hero-title animate-on-scroll">
         <span class="title-word">Full Stack</span>
         <span class="title-divider">/</span>
-        <span class="title-word accent">Creative Developer</span>
+        <span class="title-word accent typing-text" id="typingText">Creative Developer</span>
+        <span class="cursor-blink">|</span>
       </h2>
       <p class="hero-description animate-on-scroll">
         Creo experiencias digitales que fusionan <span class="highlight">diseño innovador</span> 
@@ -209,6 +210,17 @@
 
   .title-word.accent {
     color: var(--accent-1);
+  }
+
+  .cursor-blink {
+    color: var(--accent-1);
+    animation: blink 1s step-end infinite;
+    font-weight: 300;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
 
   .hero-description {
@@ -542,4 +554,65 @@
   }, observerOptions);
 
   counters.forEach(counter => counterObserver.observe(counter));
+
+  // Typing animation
+  const typingElement = document.getElementById('typingText');
+  if (typingElement) {
+    const texts = ['Creative Developer', 'UI/UX Designer', 'Problem Solver', 'Tech Enthusiast'];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let isPaused = false;
+
+    function type() {
+      const currentText = texts[textIndex];
+      
+      if (isPaused) {
+        setTimeout(type, 2000);
+        isPaused = false;
+        isDeleting = true;
+        return;
+      }
+
+      if (isDeleting) {
+        typingElement.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingElement.textContent = currentText.substring(0, charIndex + 1);
+        charIndex++;
+      }
+
+      let typeSpeed = isDeleting ? 50 : 100;
+
+      if (!isDeleting && charIndex === currentText.length) {
+        typeSpeed = 2000;
+        isPaused = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        textIndex = (textIndex + 1) % texts.length;
+      }
+
+      setTimeout(type, typeSpeed);
+    }
+
+    setTimeout(type, 1500);
+  }
+
+  // Magnetic buttons
+  const magneticButtons = document.querySelectorAll('.btn-primary, .btn-secondary');
+  
+  magneticButtons.forEach((btn) => {
+    btn.addEventListener('mousemove', (e: Event) => {
+      const mouseEvent = e as MouseEvent;
+      const rect = (btn as HTMLElement).getBoundingClientRect();
+      const x = mouseEvent.clientX - rect.left - rect.width / 2;
+      const y = mouseEvent.clientY - rect.top - rect.height / 2;
+      
+      (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      (btn as HTMLElement).style.transform = 'translate(0, 0)';
+    });
+  });
 </script>

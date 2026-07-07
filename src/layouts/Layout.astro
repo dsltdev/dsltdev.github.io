@@ -221,12 +221,107 @@ const {
     border-radius: 20px;
     backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(135deg, transparent, var(--accent-1), var(--accent-2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glass-card:hover::before {
+    opacity: 1;
   }
 
   .glass-card:hover {
-    border-color: var(--accent-1);
+    border-color: transparent;
     box-shadow: var(--shadow-glow);
     transform: translateY(-5px);
+  }
+
+  .animated-border {
+    position: relative;
+  }
+
+  .animated-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from var(--angle, 0deg), #6366f1, #8b5cf6, #d946ef, #06b6d4, #6366f1);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: rotate-border 4s linear infinite;
+  }
+
+  .animated-border:hover::after {
+    opacity: 1;
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotate-border {
+    to { --angle: 360deg; }
+  }
+
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glow-orb-1 {
+    width: 600px;
+    height: 600px;
+    background: #6366f1;
+    top: -200px;
+    right: -200px;
+    animation: float-orb 20s ease-in-out infinite;
+  }
+
+  .glow-orb-2 {
+    width: 500px;
+    height: 500px;
+    background: #8b5cf6;
+    bottom: -150px;
+    left: -150px;
+    animation: float-orb 25s ease-in-out infinite reverse;
+  }
+
+  .glow-orb-3 {
+    width: 400px;
+    height: 400px;
+    background: #d946ef;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: float-orb 30s ease-in-out infinite;
+  }
+
+  @keyframes float-orb {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -50px); }
+    50% { transform: translate(-30px, 30px); }
+    75% { transform: translate(40px, 20px); }
   }
 
   @media (max-width: 768px) {

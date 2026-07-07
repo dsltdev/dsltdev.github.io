@@ -7,12 +7,19 @@ import Projects from '../components/Projects.astro';
 import Skills from '../components/Skills.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
 ---
 
 <Layout>
+  <Loader />
+  <ScrollProgress />
   <div class="cursor" id="cursor"></div>
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="noise-overlay"></div>
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
   
   <Navbar />
   <main>
