@@ -7,20 +7,9 @@ import Projects from '../components/Projects.astro';
 import Skills from '../components/Skills.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
-import Loader from '../components/Loader.astro';
-import ScrollProgress from '../components/ScrollProgress.astro';
 ---
 
 <Layout>
-  <Loader />
-  <ScrollProgress />
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="noise-overlay"></div>
-  <div class="glow-orb glow-orb-1"></div>
-  <div class="glow-orb glow-orb-2"></div>
-  <div class="glow-orb glow-orb-3"></div>
-  
   <Navbar />
   <main>
     <Hero />
@@ -33,44 +22,6 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 </Layout>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const cursorDot = document.getElementById('cursorDot');
-  
-  document.addEventListener('mousemove', (e) => {
-    if (cursor && cursorDot) {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-      cursorDot.style.left = `${e.clientX}px`;
-      cursorDot.style.top = `${e.clientY}px`;
-    }
-  });
-
-  // Cursor hover effect on interactive elements
-  const interactiveElements = document.querySelectorAll('a, button, input, textarea, .project-card, .glass-card');
-  
-  interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => cursor?.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor?.classList.remove('hover'));
-  });
-
-  // Scroll animations
-  const animateElements = document.querySelectorAll('.animate-on-scroll');
-  
-  const scrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        scrollObserver.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
-
-  animateElements.forEach(el => scrollObserver.observe(el));
-
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (this: HTMLElement, e: Event) {
@@ -85,9 +36,3 @@ import ScrollProgress from '../components/ScrollProgress.astro';
     });
   });
 </script>
-
-<style is:global>
-  main {
-    position: relative;
-  }
-</style>

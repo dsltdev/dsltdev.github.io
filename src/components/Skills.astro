@@ -1,98 +1,55 @@
 ---
-const skillCategories = [
-  {
-    title: "Frontend",
-    icon: "🎨",
-    skills: [
-      { name: "React/Next.js", level: 95 },
-      { name: "TypeScript", level: 90 },
-      { name: "Vue.js", level: 85 },
-      { name: "Tailwind CSS", level: 92 },
-      { name: "Astro", level: 88 }
-    ]
-  },
-  {
-    title: "Backend",
-    icon: "⚙️",
-    skills: [
-      { name: "Node.js", level: 92 },
-      { name: "Python", level: 88 },
-      { name: "PostgreSQL", level: 85 },
-      { name: "MongoDB", level: 82 },
-      { name: "GraphQL", level: 80 }
-    ]
-  },
-  {
-    title: "DevOps & Tools",
-    icon: "🚀",
-    skills: [
-      { name: "Docker", level: 85 },
-      { name: "AWS/GCP", level: 78 },
-      { name: "Git", level: 95 },
-      { name: "CI/CD", level: 88 },
-      { name: "Linux", level: 82 }
-    ]
-  }
-];
-
-const techStack = [
-  { name: "React", icon: "⚛️" },
-  { name: "Node.js", icon: "🟢" },
-  { name: "TypeScript", icon: "📘" },
-  { name: "Python", icon: "🐍" },
-  { name: "Docker", icon: "🐳" },
-  { name: "AWS", icon: "☁️" },
-  { name: "PostgreSQL", icon: "🐘" },
-  { name: "Git", icon: "📦" }
+const skills = [
+  { name: "React / Next.js", level: 95 },
+  { name: "TypeScript", level: 90 },
+  { name: "Node.js", level: 92 },
+  { name: "Python", level: 85 },
+  { name: "PostgreSQL", level: 85 },
+  { name: "Docker", level: 80 },
+  { name: "AWS", level: 75 },
+  { name: "Git", level: 95 }
 ];
 ---
 
 <section id="skills" class="skills">
   <div class="container">
-    <p class="section-subtitle animate-on-scroll">// Skills & Tecnologías</p>
-    <h2 class="section-title animate-on-scroll">Mi <span class="glow-text">Stack Tecnológico</span></h2>
-    
-    <div class="skills-wrapper">
-      <div class="skills-grid">
-        {skillCategories.map((category, catIndex) => (
-          <div 
-            class="skill-category glass-card animate-on-scroll"
-            style={`animation-delay: ${catIndex * 0.1}s`}
-          >
-            <div class="category-header">
-              <span class="category-icon">{category.icon}</span>
-              <h3 class="category-title">{category.title}</h3>
-            </div>
-            
-            <div class="skills-list">
-              {category.skills.map((skill, skillIndex) => (
-                <div class="skill-item" style={`animation-delay: ${skillIndex * 0.05}s`}>
-                  <div class="skill-info">
-                    <span class="skill-name">{skill.name}</span>
-                    <span class="skill-percentage">{skill.level}%</span>
-                  </div>
-                  <div class="skill-bar">
-                    <div 
-                      class="skill-progress" 
-                      style={`--progress: ${skill.level}%`}
-                      data-progress={skill.level}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+    <div class="skills-grid">
+      <div class="skills-left">
+        <p class="section-label">// 003</p>
+        <h2 class="section-title">Skills</h2>
+        <p class="section-subtitle">
+          Tecnologías que uso día a día para construir productos.
+        </p>
       </div>
 
-      <div class="tech-marquee animate-on-scroll">
-        <div class="marquee-track">
-          {[...techStack, ...techStack, ...techStack].map(tech => (
-            <div class="tech-item">
-              <span class="tech-icon">{tech.icon}</span>
-              <span class="tech-name">{tech.name}</span>
+      <div class="skills-right">
+        <div class="skills-list">
+          {skills.map(skill => (
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">{skill.name}</span>
+                <span class="skill-percentage">{skill.level}%</span>
+              </div>
+              <div class="skill-bar">
+                <div 
+                  class="skill-fill" 
+                  style={`width: ${skill.level}%`}
+                ></div>
+              </div>
             </div>
           ))}
+        </div>
+
+        <div class="skills-extra">
+          <p class="extra-label">También trabajo con:</p>
+          <div class="extra-tags">
+            <span class="tag">Vue.js</span>
+            <span class="tag">GraphQL</span>
+            <span class="tag">Redis</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Tailwind</span>
+            <span class="tag">Linux</span>
+          </div>
         </div>
       </div>
     </div>
@@ -100,197 +57,80 @@ const techStack = [
 </section>
 
 <style>
-  .skills {
-    background: var(--bg-secondary);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .skills::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
-  }
-
-  .skills-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    margin-top: 3rem;
-  }
-
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-
-  .skill-category {
-    padding: 2rem;
-  }
-
-  .category-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .category-icon {
-    font-size: 2rem;
-  }
-
-  .category-title {
-    font-size: 1.3rem;
-    font-weight: 600;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
   }
 
   .skills-list {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
   .skill-item {
-    opacity: 0;
-    animation: slide-up 0.5s ease forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .skill-info {
+  .skill-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    align-items: center;
   }
 
   .skill-name {
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .skill-percentage {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--accent-1);
+    font-size: 0.8rem;
+    color: var(--gray);
   }
 
   .skill-bar {
-    height: 6px;
-    background: var(--bg-tertiary);
-    border-radius: 3px;
-    overflow: hidden;
+    height: 4px;
+    background: var(--light-gray);
+    border: 1px solid var(--black);
   }
 
-  .skill-progress {
+  .skill-fill {
     height: 100%;
-    width: 0;
-    background: var(--gradient-1);
-    border-radius: 3px;
-    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    background: var(--black);
   }
 
-  .skill-progress::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent-1);
-    opacity: 0;
-    transition: opacity 0.3s ease 1.5s;
+  .skills-extra {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: var(--border);
   }
 
-  .skill-progress.animated {
-    width: var(--progress);
+  .extra-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 1rem;
   }
 
-  .skill-progress.animated::after {
-    opacity: 1;
-  }
-
-  .tech-marquee {
-    overflow: hidden;
-    padding: 2rem 0;
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-  }
-
-  .marquee-track {
+  .extra-tags {
     display: flex;
-    gap: 3rem;
-    animation: marquee 30s linear infinite;
-    width: max-content;
-  }
-
-  .tech-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    white-space: nowrap;
-    transition: all 0.3s ease;
-  }
-
-  .tech-item:hover {
-    border-color: var(--accent-1);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
-  }
-
-  .tech-icon {
-    font-size: 1.5rem;
-  }
-
-  .tech-name {
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-33.33%); }
-  }
-
-  @media (max-width: 1024px) {
-    .skills-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   @media (max-width: 768px) {
     .skills-grid {
       grid-template-columns: 1fr;
+      gap: 2rem;
     }
   }
 </style>
-
-<script>
-  // Animate skill bars on scroll
-  const skillBars = document.querySelectorAll('.skill-progress');
-  
-  const skillObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const bar = entry.target as HTMLElement;
-        setTimeout(() => {
-          bar.classList.add('animated');
-        }, 200);
-        skillObserver.unobserve(bar);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  skillBars.forEach(bar => skillObserver.observe(bar));
-</script>

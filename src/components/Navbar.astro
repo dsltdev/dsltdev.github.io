@@ -3,32 +3,17 @@
 
 <nav class="navbar">
   <div class="nav-container">
-    <a href="/" class="nav-logo">
-      <span class="logo-bracket">{'{'}</span>
-      <span class="logo-text">DL</span>
-      <span class="logo-bracket">{'}'}</span>
-    </a>
+    <a href="/" class="nav-logo">DL</a>
     
     <div class="nav-links">
-      <a href="#home" class="nav-link active" data-section="home">Inicio</a>
-      <a href="#about" class="nav-link" data-section="about">Sobre mí</a>
-      <a href="#projects" class="nav-link" data-section="projects">Proyectos</a>
-      <a href="#skills" class="nav-link" data-section="skills">Skills</a>
-      <a href="#contact" class="nav-link" data-section="contact">Contacto</a>
+      <a href="#home" class="nav-link">Inicio</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#contact" class="nav-link">Contact</a>
     </div>
 
-    <button class="theme-toggle" aria-label="Toggle theme">
-      <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="5"></circle>
-        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-      </svg>
-      <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-      </svg>
-    </button>
-
     <button class="mobile-menu-btn" aria-label="Menu">
-      <span></span>
       <span></span>
       <span></span>
     </button>
@@ -43,20 +28,12 @@
     right: 0;
     z-index: 1000;
     padding: 1rem 5%;
-    background: rgba(5, 5, 8, 0.6);
-    backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--border-subtle);
-    transition: all var(--transition-base);
-  }
-
-  .navbar.scrolled {
-    padding: 0.75rem 5%;
-    background: rgba(5, 5, 8, 0.85);
-    box-shadow: var(--shadow-md);
+    background: var(--white);
+    border-bottom: var(--border);
   }
 
   .nav-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -65,113 +42,31 @@
 
   .nav-logo {
     font-family: var(--font-mono);
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    transition: all var(--transition-base);
-    position: relative;
-  }
-
-  .nav-logo::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-button);
-    transition: width var(--transition-base);
+    letter-spacing: -0.05em;
   }
 
   .nav-logo:hover {
-    transform: scale(1.05);
-  }
-
-  .nav-logo:hover::after {
-    width: 100%;
-  }
-
-  .logo-bracket {
-    color: var(--accent-primary);
-    text-shadow: 0 0 20px var(--accent-glow);
-  }
-
-  .logo-text {
-    background: var(--gradient-text);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradient-shift 4s ease infinite;
+    color: var(--red);
   }
 
   .nav-links {
     display: flex;
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   .nav-link {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    position: relative;
-    padding: 0.5rem 0;
-    transition: all var(--transition-base);
-    letter-spacing: 0.02em;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-button);
-    transition: all var(--transition-base);
-    transform: translateX(-50%);
-    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    transition: color 0.15s;
   }
 
   .nav-link:hover {
-    color: var(--text-primary);
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
-  }
-
-  .nav-link.active {
-    color: var(--accent-primary);
-  }
-
-  .nav-link.active::after {
-    width: 100%;
-    background: var(--accent-primary);
-  }
-
-  .theme-toggle {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 0.7rem;
-    color: var(--text-secondary);
-    cursor: none;
-    transition: all var(--transition-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-  }
-
-  .theme-toggle:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-    box-shadow: var(--shadow-glow);
-    transform: rotate(15deg);
+    color: var(--black);
   }
 
   .mobile-menu-btn {
@@ -180,50 +75,41 @@
     gap: 6px;
     background: none;
     border: none;
-    cursor: none;
-    padding: 8px;
+    cursor: pointer;
+    padding: 5px;
   }
 
   .mobile-menu-btn span {
     width: 24px;
     height: 2px;
-    background: var(--text-primary);
-    transition: all var(--transition-base);
-    border-radius: var(--radius-full);
+    background: var(--black);
+    transition: all 0.2s;
   }
 
-  .mobile-menu-btn.active span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-    background: var(--accent-primary);
+  .mobile-menu-btn.active span:first-child {
+    transform: rotate(45deg) translate(3px, 3px);
   }
 
-  .mobile-menu-btn.active span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-
-  .mobile-menu-btn.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-    background: var(--accent-primary);
+  .mobile-menu-btn.active span:last-child {
+    transform: rotate(-45deg) translate(3px, -3px);
   }
 
   @media (max-width: 768px) {
     .nav-links {
       position: fixed;
-      top: 70px;
+      top: 60px;
       left: 0;
       right: 0;
-      background: rgba(5, 5, 8, 0.98);
-      backdrop-filter: blur(20px);
+      background: var(--white);
+      border-bottom: var(--border);
       flex-direction: column;
       align-items: center;
-      padding: 2.5rem;
-      gap: 2rem;
+      padding: 2rem;
+      gap: 1.5rem;
       transform: translateY(-100%);
       opacity: 0;
       pointer-events: none;
-      transition: all var(--transition-base);
-      border-bottom: 1px solid var(--border-subtle);
+      transition: all 0.2s;
     }
 
     .nav-links.active {
@@ -235,82 +121,22 @@
     .mobile-menu-btn {
       display: flex;
     }
-
-    .theme-toggle {
-      cursor: pointer;
-    }
   }
 </style>
 
 <script>
-  const navbar = document.querySelector('.navbar');
-  const navLinks = document.querySelectorAll('.nav-link');
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinksContainer = document.querySelector('.nav-links');
-  const themeToggle = document.querySelector('.theme-toggle');
-  const sunIcon = document.querySelector('.sun-icon');
-  const moonIcon = document.querySelector('.moon-icon');
+  const navLinks = document.querySelector('.nav-links');
 
-  // Navbar scroll effect
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar?.classList.add('scrolled');
-    } else {
-      navbar?.classList.remove('scrolled');
-    }
-  });
-
-  // Active section detection
-  const sections = document.querySelectorAll('section');
-  const observerOptions = {
-    threshold: 0.3,
-    rootMargin: '-100px 0px'
-  };
-
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('data-section') === id) {
-            link.classList.add('active');
-          }
-        });
-      }
-    });
-  }, observerOptions);
-
-  sections.forEach(section => sectionObserver.observe(section));
-
-  // Mobile menu toggle
   mobileMenuBtn?.addEventListener('click', () => {
     mobileMenuBtn.classList.toggle('active');
-    navLinksContainer?.classList.toggle('active');
+    navLinks?.classList.toggle('active');
   });
 
-  // Close mobile menu on link click
-  navLinks.forEach(link => {
+  document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       mobileMenuBtn?.classList.remove('active');
-      navLinksContainer?.classList.remove('active');
+      navLinks?.classList.remove('active');
     });
-  });
-
-  // Theme toggle
-  let isDark = true;
-  themeToggle?.addEventListener('click', () => {
-    isDark = !isDark;
-    document.documentElement.style.setProperty('--bg-primary', isDark ? '#0a0a0f' : '#f8f9fa');
-    document.documentElement.style.setProperty('--bg-secondary', isDark ? '#12121a' : '#ffffff');
-    document.documentElement.style.setProperty('--bg-tertiary', isDark ? '#1a1a25' : '#e9ecef');
-    document.documentElement.style.setProperty('--text-primary', isDark ? '#ffffff' : '#1a1a2e');
-    document.documentElement.style.setProperty('--text-secondary', isDark ? '#a0a0b0' : '#6c757d');
-    document.documentElement.style.setProperty('--border-color', isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.1)');
-    
-    if (sunIcon && moonIcon) {
-      (sunIcon as HTMLElement).style.display = isDark ? 'block' : 'none';
-      (moonIcon as HTMLElement).style.display = isDark ? 'none' : 'block';
-    }
   });
 </script>

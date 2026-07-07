@@ -2,37 +2,33 @@
 const projects = [
   {
     title: "E-Commerce Platform",
-    description: "Plataforma de comercio electrónico completa con panel de administración, pasarela de pagos y dashboard de analytics en tiempo real.",
-    image: "/projects/ecommerce.jpg",
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    color: "#6366f1",
+    description: "Plataforma de comercio electrónico completa. Panel admin, pagos, analytics.",
+    tags: ["React", "Node.js", "MongoDB"],
+    year: "2024",
     link: "#",
     github: "#"
   },
   {
     title: "AI Task Manager",
-    description: "Aplicación de gestión de tareas potenciada por IA que aprende tus patrones y optimiza tu productividad automáticamente.",
-    image: "/projects/ai-tasks.jpg",
-    tags: ["Next.js", "Python", "OpenAI", "PostgreSQL"],
-    color: "#8b5cf6",
+    description: "Gestión de tareas potenciada por IA. Aprende patrones, optimiza productividad.",
+    tags: ["Next.js", "Python", "OpenAI"],
+    year: "2024",
     link: "#",
     github: "#"
   },
   {
     title: "Real-time Dashboard",
-    description: "Dashboard de análisis de datos en tiempo real con visualizaciones interactivas y alertas personalizables.",
-    image: "/projects/dashboard.jpg",
-    tags: ["Vue.js", "D3.js", "WebSocket", "Redis"],
-    color: "#d946ef",
+    description: "Dashboard de datos en tiempo real. Visualizaciones y alertas.",
+    tags: ["Vue.js", "D3.js", "WebSocket"],
+    year: "2023",
     link: "#",
     github: "#"
   },
   {
     title: "Social Media App",
-    description: "Red social móvil con sistema de feeds, stories, mensajería instantánea y sistema de recomendaciones.",
-    image: "/projects/social.jpg",
-    tags: ["React Native", "Firebase", "GraphQL"],
-    color: "#06b6d4",
+    description: "Red social móvil. Feeds, stories, mensajería instantánea.",
+    tags: ["React Native", "Firebase"],
+    year: "2023",
     link: "#",
     github: "#"
   }
@@ -41,256 +37,146 @@ const projects = [
 
 <section id="projects" class="projects">
   <div class="container">
-    <p class="section-subtitle animate-on-scroll">// Proyectos Destacados</p>
-    <h2 class="section-title animate-on-scroll">Trabajo que <span class="glow-text">Habla por Sí Solo</span></h2>
-    
+    <div class="projects-header">
+      <div>
+        <p class="section-label">// 002</p>
+        <h2 class="section-title">Proyectos</h2>
+      </div>
+      <a href="https://github.com/dsltdev" class="btn btn-secondary" target="_blank">GitHub →</a>
+    </div>
+
     <div class="projects-grid">
       {projects.map((project, index) => (
-        <article 
-          class="project-card animate-on-scroll"
-          style={`--card-color: ${project.color}; animation-delay: ${index * 0.1}s`}
-        >
-          <div class="project-image">
-            <div class="image-placeholder" style={`background: linear-gradient(135deg, ${project.color}33, ${project.color}11)`}>
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke={project.color} stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21,15 16,10 5,21"/>
-              </svg>
-            </div>
-            <div class="project-overlay">
-              <div class="overlay-content">
-                <a href={project.link} class="overlay-btn" aria-label="View project">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15,3 21,3 21,9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                </a>
-                <a href={project.github} class="overlay-btn" aria-label="View code">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
+        <article class="project-card">
+          <div class="project-number">{String(index + 1).padStart(2, '0')}</div>
           
           <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">{project.title}</h3>
+              <span class="project-year">{project.year}</span>
+            </div>
+            
+            <p class="project-description">{project.description}</p>
+            
             <div class="project-tags">
               {project.tags.map(tag => (
                 <span class="tag">{tag}</span>
               ))}
             </div>
-            <h3 class="project-title">{project.title}</h3>
-            <p class="project-description">{project.description}</p>
           </div>
 
-          <div class="project-glow"></div>
+          <div class="project-links">
+            <a href={project.link} class="project-link">Ver ↗</a>
+            <a href={project.github} class="project-link">Código ↗</a>
+          </div>
         </article>
       ))}
-    </div>
-
-    <div class="projects-cta animate-on-scroll">
-      <a href="https://github.com/dsltdev" class="btn-secondary" target="_blank">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-        <span>Ver Todos en GitHub</span>
-      </a>
     </div>
   </div>
 </section>
 
 <style>
-  .projects {
-    background: var(--bg-primary);
-    position: relative;
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
   }
 
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
+    gap: 2px;
+    background: var(--black);
+    border: var(--border);
   }
 
   .project-card {
-    position: relative;
-    border-radius: 24px;
-    overflow: hidden;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-style: preserve-3d;
-    perspective: 1000px;
+    background: var(--white);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: background 0.15s;
   }
 
   .project-card:hover {
-    transform: translateY(-10px) rotateX(2deg);
-    border-color: var(--card-color);
-    box-shadow: 0 30px 60px -20px var(--card-color, rgba(99, 102, 241, 0.3));
+    background: var(--light-gray);
   }
 
-  .project-glow {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--card-color) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  .project-card:hover .project-glow {
-    opacity: 0.1;
-  }
-
-  .project-image {
-    position: relative;
-    height: 240px;
-    overflow: hidden;
-  }
-
-  .image-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.5s ease;
-  }
-
-  .project-card:hover .image-placeholder {
-    transform: scale(1.1);
-  }
-
-  .project-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 10, 15, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .project-card:hover .project-overlay {
-    opacity: 1;
-  }
-
-  .overlay-content {
-    display: flex;
-    gap: 1rem;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-  }
-
-  .project-card:hover .overlay-content {
-    transform: translateY(0);
-  }
-
-  .overlay-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--card-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    transition: all 0.3s ease;
-    transform: scale(0.8);
-  }
-
-  .project-card:hover .overlay-btn {
-    transform: scale(1);
-  }
-
-  .overlay-btn:hover {
-    transform: scale(1.1) !important;
-    box-shadow: 0 10px 30px var(--card-color);
+  .project-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray);
   }
 
   .project-content {
-    padding: 1.5rem;
+    flex: 1;
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .project-title {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray);
+  }
+
+  .project-description {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
   }
 
   .project-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 1rem;
   }
 
-  .tag {
-    padding: 0.35rem 0.75rem;
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--accent-1);
-  }
-
-  .project-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    transition: color 0.3s ease;
-  }
-
-  .project-card:hover .project-title {
-    color: var(--card-color);
-  }
-
-  .project-description {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  .projects-cta {
+  .project-links {
     display: flex;
-    justify-content: center;
-    margin-top: 4rem;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: var(--border-thin);
   }
 
-  @media (max-width: 1024px) {
+  .project-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--black);
+    transition: color 0.15s;
+  }
+
+  .project-link:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 768px) {
     .projects-grid {
       grid-template-columns: 1fr;
     }
-  }
 
-  @media (max-width: 640px) {
-    .project-image {
-      height: 180px;
+    .projects-header {
+      flex-direction: column;
+      gap: 1rem;
     }
   }
 </style>
-
-<script>
-  // 3D tilt effect
-  const cards = document.querySelectorAll('.project-card');
-  
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e: Event) => {
-      const mouseEvent = e as MouseEvent;
-      const rect = (card as HTMLElement).getBoundingClientRect();
-      const x = mouseEvent.clientX - rect.left;
-      const y = mouseEvent.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
-      
-      (card as HTMLElement).style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
-      (card as HTMLElement).style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
-      (card as HTMLElement).style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
-    });
-
-    card.addEventListener('mouseleave', () => {
-      (card as HTMLElement).style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-    });
-  });
-</script>
