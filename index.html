@@ -3,1289 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dsltdev — David Lopez</title>
-  <meta name="description" content="David Lopez — I turn your idea into a digital product people love. Fast, clean, on time.">
+  <title>dsltdev — David Lopez | Digital Product Developer</title>
+  <meta name="description" content="David Lopez — I turn your idea into a digital product people love. Fast, clean, on time. Based in Colombia, working worldwide.">
+  <meta name="keywords" content="web developer, digital products, landing pages, e-commerce, web applications, Colombia, remote developer">
+  <meta name="author" content="David Lopez">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="dsltdev — David Lopez | Digital Product Developer">
+  <meta property="og:description" content="I turn your idea into a digital product people love. Fast, clean, on time.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dsltdev.github.io">
+  <meta property="og:image" content="https://dsltdev.github.io/og-image.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="dsltdev — David Lopez | Digital Product Developer">
+  <meta name="twitter:description" content="I turn your idea into a digital product people love. Fast, clean, on time.">
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300&family=DM+Mono:wght@300;400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-    /* ── Tokens ─────────────────────────────────────────── */
-    :root {
-      --gold:  #C4A45A;
-      --gold2: #E8D48A;
-      --ease:  cubic-bezier(.16,1,.3,1);
-      --pad:   5vw;
-    }
-    [data-theme="dark"] {
-      --bg:      #050505;
-      --bg2:     #0A0A0A;
-      --fg:      #F0EDEA;
-      --muted:   rgba(240,237,234,.38);
-      --faint:   rgba(240,237,234,.16);
-      --border:  rgba(240,237,234,.07);
-      --card:    rgba(240,237,234,.025);
-      --nav-bg:  rgba(5,5,5,.9);
-      --shadow:  rgba(0,0,0,.8);
-    }
-    [data-theme="light"] {
-      --bg:      #F2EFE9;
-      --bg2:     #E8E4DC;
-      --fg:      #0C0B09;
-      --muted:   rgba(12,11,9,.48);
-      --faint:   rgba(12,11,9,.22);
-      --border:  rgba(12,11,9,.1);
-      --card:    rgba(12,11,9,.03);
-      --nav-bg:  rgba(242,239,233,.92);
-      --shadow:  rgba(0,0,0,.15);
-    }
-
-    html { scroll-behavior:smooth; }
-    body {
-      background:var(--bg); color:var(--fg);
-      font-family:'DM Sans',sans-serif; font-weight:300;
-      overflow-x:hidden; cursor:none;
-      transition:background .5s var(--ease), color .5s var(--ease);
-    }
-
-    /* grain */
-    body::before {
-      content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
-      background-size:256px;
-    }
-
-    /* ── Canvas particles ────────────────────────────────── */
-    #cv {
-      position:fixed; inset:0; z-index:0;
-      pointer-events:none; opacity:.7;
-    }
-
-    /* ── Scroll progress ─────────────────────────────────── */
-    #prog {
-      position:fixed; top:0; left:0; height:1.5px; z-index:1000;
-      background:var(--gold); width:0%;
-      box-shadow:0 0 12px var(--gold), 0 0 4px var(--gold);
-      transition:width .08s linear;
-    }
-
-    /* ── Cursor + trail ──────────────────────────────────── */
-    .trail {
-      position:fixed; border-radius:50%; pointer-events:none;
-      z-index:9990; background:var(--gold);
-      transform:translate(-50%,-50%);
-    }
-    #cur {
-      position:fixed; width:6px; height:6px; border-radius:50%;
-      background:var(--fg); pointer-events:none; z-index:9999;
-      transform:translate(-50%,-50%);
-      mix-blend-mode:difference;
-      transition:transform .1s var(--ease);
-    }
-    #curl {
-      position:fixed; width:30px; height:30px; border-radius:50%;
-      border:1px solid rgba(196,164,90,.4); pointer-events:none; z-index:9998;
-      transform:translate(-50%,-50%);
-      transition:all .55s var(--ease);
-    }
-    .hovering #cur  { transform:translate(-50%,-50%) scale(4); }
-    .hovering #curl { transform:translate(-50%,-50%) scale(1.8); border-color:var(--gold); }
-
-    /* ── Ambient glow ────────────────────────────────────── */
-    #glow {
-      position:fixed; pointer-events:none; z-index:1;
-      width:700px; height:700px; border-radius:50%;
-      background:radial-gradient(circle,rgba(196,164,90,.065) 0%,transparent 70%);
-      transform:translate(-50%,-50%);
-      filter:blur(60px); transition:left 1s var(--ease), top 1s var(--ease);
-    }
-
-    /* ── Project hover preview ───────────────────────────── */
-    #pv {
-      position:fixed; z-index:8000; pointer-events:none;
-      width:300px; height:190px; overflow:hidden;
-      border:1px solid var(--border);
-      opacity:0; transform:scale(.88) translateY(6px);
-      transition:opacity .28s var(--ease), transform .28s var(--ease);
-      box-shadow:0 40px 80px var(--shadow);
-    }
-    #pv.show { opacity:1; transform:scale(1) translateY(0); }
-    #pv img { width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(20%); }
-
-    /* ── Nav ──────────────────────────────────────────────── */
-    nav {
-      position:fixed; top:0; left:0; right:0; z-index:900;
-      padding:1.8rem var(--pad);
-      display:flex; align-items:center; justify-content:space-between;
-      transition:padding .4s var(--ease), background .4s, border-color .4s;
-      border-bottom:1px solid transparent;
-    }
-    nav.scrolled {
-      background:var(--nav-bg); backdrop-filter:blur(28px); -webkit-backdrop-filter:blur(28px);
-      padding:1rem var(--pad); border-color:var(--border);
-    }
-    .nav-logo { display:flex; align-items:center; gap:.7rem; text-decoration:none; }
-    .ndot { width:7px; height:7px; border-radius:50%; background:var(--gold); position:relative; }
-    .ndot::after {
-      content:''; position:absolute; inset:-4px; border-radius:50%;
-      border:1px solid rgba(196,164,90,.3);
-      animation:pulse 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(2.2);opacity:0} }
-    .nname {
-      font-family:'DM Mono',monospace; font-size:.75rem; font-weight:300;
-      color:var(--muted); letter-spacing:.06em;
-    }
-    .nname em { color:var(--gold); font-style:normal; }
-    .nav-r { display:flex; align-items:center; gap:1.8rem; }
-    .nl { display:flex; gap:2.2rem; list-style:none; }
-    .nl a {
-      color:var(--faint); text-decoration:none;
-      font-size:.68rem; letter-spacing:.18em; text-transform:uppercase;
-      transition:color .3s;
-    }
-    .nl a:hover { color:var(--fg); }
-    .nctrl { display:flex; align-items:center; gap:.6rem; }
-    .cbtn {
-      background:none; border:1px solid var(--border); color:var(--faint);
-      font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.08em;
-      padding:.3rem .65rem; cursor:none;
-      transition:color .3s, border-color .3s;
-    }
-    .cbtn:hover { color:var(--fg); border-color:var(--faint); }
-    .avail {
-      display:flex; align-items:center; gap:.45rem;
-      font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);
-    }
-    .adot {
-      width:5px; height:5px; border-radius:50%;
-      background:#4ADE80; box-shadow:0 0 5px #4ADE80;
-      animation:blink 2s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-
-    /* ── Hero ─────────────────────────────────────────────── */
-    .hero {
-      min-height:100vh; padding:0 var(--pad);
-      display:grid; grid-template-columns:1fr 380px;
-      align-items:center; gap:4rem;
-      position:relative; z-index:2;
-    }
-    .hero::before {
-      content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
-      background-image:radial-gradient(var(--border) 1px, transparent 1px);
-      background-size:44px 44px;
-      mask-image:radial-gradient(ellipse 90% 80% at 30% 50%, black 40%, transparent 100%);
-    }
-    .hero-l { position:relative; z-index:2; }
-    .hero-tag {
-      font-family:'DM Mono',monospace; font-size:.7rem; color:var(--gold);
-      letter-spacing:.1em; margin-bottom:3rem;
-      display:flex; align-items:center; gap:.8rem;
-      opacity:0; animation:fup .7s .2s var(--ease) forwards;
-    }
-    .hero-tag::before { content:''; width:28px; height:1px; background:var(--gold); }
-    .hero-h1 {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:clamp(3.8rem,7.5vw,7.5rem); line-height:.92;
-      margin-bottom:3rem;
-    }
-    .hero-h1 .ln { overflow:hidden; display:block; }
-    .hero-h1 .ln > span { display:block; }
-    .hero-h1 .l1 > span { opacity:0; transform:translateY(105%); animation:sup 1.1s .35s var(--ease) forwards; }
-    .hero-h1 .l2 > span { opacity:0; transform:translateY(105%); animation:sup 1.1s .52s var(--ease) forwards; color:var(--muted); }
-    .hero-h1 .l3 > span { opacity:0; transform:translateY(105%); animation:sup 1.1s .68s var(--ease) forwards; color:var(--gold); }
-    #ty { font-style:italic; }
-    .hero-sub {
-      font-size:.95rem; color:var(--muted); max-width:460px; line-height:1.9;
-      margin-bottom:3.5rem;
-      opacity:0; animation:fup .7s 1.1s var(--ease) forwards;
-    }
-    .hero-ctas {
-      display:flex; gap:3rem; align-items:center;
-      opacity:0; animation:fup .7s 1.3s var(--ease) forwards;
-    }
-    .mwrap { display:inline-block; }
-    .cta-p {
-      display:block; text-decoration:none; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--fg); padding-bottom:.3rem; border-bottom:1px solid var(--border);
-      transition:border-color .3s, letter-spacing .4s var(--ease);
-    }
-    .cta-p:hover { border-color:var(--gold); letter-spacing:.28em; }
-    .cta-s {
-      display:block; text-decoration:none; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--faint); transition:color .3s;
-    }
-    .cta-s:hover { color:var(--fg); }
-    .hero-sc {
-      position:absolute; bottom:2.8rem; left:var(--pad); z-index:2;
-      display:flex; align-items:center; gap:.9rem;
-      opacity:0; animation:fup .7s 1.7s var(--ease) forwards;
-    }
-    .scl { width:36px; height:1px; background:var(--border); position:relative; overflow:hidden; }
-    .scl::after {
-      content:''; position:absolute; inset:0; background:var(--gold);
-      transform:translateX(-100%); animation:slide 2s ease-in-out infinite 2.5s;
-    }
-    @keyframes slide { 0%{transform:translateX(-100%)} 50%{transform:translateX(0)} 100%{transform:translateX(100%)} }
-    .sct { font-size:.58rem; letter-spacing:.26em; text-transform:uppercase; color:var(--faint); }
-    .hero-r {
-      position:relative; z-index:2;
-      opacity:0; animation:fup .9s 1s var(--ease) forwards;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-    }
-    .acard {
-      border:1px solid var(--border); overflow:hidden; position:relative;
-      transition:border-color .5s; transform-style:preserve-3d;
-    }
-    .acard:hover { border-color:rgba(196,164,90,.4); }
-    .aimg {
-      width:100%; aspect-ratio:3/4; object-fit:cover; display:block;
-      filter:grayscale(25%) contrast(1.05);
-      transition:filter .6s, transform .8s var(--ease);
-    }
-    .acard:hover .aimg { filter:grayscale(0%); transform:scale(1.05); }
-    .aov {
-      position:absolute; inset:0;
-      background:linear-gradient(to top,var(--bg) 0%,transparent 55%);
-    }
-    .ainfo { position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem; z-index:2; }
-    .aname {
-      font-family:'Cormorant Garamond',serif; font-weight:300;
-      font-size:1.05rem; font-style:italic; color:var(--fg); margin-bottom:.2rem;
-    }
-    .arole { font-family:'DM Mono',monospace; font-size:.6rem; color:var(--faint); letter-spacing:.07em; }
-    .abadge {
-      position:absolute; top:1.2rem; right:1.2rem; z-index:2;
-      display:flex; align-items:center; gap:.42rem;
-      padding:.35rem .7rem; backdrop-filter:blur(12px);
-      background:rgba(0,0,0,.35); border:1px solid var(--border);
-      font-size:.57rem; letter-spacing:.12em; text-transform:uppercase; color:var(--faint);
-    }
-    [data-theme="light"] .abadge { background:rgba(255,255,255,.35); }
-
-    /* ── Stats bar ───────────────────────────────────────── */
-    .stats {
-      display:grid; grid-template-columns:repeat(4,1fr);
-      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-      position:relative; z-index:2;
-    }
-    .stat {
-      padding:3rem var(--pad); border-right:1px solid var(--border);
-      position:relative; overflow:hidden; transition:background .3s;
-    }
-    .stat:last-child { border-right:none; }
-    .stat:hover { background:var(--card); }
-    .stat-n {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:clamp(2.5rem,4vw,4rem); line-height:1; color:var(--fg);
-      margin-bottom:.5rem;
-    }
-    .stat-n em { font-style:normal; color:var(--gold); }
-    .stat-l { font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); }
-
-    /* ── Marquee ─────────────────────────────────────────── */
-    .mq-wrap {
-      overflow:hidden; border-bottom:1px solid var(--border);
-      padding:1.4rem 0; position:relative; z-index:2;
-    }
-    .mq {
-      display:flex; gap:3rem; width:max-content;
-      animation:mq 28s linear infinite;
-    }
-    .mq-wrap:hover .mq { animation-play-state:paused; }
-    @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .mq-item {
-      font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.18em;
-      text-transform:uppercase; color:var(--faint); white-space:nowrap;
-      display:flex; align-items:center; gap:3rem;
-    }
-    .mq-item::after { content:'·'; color:var(--gold); }
-
-    /* ── Sections ─────────────────────────────────────────── */
-    section { padding:9rem var(--pad); position:relative; z-index:2; }
-    .ey {
-      font-family:'DM Mono',monospace; font-size:.66rem; color:var(--gold);
-      letter-spacing:.1em; margin-bottom:1.6rem;
-      display:flex; align-items:center; gap:.6rem;
-    }
-    .ey::before { content:'//'; color:var(--faint); }
-    .sh {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:clamp(2.2rem,3.8vw,3.4rem); line-height:1.12; color:var(--fg);
-    }
-    .sh em { font-style:italic; color:var(--muted); }
-
-    /* ── About ────────────────────────────────────────────── */
-    #about {
-      display:grid; grid-template-columns:1fr 1fr; gap:9rem; align-items:start;
-    }
-    .ap { font-size:.9rem; color:var(--muted); line-height:1.9; margin-bottom:1.3rem; }
-    .svcs { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:3rem; }
-    .svc {
-      padding:1.6rem; border:1px solid var(--border);
-      transition:border-color .35s, background .35s;
-    }
-    .svc:hover { border-color:rgba(196,164,90,.3); background:var(--card); }
-    .svc-name {
-      font-size:.8rem; color:var(--fg); margin-bottom:.35rem;
-      font-weight:400; letter-spacing:.02em;
-    }
-    .svc-desc { font-size:.7rem; color:var(--faint); line-height:1.7; }
-
-    /* ── Process ──────────────────────────────────────────── */
-    #process { border-top:1px solid var(--border); }
-    .proc-grid {
-      display:grid; grid-template-columns:repeat(3,1fr);
-      gap:0; margin-top:5rem;
-    }
-    .proc-step {
-      padding:3.5rem; border-right:1px solid var(--border);
-      position:relative; transition:background .3s;
-    }
-    .proc-step:last-child { border-right:none; }
-    .proc-step:hover { background:var(--card); }
-    .proc-n {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:4.5rem; color:var(--border); line-height:1;
-      margin-bottom:2rem; letter-spacing:-.02em; transition:color .3s;
-    }
-    .proc-step:hover .proc-n { color:rgba(196,164,90,.2); }
-    .proc-title {
-      font-family:'Cormorant Garamond',serif; font-weight:300;
-      font-size:1.5rem; color:var(--fg); margin-bottom:.8rem; font-style:italic;
-    }
-    .proc-desc { font-size:.82rem; color:var(--muted); line-height:1.85; }
-
-    /* ── Projects ─────────────────────────────────────────── */
-    .pf {
-      border:1px solid var(--border); overflow:hidden; position:relative;
-      margin-bottom:2px; transition:border-color .4s;
-    }
-    .pf:hover { border-color:rgba(196,164,90,.3); }
-    .pf-bg {
-      position:absolute; inset:0;
-      background-image:url('https://picsum.photos/seed/bc-v2/1600/700');
-      background-size:cover; background-position:center;
-      filter:grayscale(70%) brightness(.22);
-      transition:filter .8s var(--ease), transform 1s var(--ease);
-    }
-    [data-theme="light"] .pf-bg { filter:grayscale(50%) brightness(.45); }
-    .pf:hover .pf-bg { filter:grayscale(0%) brightness(.32); transform:scale(1.05); }
-    .pf-body {
-      position:relative; z-index:2; padding:5rem;
-      display:grid; grid-template-columns:1fr auto; align-items:end; gap:3rem;
-    }
-    .pf-badge {
-      display:inline-flex; align-items:center; gap:.45rem; margin-bottom:1.8rem;
-      font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.14em;
-      text-transform:uppercase; color:var(--gold);
-    }
-    .pf-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--gold); }
-    .pf-name {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:clamp(2.8rem,5.5vw,4.8rem); line-height:.95; color:var(--fg);
-      margin-bottom:1.2rem; transition:color .4s;
-    }
-    .pf:hover .pf-name { color:var(--gold); }
-    .pf-result {
-      font-family:'DM Mono',monospace; font-size:.68rem; color:var(--gold);
-      letter-spacing:.06em; margin-bottom:.8rem;
-    }
-    .pf-desc { font-size:.85rem; color:var(--muted); max-width:500px; line-height:1.82; }
-    .pf-link {
-      text-decoration:none; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
-      color:var(--faint); border-bottom:1px solid var(--border); padding-bottom:.25rem;
-      white-space:nowrap; transition:color .3s, border-color .3s;
-    }
-    .pf-link:hover { color:var(--fg); border-color:var(--fg); }
-    .pl { display:flex; flex-direction:column; }
-    .pi {
-      display:grid; grid-template-columns:60px 1fr auto;
-      align-items:center; gap:3rem; padding:2.8rem 0;
-      border-bottom:1px solid var(--border);
-      text-decoration:none; color:var(--fg); position:relative;
-      transition:padding-left .4s var(--ease);
-    }
-    .pi::before {
-      content:''; position:absolute;
-      left:calc(-1 * var(--pad)); right:calc(-1 * var(--pad));
-      top:0; bottom:0; background:var(--card);
-      opacity:0; transition:opacity .3s;
-    }
-    .pi:hover::before { opacity:1; }
-    .pi:hover { padding-left:1rem; }
-    .pinum { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--faint); letter-spacing:.07em; transition:color .3s; }
-    .pi:hover .pinum { color:var(--gold); }
-    .piname {
-      font-family:'Cormorant Garamond',serif; font-weight:300;
-      font-size:clamp(1.5rem,2.4vw,2rem); margin-bottom:.4rem; transition:color .3s;
-    }
-    .pi:hover .piname { color:var(--gold); }
-    .pimeta { display:flex; gap:.7rem; align-items:center; flex-wrap:wrap; }
-    .pitype { font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); }
-    .piresult { font-family:'DM Mono',monospace; font-size:.58rem; color:rgba(74,222,128,.7); letter-spacing:.06em; }
-    .piarr { font-size:1.2rem; color:var(--faint); transition:color .4s, transform .4s var(--ease); }
-    .pi:hover .piarr { color:var(--gold); transform:translate(5px,-5px); }
-
-    /* ── Contact ──────────────────────────────────────────── */
-    #contact { border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:9rem; }
-    .ch {
-      font-family:'Cormorant Garamond',serif; font-weight:200;
-      font-size:clamp(2.6rem,5vw,4.5rem); line-height:1.02;
-      margin-bottom:1.5rem;
-    }
-    .ch em { font-style:italic; color:var(--gold); }
-    .cd { font-size:.9rem; color:var(--muted); line-height:1.9; margin-bottom:3rem; max-width:400px; }
-    .cls { display:flex; flex-direction:column; gap:1rem; }
-    .cl { display:flex; align-items:center; gap:1.5rem; text-decoration:none; transition:opacity .3s; }
-    .cl:hover { opacity:.55; }
-    .ck { font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); min-width:56px; }
-    .cv { font-size:.85rem; color:var(--muted); }
-    form { display:flex; flex-direction:column; gap:2rem; }
-    .fg { display:flex; flex-direction:column; gap:.4rem; }
-    .fg label { font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--faint); }
-    .fg input, .fg textarea {
-      background:transparent; border:none; border-bottom:1px solid var(--border);
-      color:var(--fg); padding:.7rem 0;
-      font-family:'DM Sans',sans-serif; font-size:.9rem;
-      outline:none; transition:border-color .3s;
-    }
-    .fg input:focus, .fg textarea:focus { border-bottom-color:var(--gold); }
-    .fg input::placeholder, .fg textarea::placeholder { color:var(--faint); }
-    .fg textarea { resize:none; height:76px; }
-    .bsend {
-      background:none; border:none; border-bottom:1px solid var(--border);
-      color:var(--muted); padding:.5rem 0; font-family:'DM Sans',sans-serif;
-      font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
-      cursor:none; text-align:left; transition:color .3s, border-color .3s;
-    }
-    .bsend:hover { color:var(--fg); border-color:var(--fg); }
-
-    /* ── Footer ───────────────────────────────────────────── */
-    footer {
-      position:relative; z-index:2;
-      padding:2rem var(--pad); border-top:1px solid var(--border);
-      display:flex; align-items:center; justify-content:space-between;
-    }
-    .fl { font-family:'DM Mono',monospace; font-size:.62rem; color:var(--faint); letter-spacing:.06em; }
-    .fls { display:flex; gap:2.2rem; }
-    .fls a { color:var(--faint); text-decoration:none; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; transition:color .3s; }
-    .fls a:hover { color:var(--fg); }
-
-    /* ── Reveal ───────────────────────────────────────────── */
-    .rv { opacity:0; transform:translateY(24px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
-    .rv.in { opacity:1; transform:none; }
-    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-
-    /* ── Rubik's Cube ────────────────────────────────────── */
-    .cube-scene {
-      width:260px; height:260px;
-      perspective:680px; perspective-origin:50% 42%;
-      display:flex; align-items:center; justify-content:center;
-    }
-    #cubeWrapper { transform-style:preserve-3d; position:relative; width:0; height:0; }
-    .cubie {
-      position:absolute; width:52px; height:52px;
-      left:-26px; top:-26px; transform-style:preserve-3d;
-    }
-    .cubie-face {
-      position:absolute; width:52px; height:52px;
-      border:2.5px solid rgba(0,0,0,.82);
-      border-radius:5px; backface-visibility:hidden; box-sizing:border-box;
-    }
-    .cube-label {
-      margin-top:2rem; text-align:center;
-      font-family:'DM Mono',monospace; font-size:.6rem;
-      letter-spacing:.1em; color:var(--faint);
-      display:flex; align-items:center; justify-content:center; gap:.5rem;
-    }
-
-    /* ── Keyframes ────────────────────────────────────────── */
-    @keyframes fup  { to{opacity:1} }
-    @keyframes sup  { to{opacity:1;transform:translateY(0)} }
-
-    /* ── Mobile ───────────────────────────────────────────── */
-    @media(max-width:1060px) {
-      :root { --pad:2.8rem; }
-      .hero { grid-template-columns:1fr; padding-top:9rem; padding-bottom:6rem; min-height:auto; }
-      .hero-r { max-width:280px; }
-      nav { padding:1.4rem var(--pad); }
-      nav.scrolled { padding:.9rem var(--pad); }
-      .nl { display:none; }
-      .stats { grid-template-columns:repeat(2,1fr); }
-      .stat { border-bottom:1px solid var(--border); }
-      #about, #contact { grid-template-columns:1fr; gap:5rem; }
-      .proc-grid { grid-template-columns:1fr; }
-      .proc-step { border-right:none; border-bottom:1px solid var(--border); }
-      .pf-body { grid-template-columns:1fr; }
-      .pi { grid-template-columns:44px 1fr auto; gap:1.2rem; }
-      footer { flex-direction:column; gap:1.5rem; }
-      .fls { flex-wrap:wrap; justify-content:center; }
-      .svcs { grid-template-columns:1fr; }
-    }
-    @media(max-width:600px) {
-      .hero-h1 { font-size:clamp(3rem,14vw,5rem); }
-      .stats { grid-template-columns:1fr 1fr; }
-    }
-  </style>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-<canvas id="cv"></canvas>
-<div id="prog"></div>
-<div id="cur"></div>
-<div id="curl"></div>
-<div id="glow"></div>
-<div id="pv"><img id="pv-img" src="" alt=""></div>
+<!-- Skip Link (Accessibility) -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<canvas id="cv" aria-hidden="true"></canvas>
+<div id="prog" role="progressbar" aria-label="Scroll progress"></div>
+<div id="cur" aria-hidden="true"></div>
+<div id="curl" aria-hidden="true"></div>
+<div id="glow" aria-hidden="true"></div>
+<div id="pv" aria-hidden="true"><img id="pv-img" src="" alt=""></div>
 
 <!-- ── Nav ───────────────────────────────────────────────── -->
-<nav id="nav">
-  <a href="#home" class="nav-logo">
-    <div class="ndot"></div>
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#home" class="nav-logo" aria-label="dsltdev - Home">
+    <div class="ndot" aria-hidden="true"></div>
     <span class="nname"><em>dslt</em>dev</span>
   </a>
   <div class="nav-r">
     <ul class="nl">
-      <li><a href="#about"    data-i="nav.about">About</a></li>
-      <li><a href="#process"  data-i="nav.process">Process</a></li>
+      <li><a href="#about" data-i="nav.about">About</a></li>
+      <li><a href="#process" data-i="nav.process">Process</a></li>
       <li><a href="#projects" data-i="nav.projects">Projects</a></li>
-      <li><a href="#contact"  data-i="nav.contact">Contact</a></li>
+      <li><a href="#contact" data-i="nav.contact">Contact</a></li>
     </ul>
     <div class="nctrl">
-      <div class="avail">
-        <div class="adot"></div>
+      <div class="avail" aria-label="Status: Available for work">
+        <div class="adot" aria-hidden="true"></div>
         <span data-i="nav.avail">Available</span>
       </div>
-      <button class="cbtn" id="langBtn">ES</button>
-      <button class="cbtn" id="themeBtn">☀</button>
+      <button class="cbtn" id="langBtn" aria-label="Switch language">ES</button>
+      <button class="cbtn" id="themeBtn" aria-label="Toggle theme">☀</button>
     </div>
   </div>
 </nav>
 
-<!-- ── Hero ──────────────────────────────────────────────── -->
-<section class="hero" id="home">
-  <div class="hero-l">
-    <div class="hero-tag" data-i="hero.tag">Colombia · Remote worldwide</div>
-    <h1 class="hero-h1">
-      <span class="ln l1"><span data-scramble data-i="hero.l1">David Lopez</span></span>
-      <span class="ln l2"><span data-i="hero.l2">turns ideas</span></span>
-      <span class="ln l3"><span id="ty">into products</span></span>
-    </h1>
-    <p class="hero-sub" data-i="hero.sub">
-      I take your idea from a sketch to a live product — clean, fast, and ready for real users. No jargon, no delays, no surprises.
-    </p>
-    <div class="hero-ctas">
-      <div class="mwrap"><a href="#contact" class="cta-p" data-i="hero.cta1">Start a project</a></div>
-      <div class="mwrap"><a href="#projects" class="cta-s" data-i="hero.cta2">See my work</a></div>
-    </div>
-  </div>
-
-  <div class="hero-r">
-    <div class="cube-scene">
-      <div id="cubeWrapper"></div>
-    </div>
-    <div class="cube-label">
-      <div class="adot" style="width:5px;height:5px"></div>
-      <span data-i="hero.badge">Open to work</span>
-      <span>·</span>
-      <span>dsltdev</span>
-    </div>
-  </div>
-
-  <div class="hero-sc">
-    <div class="scl"></div>
-    <span class="sct" data-i="hero.scroll">Scroll to explore</span>
-  </div>
-</section>
-
-<!-- ── Stats ─────────────────────────────────────────────── -->
-<div class="stats">
-  <div class="stat rv">
-    <div class="stat-n"><span class="cnt" data-to="12">0</span><em>+</em></div>
-    <div class="stat-l" data-i="stat.a">Projects delivered</div>
-  </div>
-  <div class="stat rv d1">
-    <div class="stat-n"><span class="cnt" data-to="5">0</span></div>
-    <div class="stat-l" data-i="stat.b">Avg. days to launch</div>
-  </div>
-  <div class="stat rv d2">
-    <div class="stat-n"><span class="cnt" data-to="100">0</span><em>%</em></div>
-    <div class="stat-l" data-i="stat.c">On-time delivery</div>
-  </div>
-  <div class="stat rv d3">
-    <div class="stat-n"><span class="cnt" data-to="3">0</span></div>
-    <div class="stat-l" data-i="stat.d">Countries served</div>
-  </div>
-</div>
-
-<!-- ── Marquee ────────────────────────────────────────────── -->
-<div class="mq-wrap">
-  <div class="mq" id="mq"></div>
-</div>
-
-<!-- ── About ──────────────────────────────────────────────── -->
-<section id="about">
-  <div class="rv">
-    <div class="ey" data-i="about.ey">about</div>
-    <h2 class="sh" style="margin-bottom:2.2rem" data-i="about.h">Your idea deserves<br>to look <em>world-class.</em></h2>
-    <p class="ap" data-i="about.p1">I build digital products that feel expensive — because the details matter. From the first pixel to the last line of code, everything has a reason to be there.</p>
-    <p class="ap" data-i="about.p2">Based in Colombia. Working with founders, agencies, and companies worldwide. I speak fluent Spanish and English.</p>
-  </div>
-
-  <div class="rv d2">
-    <div class="ey" data-i="about.svc-ey">what I do</div>
-    <div class="svcs">
-      <div class="svc">
-        <div class="svc-name" data-i="svc.a.n">Landing Pages</div>
-        <div class="svc-desc" data-i="svc.a.d">That convert visitors into clients. Fast, beautiful, mobile-perfect.</div>
-      </div>
-      <div class="svc">
-        <div class="svc-name" data-i="svc.b.n">Web Applications</div>
-        <div class="svc-desc" data-i="svc.b.d">Full products your users won't want to stop using.</div>
-      </div>
-      <div class="svc">
-        <div class="svc-name" data-i="svc.c.n">E-commerce</div>
-        <div class="svc-desc" data-i="svc.c.d">Stores built to sell. Clean checkout, zero friction.</div>
-      </div>
-      <div class="svc">
-        <div class="svc-name" data-i="svc.d.n">Brand & Design</div>
-        <div class="svc-desc" data-i="svc.d.d">Your visual identity, sharp and consistent across every touchpoint.</div>
-      </div>
-      <div class="svc">
-        <div class="svc-name" data-i="svc.e.n">APIs & Integrations</div>
-        <div class="svc-desc" data-i="svc.e.d">Connect your tools. Automate what wastes your team's time.</div>
-      </div>
-      <div class="svc">
-        <div class="svc-name" data-i="svc.f.n">Consulting</div>
-        <div class="svc-desc" data-i="svc.f.d">Not sure where to start? I'll map the best path and build it.</div>
+<main id="main">
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero-l">
+      <div class="hero-tag" data-i="hero.tag">Colombia · Remote worldwide</div>
+      <h1 class="hero-h1">
+        <span class="ln l1"><span data-scramble data-i="hero.l1" data-glitch data-text="David Lopez">David Lopez</span></span>
+        <span class="ln l2"><span data-i="hero.l2">turns ideas</span></span>
+        <span class="ln l3"><span id="ty">into products</span></span>
+      </h1>
+      <p class="hero-sub" data-i="hero.sub">
+        I take your idea from a sketch to a live product — clean, fast, and ready for real users. No jargon, no delays, no surprises.
+      </p>
+      <div class="hero-ctas">
+        <div class="mwrap"><a href="#contact" class="cta-p" data-i="hero.cta1">Start a project</a></div>
+        <div class="mwrap"><a href="#projects" class="cta-s" data-i="hero.cta2">See my work</a></div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ── Process ────────────────────────────────────────────── -->
-<section id="process">
-  <div class="rv">
-    <div class="ey" data-i="proc.ey">how it works</div>
-    <h2 class="sh" data-i="proc.h">Simple for you.<br><em>Precise</em> from my side.</h2>
-  </div>
-  <div class="proc-grid">
-    <div class="proc-step rv d1">
-      <div class="proc-n">01</div>
-      <div class="proc-title" data-i="proc.a.t">We talk</div>
-      <p class="proc-desc" data-i="proc.a.d">Tell me your idea. I'll tell you exactly what's possible, how long it takes, and what it costs. Free call, no commitment.</p>
-    </div>
-    <div class="proc-step rv d2">
-      <div class="proc-n">02</div>
-      <div class="proc-title" data-i="proc.b.t">I build</div>
-      <p class="proc-desc" data-i="proc.b.d">You see real progress every day. No black boxes. No "it'll be ready when it's ready." Revisions are part of the process.</p>
-    </div>
-    <div class="proc-step rv d3">
-      <div class="proc-n">03</div>
-      <div class="proc-title" data-i="proc.c.t">You launch</div>
-      <p class="proc-desc" data-i="proc.c.d">Your product goes live, polished and tested. I don't disappear — I stay to make sure everything runs perfectly.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ── Projects ───────────────────────────────────────────── -->
-<section id="projects">
-  <div class="rv" style="margin-bottom:5rem">
-    <div class="ey" data-i="proj.ey">work</div>
-    <h2 class="sh" data-i="proj.h">Results, not <em>promises.</em></h2>
-  </div>
-
-  <div class="pf rv">
-    <div class="pf-bg"></div>
-    <div class="pf-body">
-      <div>
-        <div class="pf-badge" data-i="proj.feat">Featured · 2024</div>
-        <div class="pf-name">BellasCocinas</div>
-        <div class="pf-result" data-i="proj.bc.res">→ Delivered in 5 days · First version, no revisions</div>
-        <p class="pf-desc" data-i="proj.bc.d">A premium kitchen design brand went from invisible to unforgettable online. SpaceX-inspired layout, immersive scroll experience, custom interactions. Zero frameworks — pure craft.</p>
+    <div class="hero-r">
+      <div class="cube-scene" aria-label="3D Rubik's Cube animation">
+        <div id="cubeWrapper"></div>
       </div>
-      <a href="#" class="pf-link" data-i="proj.view">View project ↗</a>
+      <div class="cube-label">
+        <div class="adot" style="width:5px;height:5px" aria-hidden="true"></div>
+        <span data-i="hero.badge">Open to work</span>
+        <span aria-hidden="true">·</span>
+        <span>dsltdev</span>
+      </div>
+    </div>
+
+    <div class="hero-sc" aria-hidden="true">
+      <div class="scl"></div>
+      <span class="sct" data-i="hero.scroll">Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ── Stats ─────────────────────────────────────────────── -->
+  <div class="stats" role="region" aria-label="Statistics">
+    <div class="stat rv">
+      <div class="stat-n"><span class="cnt" data-to="12">0</span><em>+</em></div>
+      <div class="stat-l" data-i="stat.a">Projects delivered</div>
+    </div>
+    <div class="stat rv d1">
+      <div class="stat-n"><span class="cnt" data-to="5">0</span></div>
+      <div class="stat-l" data-i="stat.b">Avg. days to launch</div>
+    </div>
+    <div class="stat rv d2">
+      <div class="stat-n"><span class="cnt" data-to="100">0</span><em>%</em></div>
+      <div class="stat-l" data-i="stat.c">On-time delivery</div>
+    </div>
+    <div class="stat rv d3">
+      <div class="stat-n"><span class="cnt" data-to="3">0</span></div>
+      <div class="stat-l" data-i="stat.d">Countries served</div>
     </div>
   </div>
 
-  <div class="pl">
-    <a href="#" class="pi rv" data-preview="https://picsum.photos/seed/proj2/600/380">
-      <span class="pinum">02</span>
-      <div>
-        <div class="piname" data-i="proj.b.n">Project Alpha</div>
-        <div class="pimeta">
-          <span class="pitype">Web App</span>
-          <span class="piresult" data-i="proj.b.r">↑ 3× more signups post-launch</span>
+  <!-- ── Marquee ────────────────────────────────────────────── -->
+  <div class="mq-wrap" role="region" aria-label="Services marquee">
+    <div class="mq" id="mq"></div>
+  </div>
+
+  <!-- ── About ──────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="rv">
+      <div class="ey" data-i="about.ey">about</div>
+      <h2 class="sh" style="margin-bottom:2.2rem" data-i="about.h">Your idea deserves<br>to look <em>world-class.</em></h2>
+      <p class="ap" data-i="about.p1">I build digital products that feel expensive — because the details matter. From the first pixel to the last line of code, everything has a reason to be there.</p>
+      <p class="ap" data-i="about.p2">Based in Colombia. Working with founders, agencies, and companies worldwide. I speak fluent Spanish and English.</p>
+    </div>
+
+    <div class="rv d2">
+      <div class="ey" data-i="about.svc-ey">what I do</div>
+      <div class="svcs">
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.a.n">Landing Pages</div>
+          <div class="svc-desc" data-i="svc.a.d">That convert visitors into clients. Fast, beautiful, mobile-perfect.</div>
+        </div>
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.b.n">Web Applications</div>
+          <div class="svc-desc" data-i="svc.b.d">Full products your users won't want to stop using.</div>
+        </div>
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.c.n">E-commerce</div>
+          <div class="svc-desc" data-i="svc.c.d">Stores built to sell. Clean checkout, zero friction.</div>
+        </div>
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.d.n">Brand & Design</div>
+          <div class="svc-desc" data-i="svc.d.d">Your visual identity, sharp and consistent across every touchpoint.</div>
+        </div>
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.e.n">APIs & Integrations</div>
+          <div class="svc-desc" data-i="svc.e.d">Connect your tools. Automate what wastes your team's time.</div>
+        </div>
+        <div class="svc" role="article">
+          <div class="svc-name" data-i="svc.f.n">Consulting</div>
+          <div class="svc-desc" data-i="svc.f.d">Not sure where to start? I'll map the best path and build it.</div>
         </div>
       </div>
-      <span class="piarr">↗</span>
-    </a>
-    <a href="#" class="pi rv d1" data-preview="https://picsum.photos/seed/proj3/600/380">
-      <span class="pinum">03</span>
-      <div>
-        <div class="piname" data-i="proj.c.n">Project Beta</div>
-        <div class="pimeta">
-          <span class="pitype">E-commerce</span>
-          <span class="piresult" data-i="proj.c.r">↑ 60% increase in checkout completion</span>
-        </div>
-      </div>
-      <span class="piarr">↗</span>
-    </a>
-    <a href="#" class="pi rv d2" data-preview="https://picsum.photos/seed/proj4/600/380">
-      <span class="pinum">04</span>
-      <div>
-        <div class="piname" data-i="proj.d.n">Project Gamma</div>
-        <div class="pimeta">
-          <span class="pitype">Automation</span>
-          <span class="piresult" data-i="proj.d.r">→ 20h/week saved for the team</span>
-        </div>
-      </div>
-      <span class="piarr">↗</span>
-    </a>
-  </div>
-</section>
+    </div>
+  </section>
 
-<!-- ── Contact ────────────────────────────────────────────── -->
-<section id="contact">
-  <div class="rv">
-    <div class="ey" data-i="con.ey">contact</div>
-    <h2 class="ch" data-i="con.h">Your idea is one<br>conversation <em>away.</em></h2>
-    <p class="cd" data-i="con.d">Tell me what you're building. I'll tell you how we can make it real. Usually respond within a few hours.</p>
-    <div class="cls">
-      <a href="mailto:dsltdev@icloud.com" class="cl">
-        <span class="ck" data-i="con.email">Email</span>
-        <span class="cv">dsltdev@icloud.com</span>
+  <!-- ── Process ────────────────────────────────────────────── -->
+  <section id="process">
+    <div class="rv">
+      <div class="ey" data-i="proc.ey">how it works</div>
+      <h2 class="sh" data-i="proc.h">Simple for you.<br><em>Precise</em> from my side.</h2>
+    </div>
+    <div class="proc-grid">
+      <div class="proc-step rv d1" role="article">
+        <div class="proc-n">01</div>
+        <div class="proc-title" data-i="proc.a.t">We talk</div>
+        <p class="proc-desc" data-i="proc.a.d">Tell me your idea. I'll tell you exactly what's possible, how long it takes, and what it costs. Free call, no commitment.</p>
+      </div>
+      <div class="proc-step rv d2" role="article">
+        <div class="proc-n">02</div>
+        <div class="proc-title" data-i="proc.b.t">I build</div>
+        <p class="proc-desc" data-i="proc.b.d">You see real progress every day. No black boxes. No "it'll be ready when it's ready." Revisions are part of the process.</p>
+      </div>
+      <div class="proc-step rv d3" role="article">
+        <div class="proc-n">03</div>
+        <div class="proc-title" data-i="proc.c.t">You launch</div>
+        <p class="proc-desc" data-i="proc.c.d">Your product goes live, polished and tested. I don't disappear — I stay to make sure everything runs perfectly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Projects ───────────────────────────────────────────── -->
+  <section id="projects">
+    <div class="rv" style="margin-bottom:5rem">
+      <div class="ey" data-i="proj.ey">work</div>
+      <h2 class="sh" data-i="proj.h">Results, not <em>promises.</em></h2>
+    </div>
+
+    <div class="pf rv">
+      <div class="pf-bg" aria-hidden="true"></div>
+      <div class="pf-body">
+        <div>
+          <div class="pf-badge" data-i="proj.feat">Featured · 2024</div>
+          <div class="pf-name">BellasCocinas</div>
+          <div class="pf-result" data-i="proj.bc.res">→ Delivered in 5 days · First version, no revisions</div>
+          <p class="pf-desc" data-i="proj.bc.d">A premium kitchen design brand went from invisible to unforgettable online. SpaceX-inspired layout, immersive scroll experience, custom interactions. Zero frameworks — pure craft.</p>
+        </div>
+        <a href="#" class="pf-link" data-i="proj.view" aria-label="View BellasCocinas project">View project ↗</a>
+      </div>
+    </div>
+
+    <div class="pl">
+      <a href="#" class="pi rv" data-preview="https://picsum.photos/seed/proj2/600/380" aria-label="Project Alpha - Web App">
+        <span class="pinum">02</span>
+        <div>
+          <div class="piname" data-i="proj.b.n">Project Alpha</div>
+          <div class="pimeta">
+            <span class="pitype">Web App</span>
+            <span class="piresult" data-i="proj.b.r">↑ 3× more signups post-launch</span>
+          </div>
+        </div>
+        <span class="piarr" aria-hidden="true">↗</span>
       </a>
-      <a href="https://github.com/dsltdev" target="_blank" class="cl">
-        <span class="ck">GitHub</span>
-        <span class="cv">github.com/dsltdev</span>
+      <a href="#" class="pi rv d1" data-preview="https://picsum.photos/seed/proj3/600/380" aria-label="Project Beta - E-commerce">
+        <span class="pinum">03</span>
+        <div>
+          <div class="piname" data-i="proj.c.n">Project Beta</div>
+          <div class="pimeta">
+            <span class="pitype">E-commerce</span>
+            <span class="piresult" data-i="proj.c.r">↑ 60% increase in checkout completion</span>
+          </div>
+        </div>
+        <span class="piarr" aria-hidden="true">↗</span>
       </a>
-      <div class="cl" style="cursor:default">
-        <span class="ck" data-i="con.loc">Location</span>
-        <span class="cv" data-i="con.locv">Colombia · Remote worldwide</span>
+      <a href="#" class="pi rv d2" data-preview="https://picsum.photos/seed/proj4/600/380" aria-label="Project Gamma - Automation">
+        <span class="pinum">04</span>
+        <div>
+          <div class="piname" data-i="proj.d.n">Project Gamma</div>
+          <div class="pimeta">
+            <span class="pitype">Automation</span>
+            <span class="piresult" data-i="proj.d.r">→ 20h/week saved for the team</span>
+          </div>
+        </div>
+        <span class="piarr" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Contact ────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="rv">
+      <div class="ey" data-i="con.ey">contact</div>
+      <h2 class="ch" data-i="con.h">Your idea is one<br>conversation <em>away.</em></h2>
+      <p class="cd" data-i="con.d">Tell me what you're building. I'll tell you how we can make it real. Usually respond within a few hours.</p>
+      <div class="cls">
+        <a href="mailto:dsltdev@icloud.com" class="cl" aria-label="Email dsltdev@icloud.com">
+          <span class="ck" data-i="con.email">Email</span>
+          <span class="cv">dsltdev@icloud.com</span>
+        </a>
+        <a href="https://github.com/dsltdev" target="_blank" rel="noopener noreferrer" class="cl" aria-label="GitHub profile">
+          <span class="ck">GitHub</span>
+          <span class="cv">github.com/dsltdev</span>
+        </a>
+        <div class="cl" style="cursor:default">
+          <span class="ck" data-i="con.loc">Location</span>
+          <span class="cv" data-i="con.locv">Colombia · Remote worldwide</span>
+        </div>
       </div>
     </div>
-  </div>
-  <form class="rv d2" id="cform">
-    <div class="fg">
-      <label data-i="f.name">Name</label>
-      <input type="text" data-i-ph="f.name-ph" placeholder="Your name">
-    </div>
-    <div class="fg">
-      <label data-i="f.email">Email</label>
-      <input type="email" placeholder="your@email.com">
-    </div>
-    <div class="fg">
-      <label data-i="f.msg">Message</label>
-      <textarea data-i-ph="f.msg-ph" placeholder="Tell me about your project…"></textarea>
-    </div>
-    <button type="submit" class="bsend"><span id="sbtn" data-i="f.send">Send message →</span></button>
-  </form>
-</section>
+    <form class="rv d2" id="cform" novalidate>
+      <div class="fg">
+        <label for="name" data-i="f.name">Name</label>
+        <input type="text" id="name" data-i-ph="f.name-ph" placeholder="Your name" required>
+      </div>
+      <div class="fg">
+        <label for="email" data-i="f.email">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required>
+      </div>
+      <div class="fg">
+        <label for="message" data-i="f.msg">Message</label>
+        <textarea id="message" data-i-ph="f.msg-ph" placeholder="Tell me about your project…" required></textarea>
+      </div>
+      <button type="submit" class="bsend"><span id="sbtn" data-i="f.send">Send message →</span></button>
+    </form>
+  </section>
+</main>
 
-<footer>
+<footer role="contentinfo">
   <div class="fl">dsltdev · david lopez · © 2024</div>
   <div class="fls">
-    <a href="https://github.com/dsltdev" target="_blank">GitHub</a>
+    <a href="https://github.com/dsltdev" target="_blank" rel="noopener noreferrer">GitHub</a>
     <a href="mailto:dsltdev@icloud.com">Email</a>
     <a href="#home" data-i="f.top">Back to top ↑</a>
   </div>
 </footer>
 
-<script>
-/* ═══════════════════════════════════════════════════════════
-   i18n strings
-═══════════════════════════════════════════════════════════ */
-const S = {
-  en: {
-    'nav.about':'About','nav.process':'Process','nav.projects':'Projects',
-    'nav.contact':'Contact','nav.avail':'Available',
-    'hero.tag':'Colombia · Remote worldwide',
-    'hero.l1':'David Lopez','hero.l2':'turns ideas',
-    'hero.sub':'I take your idea from a sketch to a live product — clean, fast, and ready for real users. No jargon, no delays, no surprises.',
-    'hero.cta1':'Start a project','hero.cta2':'See my work',
-    'hero.badge':'Open to work','hero.role':'software developer','hero.scroll':'Scroll to explore',
-    'stat.a':'Projects delivered','stat.b':'Avg. days to launch',
-    'stat.c':'On-time delivery','stat.d':'Countries served',
-    'about.ey':'about',
-    'about.h':'Your idea deserves<br>to look <em>world-class.</em>',
-    'about.p1':"I build digital products that feel expensive — because the details matter. From the first pixel to the last line of code, everything has a reason to be there.",
-    'about.p2':'Based in Colombia. Working with founders, agencies, and companies worldwide. I speak fluent Spanish and English.',
-    'about.svc-ey':'what I do',
-    'svc.a.n':'Landing Pages','svc.a.d':'That convert visitors into clients. Fast, beautiful, mobile-perfect.',
-    'svc.b.n':'Web Applications','svc.b.d':"Full products your users won't want to stop using.",
-    'svc.c.n':'E-commerce','svc.c.d':'Stores built to sell. Clean checkout, zero friction.',
-    'svc.d.n':'Brand & Design','svc.d.d':'Your visual identity, sharp and consistent across every touchpoint.',
-    'svc.e.n':'APIs & Integrations','svc.e.d':"Connect your tools. Automate what wastes your team's time.",
-    'svc.f.n':'Consulting','svc.f.d':"Not sure where to start? I'll map the best path and build it.",
-    'proc.ey':'how it works',
-    'proc.h':'Simple for you.<br><em>Precise</em> from my side.',
-    'proc.a.t':'We talk',
-    'proc.a.d':"Tell me your idea. I'll tell you exactly what's possible, how long it takes, and what it costs. Free call, no commitment.",
-    'proc.b.t':'I build',
-    'proc.b.d':"You see real progress every day. No black boxes. No \"it'll be ready when it's ready.\" Revisions are part of the process.",
-    'proc.c.t':'You launch',
-    'proc.c.d':"Your product goes live, polished and tested. I don't disappear — I stay to make sure everything runs perfectly.",
-    'proj.ey':'work','proj.h':'Results, not <em>promises.</em>',
-    'proj.feat':'Featured · 2024',
-    'proj.bc.res':'→ Delivered in 5 days · First version, no revisions',
-    'proj.bc.d':'A premium kitchen design brand went from invisible to unforgettable online. SpaceX-inspired layout, immersive scroll experience, custom interactions. Zero frameworks — pure craft.',
-    'proj.view':'View project ↗',
-    'proj.b.n':'Project Alpha','proj.b.r':'↑ 3× more signups post-launch',
-    'proj.c.n':'Project Beta','proj.c.r':'↑ 60% increase in checkout completion',
-    'proj.d.n':'Project Gamma','proj.d.r':'→ 20h/week saved for the team',
-    'con.ey':'contact',
-    'con.h':'Your idea is one<br>conversation <em>away.</em>',
-    'con.d':"Tell me what you're building. I'll tell you how we can make it real. Usually respond within a few hours.",
-    'con.email':'Email','con.loc':'Location','con.locv':'Colombia · Remote worldwide',
-    'f.name':'Name','f.name-ph':'Your name','f.email':'Email',
-    'f.msg':'Message','f.msg-ph':'Tell me about your project…',
-    'f.send':'Send message →','f.sent':"Sent! I'll be in touch →",'f.top':'Back to top ↑',
-    'mq':['Landing Pages','Web Applications','E-commerce','UI Design','Mobile Apps','APIs','Automation','Consulting','Branding'],
-    'ty':['people love.','that win.','in days.','that convert.','that impress.'],
-  },
-  es: {
-    'nav.about':'Sobre mí','nav.process':'Proceso','nav.projects':'Proyectos',
-    'nav.contact':'Contacto','nav.avail':'Disponible',
-    'hero.tag':'Colombia · Trabajo remoto',
-    'hero.l1':'David Lopez','hero.l2':'convierte ideas',
-    'hero.sub':'Llevo tu idea de papel a producto real — limpio, rápido y listo para usuarios reales. Sin tecnicismos, sin retrasos, sin sorpresas.',
-    'hero.cta1':'Iniciar proyecto','hero.cta2':'Ver trabajo',
-    'hero.badge':'Disponible','hero.role':'desarrollador de software','hero.scroll':'Scroll para explorar',
-    'stat.a':'Proyectos entregados','stat.b':'Días promedio de lanzamiento',
-    'stat.c':'Entregas a tiempo','stat.d':'Países atendidos',
-    'about.ey':'sobre mí',
-    'about.h':'Tu idea merece<br>verse <em>de talla mundial.</em>',
-    'about.p1':'Construyo productos digitales que se sienten costosos — porque los detalles importan. Desde el primer píxel hasta la última línea de código, todo tiene una razón de estar.',
-    'about.p2':'Basado en Colombia. Trabajo con fundadores, agencias y empresas de todo el mundo. Hablo español e inglés.',
-    'about.svc-ey':'lo que hago',
-    'svc.a.n':'Landing Pages','svc.a.d':'Que convierten visitantes en clientes. Rápidas, hermosas, perfectas en móvil.',
-    'svc.b.n':'Aplicaciones Web','svc.b.d':'Productos completos que tus usuarios no querrán dejar de usar.',
-    'svc.c.n':'E-commerce','svc.c.d':'Tiendas construidas para vender. Checkout limpio, cero fricción.',
-    'svc.d.n':'Marca & Diseño','svc.d.d':'Tu identidad visual, nítida y consistente en cada punto de contacto.',
-    'svc.e.n':'APIs e Integraciones','svc.e.d':'Conecta tus herramientas. Automatiza lo que desperdicia el tiempo de tu equipo.',
-    'svc.f.n':'Consultoría','svc.f.d':'¿No sabes por dónde empezar? Trazo el mejor camino y lo construyo.',
-    'proc.ey':'cómo funciona',
-    'proc.h':'Simple para ti.<br><em>Preciso</em> de mi parte.',
-    'proc.a.t':'Hablamos',
-    'proc.a.d':'Cuéntame tu idea. Te diré exactamente qué es posible, cuánto tarda y cuánto cuesta. Llamada gratis, sin compromiso.',
-    'proc.b.t':'Construyo',
-    'proc.b.d':'Ves progreso real cada día. Sin cajas negras. Sin "estará listo cuando esté listo". Las revisiones son parte del proceso.',
-    'proc.c.t':'Lanzas',
-    'proc.c.d':'Tu producto sale en vivo, pulido y probado. No desaparezco — me quedo para asegurar que todo funcione perfecto.',
-    'proj.ey':'trabajo','proj.h':'Resultados, no <em>promesas.</em>',
-    'proj.feat':'Destacado · 2024',
-    'proj.bc.res':'→ Entregado en 5 días · Primera versión, sin revisiones',
-    'proj.bc.d':'Una marca premium de cocinas pasó de invisible a impactante en línea. Layout inspirado en SpaceX, experiencia inmersiva de scroll, interacciones a medida.',
-    'proj.view':'Ver proyecto ↗',
-    'proj.b.n':'Proyecto Alpha','proj.b.r':'↑ 3× más registros post-lanzamiento',
-    'proj.c.n':'Proyecto Beta','proj.c.r':'↑ 60% más conversiones en checkout',
-    'proj.d.n':'Proyecto Gamma','proj.d.r':'→ 20h/semana ahorradas al equipo',
-    'con.ey':'contacto',
-    'con.h':'Tu idea está a una<br>conversación <em>de distancia.</em>',
-    'con.d':'Cuéntame qué estás construyendo. Te diré cómo lo hacemos real. Generalmente respondo en pocas horas.',
-    'con.email':'Email','con.loc':'Ubicación','con.locv':'Colombia · Trabajo remoto',
-    'f.name':'Nombre','f.name-ph':'Tu nombre','f.email':'Email',
-    'f.msg':'Mensaje','f.msg-ph':'Cuéntame sobre tu proyecto…',
-    'f.send':'Enviar mensaje →','f.sent':'¡Enviado! Te contacto pronto →','f.top':'Volver arriba ↑',
-    'mq':['Landing Pages','Aplicaciones Web','E-commerce','Diseño UI','Apps Móviles','APIs','Automatización','Consultoría','Branding'],
-    'ty':['que la gente ama.','que ganan.','en días.','que convierten.','que impresionan.'],
-  }
-};
-
-let lang = localStorage.getItem('lang') || 'en';
-let theme = localStorage.getItem('theme') || 'dark';
-let tyPhrases, tyIdx=0, tyChar=0, tyDel=false, tyTimer;
-
-function applyLang() {
-  const s = S[lang];
-  document.documentElement.setAttribute('data-lang', lang);
-  document.getElementById('langBtn').textContent = lang==='en'?'ES':'EN';
-  document.querySelectorAll('[data-i]').forEach(el => {
-    const k = el.getAttribute('data-i');
-    if(s[k]!==undefined) el.innerHTML = s[k];
-  });
-  document.querySelectorAll('[data-i-ph]').forEach(el => {
-    const k = el.getAttribute('data-i-ph');
-    if(s[k]!==undefined) el.placeholder = s[k];
-  });
-  tyPhrases = s['ty'];
-  tyIdx=0; tyChar=0; tyDel=false;
-  clearTimeout(tyTimer); typeTick();
-  buildMarquee();
-}
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', theme);
-  document.getElementById('themeBtn').textContent = theme==='dark'?'☀':'☾';
-  localStorage.setItem('theme', theme);
-}
-document.getElementById('langBtn').addEventListener('click', () => {
-  lang = lang==='en'?'es':'en';
-  localStorage.setItem('lang', lang);
-  applyLang();
-});
-document.getElementById('themeBtn').addEventListener('click', () => {
-  theme = theme==='dark'?'light':'dark';
-  applyTheme();
-});
-
-/* ── Marquee ───────────────────────────────────────────── */
-function buildMarquee() {
-  const items = S[lang]['mq'];
-  const mq = document.getElementById('mq');
-  const rep = [...items,...items,...items,...items];
-  mq.innerHTML = rep.map(t=>`<span class="mq-item">${t}</span>`).join('');
-}
-
-/* ── Typewriter ────────────────────────────────────────── */
-const tyEl = document.getElementById('ty');
-function typeTick() {
-  if(!tyPhrases) return;
-  const phrase = tyPhrases[tyIdx];
-  if(!tyDel) {
-    tyEl.textContent = phrase.slice(0, ++tyChar);
-    if(tyChar===phrase.length){ tyDel=true; tyTimer=setTimeout(typeTick,2400); }
-    else tyTimer=setTimeout(typeTick,72);
-  } else {
-    tyEl.textContent = phrase.slice(0, --tyChar);
-    if(tyChar===0){ tyDel=false; tyIdx=(tyIdx+1)%tyPhrases.length; tyTimer=setTimeout(typeTick,350); }
-    else tyTimer=setTimeout(typeTick,38);
-  }
-}
-
-/* ── Text Scramble ─────────────────────────────────────── */
-const CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#&';
-function scramble(el, final, dur) {
-  const frames=Math.floor(dur/16); let frame=0;
-  const tick=()=>{
-    const p=frame/frames;
-    el.textContent=final.split('').map((ch,i)=>{
-      if(ch===' ') return ' ';
-      if(i/final.length<p) return ch;
-      return CHARS[Math.floor(Math.random()*CHARS.length)];
-    }).join('');
-    frame++;
-    if(frame<=frames) requestAnimationFrame(tick);
-    else el.textContent=final;
-  };
-  requestAnimationFrame(tick);
-}
-setTimeout(()=>{
-  document.querySelectorAll('[data-scramble]').forEach(el=>{
-    scramble(el, el.textContent.trim(), 900);
-  });
-}, 1600);
-
-/* ── Canvas Particles ──────────────────────────────────── */
-const cv=document.getElementById('cv');
-const ctx=cv.getContext('2d');
-let W,H,parts=[],mouse={x:-999,y:-999};
-function resize(){ W=cv.width=innerWidth; H=cv.height=innerHeight; }
-resize(); addEventListener('resize',resize);
-
-class P {
-  constructor(){
-    this.x=Math.random()*W; this.y=Math.random()*H;
-    this.vx=(Math.random()-.5)*.25; this.vy=(Math.random()-.5)*.25;
-    this.r=Math.random()*1.3+.4;
-    this.a=Math.random()*.32+.07;
-    this.gold=Math.random()>.72;
-  }
-  update(){
-    const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.hypot(dx,dy);
-    if(d<120){ const f=.55*(1-d/120); this.vx+=dx/d*f; this.vy+=dy/d*f; }
-    this.vx*=.98; this.vy*=.98;
-    this.x+=this.vx; this.y+=this.vy;
-    if(this.x<-5) this.x=W+5; if(this.x>W+5) this.x=-5;
-    if(this.y<-5) this.y=H+5; if(this.y>H+5) this.y=-5;
-  }
-  draw(){
-    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-    ctx.fillStyle=this.gold?`rgba(196,164,90,${this.a})`:`rgba(240,237,234,${this.a*.55})`;
-    ctx.fill();
-  }
-}
-for(let i=0;i<80;i++) parts.push(new P());
-
-function drawLines(){
-  for(let i=0;i<parts.length;i++){
-    for(let j=i+1;j<parts.length;j++){
-      const d=Math.hypot(parts[i].x-parts[j].x,parts[i].y-parts[j].y);
-      if(d<90){
-        ctx.beginPath(); ctx.moveTo(parts[i].x,parts[i].y); ctx.lineTo(parts[j].x,parts[j].y);
-        ctx.strokeStyle=`rgba(196,164,90,${.07*(1-d/90)})`; ctx.lineWidth=.5; ctx.stroke();
-      }
-    }
-  }
-}
-(function animP(){ ctx.clearRect(0,0,W,H); parts.forEach(p=>{p.update();p.draw();}); drawLines(); requestAnimationFrame(animP); })();
-
-/* ── Cursor + Trail ────────────────────────────────────── */
-const TN=12; const trail=[];
-for(let i=0;i<TN;i++){
-  const d=document.createElement('div'); d.className='trail';
-  const s=Math.max(1.5,4.5*(1-i/TN));
-  d.style.cssText=`width:${s}px;height:${s}px;opacity:${.55*(1-i/TN)};`;
-  document.body.appendChild(d);
-  trail.push({el:d,x:0,y:0});
-}
-const curDot=document.getElementById('cur'), curRing=document.getElementById('curl');
-let mx=0,my=0,rx=0,ry=0;
-const tp=Array(TN).fill(null).map(()=>({x:0,y:0}));
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX; my=e.clientY;
-  mouse.x=mx; mouse.y=my;
-  curDot.style.left=mx+'px'; curDot.style.top=my+'px';
-});
-(function curTick(){
-  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
-  curRing.style.left=rx+'px'; curRing.style.top=ry+'px';
-  for(let i=TN-1;i>0;i--){ tp[i].x+=(tp[i-1].x-tp[i].x)*.35; tp[i].y+=(tp[i-1].y-tp[i].y)*.35; }
-  tp[0].x+=(mx-tp[0].x)*.35; tp[0].y+=(my-tp[0].y)*.35;
-  trail.forEach((t,i)=>{ t.el.style.left=tp[i].x+'px'; t.el.style.top=tp[i].y+'px'; });
-  requestAnimationFrame(curTick);
-})();
-document.querySelectorAll('a,button,.svc,.proc-step,.stat').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
-});
-
-/* ── Ambient glow ──────────────────────────────────────── */
-const glowEl=document.getElementById('glow');
-let gx=innerWidth/2,gy=innerHeight/2,gfx=gx,gfy=gy;
-document.addEventListener('mousemove',e=>{gx=e.clientX;gy=e.clientY;});
-(function glTick(){
-  gfx+=(gx-gfx)*.04; gfy+=(gy-gfy)*.04;
-  glowEl.style.left=gfx+'px'; glowEl.style.top=gfy+'px';
-  requestAnimationFrame(glTick);
-})();
-
-/* ── Project hover preview ─────────────────────────────── */
-const pv=document.getElementById('pv'), pvImg=document.getElementById('pv-img');
-document.querySelectorAll('.pi[data-preview]').forEach(item=>{
-  item.addEventListener('mouseenter',()=>{ pvImg.src=item.dataset.preview; pv.classList.add('show'); });
-  item.addEventListener('mousemove',e=>{
-    const top=Math.min(e.clientY-100,innerHeight-210);
-    const left=e.clientX+40+300>innerWidth? e.clientX-340 : e.clientX+40;
-    pv.style.left=left+'px'; pv.style.top=top+'px';
-  });
-  item.addEventListener('mouseleave',()=>pv.classList.remove('show'));
-});
-
-/* ── 3D Tilt ───────────────────────────────────────────── */
-document.querySelectorAll('.tilt').forEach(card=>{
-  card.style.transition='transform .06s ease';
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const dx=(e.clientX-r.left-r.width/2)/(r.width/2);
-    const dy=(e.clientY-r.top-r.height/2)/(r.height/2);
-    card.style.transform=`perspective(900px) rotateY(${dx*9}deg) rotateX(${-dy*9}deg)`;
-  });
-  card.addEventListener('mouseleave',()=>{
-    card.style.transition='transform .7s cubic-bezier(.16,1,.3,1)';
-    card.style.transform='perspective(900px) rotateY(0deg) rotateX(0deg)';
-  });
-});
-
-/* ── Magnetic buttons ──────────────────────────────────── */
-document.querySelectorAll('.mwrap').forEach(w=>{
-  const a=w.querySelector('a');
-  w.addEventListener('mousemove',e=>{
-    const r=w.getBoundingClientRect();
-    const x=(e.clientX-r.left-r.width/2)*.25, y=(e.clientY-r.top-r.height/2)*.25;
-    a.style.transform=`translate(${x}px,${y}px)`; a.style.transition='transform .1s ease';
-  });
-  w.addEventListener('mouseleave',()=>{
-    a.style.transform='translate(0,0)'; a.style.transition='transform .6s cubic-bezier(.16,1,.3,1)';
-  });
-});
-
-/* ── Nav + progress ────────────────────────────────────── */
-const nav=document.getElementById('nav'), prog=document.getElementById('prog');
-addEventListener('scroll',()=>{
-  const s=scrollY;
-  nav.classList.toggle('scrolled',s>50);
-  prog.style.width=(s/(document.body.scrollHeight-innerHeight)*100)+'%';
-},{passive:true});
-
-/* ── Counters ──────────────────────────────────────────── */
-const easeOut=t=>1-Math.pow(1-t,3);
-function animCount(el,to,dur=1800){
-  let start;
-  const step=ts=>{
-    if(!start) start=ts;
-    const p=Math.min((ts-start)/dur,1);
-    el.textContent=Math.round(to*easeOut(p));
-    if(p<1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-const cio=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ animCount(e.target,+e.target.dataset.to); cio.unobserve(e.target); } });
-},{threshold:.5});
-document.querySelectorAll('.cnt').forEach(el=>cio.observe(el));
-
-/* ── Reveal ────────────────────────────────────────────── */
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
-/* ── Form ──────────────────────────────────────────────── */
-document.getElementById('cform').addEventListener('submit',e=>{
-  e.preventDefault();
-  const b=document.getElementById('sbtn');
-  b.textContent=S[lang]['f.sent'];
-  setTimeout(()=>b.textContent=S[lang]['f.send'],3500);
-});
-
-/* ── Rubik's Cube 3D ───────────────────────────────────── */
-(function(){
-  const CS=52, HALF=26, STEP=57;
-
-  // Standard Rubik's colors
-  const C = {
-    pz:'#E63946', nz:'#F77F00',  // front red, back orange
-    px:'#3B82F6', nx:'#22C55E',  // right blue, left green
-    ny:'#F5F5F0', py:'#FBBF24',  // top white, bottom yellow
-    in:'#101010'                  // interior black
-  };
-
-  const FDEF = [
-    { id:'pz', t:`translateZ(${HALF}px)` },
-    { id:'nz', t:`rotateY(180deg) translateZ(${HALF}px)` },
-    { id:'px', t:`rotateY(90deg) translateZ(${HALF}px)` },
-    { id:'nx', t:`rotateY(-90deg) translateZ(${HALF}px)` },
-    { id:'py', t:`rotateX(90deg) translateZ(${HALF}px)` },   // bottom face (+Y down)
-    { id:'ny', t:`rotateX(-90deg) translateZ(${HALF}px)` },  // top face   (-Y up)
-  ];
-
-  function col(id, x, y, z) {
-    if(id==='pz'&&z=== 1) return C.pz;
-    if(id==='nz'&&z===-1) return C.nz;
-    if(id==='px'&&x=== 1) return C.px;
-    if(id==='nx'&&x===-1) return C.nx;
-    if(id==='ny'&&y===-1) return C.ny; // y=-1 is visually top
-    if(id==='py'&&y=== 1) return C.py; // y=+1 is visually bottom
-    return C.in;
-  }
-
-  const wrap = document.getElementById('cubeWrapper');
-  if(!wrap) return;
-  const cubies = [];
-
-  for(let xi=0;xi<3;xi++) for(let yi=0;yi<3;yi++) for(let zi=0;zi<3;zi++){
-    const x=xi-1, y=yi-1, z=zi-1;
-    const el = document.createElement('div');
-    el.className = 'cubie';
-    const hx=x*STEP, hy=y*STEP, hz=z*STEP;
-    el.style.transform = `translate3d(${hx}px,${hy}px,${hz}px)`;
-
-    FDEF.forEach(f => {
-      const face = document.createElement('div');
-      face.className = 'cubie-face';
-      const color = col(f.id,x,y,z);
-      face.style.background = color;
-      face.style.transform = f.t;
-      if(color !== C.in) face.style.boxShadow = 'inset 0 0 0 3px rgba(255,255,255,.1)';
-      el.appendChild(face);
-    });
-
-    cubies.push({el,x,y,z,hx,hy,hz});
-    wrap.appendChild(el);
-  }
-
-  // ── Global spin (rAF) ──
-  let rotY=0, speed=0.28;
-  (function spin(){
-    rotY += speed;
-    const rotX = -22 + Math.sin(rotY * Math.PI/600) * 10;
-    wrap.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    requestAnimationFrame(spin);
-  })();
-
-  // ── Scramble: rotate random layers visually ──
-  // Group cubies by Y layer for horizontal spins
-  function randomSpin(done) {
-    const axis = ['y','x','z'][Math.floor(Math.random()*3)];
-    const layer = [-1,0,1][Math.floor(Math.random()*3)];
-    const deg = [90,-90,180][Math.floor(Math.random()*3)];
-    const group = cubies.filter(c => c[axis]===layer);
-
-    // Wrap group in temp div, rotate it
-    const tmp = document.createElement('div');
-    tmp.style.cssText = 'position:absolute;width:0;height:0;transform-style:preserve-3d;';
-    group.forEach(c => tmp.appendChild(c.el));
-    wrap.appendChild(tmp);
-
-    const rotProp = axis==='y'?`rotateY(${deg}deg)`:axis==='x'?`rotateX(${deg}deg)`:`rotateZ(${deg}deg)`;
-    tmp.style.transition = 'transform .55s cubic-bezier(.4,0,.2,1)';
-    requestAnimationFrame(()=>{
-      tmp.style.transform = rotProp;
-      setTimeout(()=>{
-        group.forEach(c => wrap.appendChild(c.el));
-        wrap.removeChild(tmp);
-        if(done) done();
-      }, 600);
-    });
-  }
-
-  // ── Explosion ──
-  const EDIST=210;
-  function explode() {
-    cubies.forEach(c => {
-      const len = Math.hypot(c.x,c.y,c.z) || 0.58;
-      const dx = c.x/len*EDIST + (Math.random()-.5)*90;
-      const dy = c.y/len*EDIST + (Math.random()-.5)*90;
-      const dz = c.z/len*EDIST + (Math.random()-.5)*90;
-      const rx = (Math.random()-.5)*400;
-      const ry = (Math.random()-.5)*400;
-      c.el.style.transition = 'transform 1.35s cubic-bezier(.16,1,.3,1)';
-      c.el.style.transform = `translate3d(${c.hx+dx}px,${c.hy+dy}px,${c.hz+dz}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-    });
-  }
-
-  // ── Implosion ──
-  function implode(onDone) {
-    cubies.forEach((c,i) => {
-      c.el.style.transition = `transform 1.15s cubic-bezier(.16,1,.3,1) ${i*13}ms`;
-      c.el.style.transform = `translate3d(${c.hx}px,${c.hy}px,${c.hz}px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
-    });
-    setTimeout(onDone, 1150 + 27*13 + 200);
-  }
-
-  // ── Main cycle: scramble → explode → float → implode → repeat ──
-  function cycle() {
-    // 1) Scramble with 3 random layer spins
-    let spins = 0;
-    function doSpin() {
-      if(spins++ < 3) randomSpin(()=> setTimeout(doSpin, 120));
-      else afterScramble();
-    }
-    setTimeout(doSpin, 3500);
-  }
-
-  function afterScramble() {
-    // 2) Explode
-    explode();
-    // 3) Float (wait for explosion + drift time)
-    setTimeout(()=>{
-      // 4) Implode
-      implode(()=>{
-        // 5) Assembled rest, then repeat
-        setTimeout(cycle, 2500);
-      });
-    }, 1350 + 1800); // explode anim + float time
-  }
-
-  cycle();
-})();
-
-/* ── Init ──────────────────────────────────────────────── */
-applyTheme();
-applyLang();
-</script>
+<script src="js/script.js"></script>
 </body>
 </html>
