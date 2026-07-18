@@ -1,0 +1,89 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-left">
+        <span class="footer-logo">DL</span>
+        <p class="footer-copy">&copy; {currentYear} David López</p>
+      </div>
+
+      <div class="footer-right">
+        <a href="https://github.com/dsltdev" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/davidlopez" target="_blank">LinkedIn</a>
+        <a href="mailto:dsltdev@icloud.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 2rem 5%;
+    background: var(--black);
+    color: var(--white);
+    border-top: none;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .footer-logo {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray);
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .footer-right a {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    transition: color 0.15s;
+  }
+
+  .footer-right a:hover {
+    color: var(--white);
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-left {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-right {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

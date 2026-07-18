@@ -1,0 +1,136 @@
+---
+const skills = [
+  { name: "React / Next.js", level: 95 },
+  { name: "TypeScript", level: 90 },
+  { name: "Node.js", level: 92 },
+  { name: "Python", level: 85 },
+  { name: "PostgreSQL", level: 85 },
+  { name: "Docker", level: 80 },
+  { name: "AWS", level: 75 },
+  { name: "Git", level: 95 }
+];
+---
+
+<section id="skills" class="skills">
+  <div class="container">
+    <div class="skills-grid">
+      <div class="skills-left">
+        <p class="section-label">// 003</p>
+        <h2 class="section-title">Skills</h2>
+        <p class="section-subtitle">
+          Tecnologías que uso día a día para construir productos.
+        </p>
+      </div>
+
+      <div class="skills-right">
+        <div class="skills-list">
+          {skills.map(skill => (
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">{skill.name}</span>
+                <span class="skill-percentage">{skill.level}%</span>
+              </div>
+              <div class="skill-bar">
+                <div 
+                  class="skill-fill" 
+                  style={`width: ${skill.level}%`}
+                ></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="skills-extra">
+          <p class="extra-label">También trabajo con:</p>
+          <div class="extra-tags">
+            <span class="tag">Vue.js</span>
+            <span class="tag">GraphQL</span>
+            <span class="tag">Redis</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Tailwind</span>
+            <span class="tag">Linux</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+  }
+
+  .skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .skill-name {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .skill-percentage {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+
+  .skill-bar {
+    height: 4px;
+    background: var(--light-gray);
+    border: 1px solid var(--black);
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: var(--black);
+  }
+
+  .skills-extra {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: var(--border);
+  }
+
+  .extra-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 1rem;
+  }
+
+  .extra-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

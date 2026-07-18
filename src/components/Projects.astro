@@ -1,0 +1,182 @@
+---
+const projects = [
+  {
+    title: "E-Commerce Platform",
+    description: "Plataforma de comercio electrónico completa. Panel admin, pagos, analytics.",
+    tags: ["React", "Node.js", "MongoDB"],
+    year: "2024",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "AI Task Manager",
+    description: "Gestión de tareas potenciada por IA. Aprende patrones, optimiza productividad.",
+    tags: ["Next.js", "Python", "OpenAI"],
+    year: "2024",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Real-time Dashboard",
+    description: "Dashboard de datos en tiempo real. Visualizaciones y alertas.",
+    tags: ["Vue.js", "D3.js", "WebSocket"],
+    year: "2023",
+    link: "#",
+    github: "#"
+  },
+  {
+    title: "Social Media App",
+    description: "Red social móvil. Feeds, stories, mensajería instantánea.",
+    tags: ["React Native", "Firebase"],
+    year: "2023",
+    link: "#",
+    github: "#"
+  }
+];
+---
+
+<section id="projects" class="projects">
+  <div class="container">
+    <div class="projects-header">
+      <div>
+        <p class="section-label">// 002</p>
+        <h2 class="section-title">Proyectos</h2>
+      </div>
+      <a href="https://github.com/dsltdev" class="btn btn-secondary" target="_blank">GitHub →</a>
+    </div>
+
+    <div class="projects-grid">
+      {projects.map((project, index) => (
+        <article class="project-card">
+          <div class="project-number">{String(index + 1).padStart(2, '0')}</div>
+          
+          <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">{project.title}</h3>
+              <span class="project-year">{project.year}</span>
+            </div>
+            
+            <p class="project-description">{project.description}</p>
+            
+            <div class="project-tags">
+              {project.tags.map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+
+          <div class="project-links">
+            <a href={project.link} class="project-link">Ver ↗</a>
+            <a href={project.github} class="project-link">Código ↗</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--black);
+    border: var(--border);
+  }
+
+  .project-card {
+    background: var(--white);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: background 0.15s;
+  }
+
+  .project-card:hover {
+    background: var(--light-gray);
+  }
+
+  .project-number {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray);
+  }
+
+  .project-content {
+    flex: 1;
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .project-title {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray);
+  }
+
+  .project-description {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: var(--border-thin);
+  }
+
+  .project-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--black);
+    transition: color 0.15s;
+  }
+
+  .project-link:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .projects-header {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>

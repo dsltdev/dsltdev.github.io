@@ -1,0 +1,83 @@
+---
+---
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">DL</a>
+    
+    <div class="nav-links">
+      <a href="#home" class="nav-link">Inicio</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+
+    <a href="#contact" class="nav-cta btn btn-primary">Contactar</a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 5%;
+    background: var(--white);
+    border-bottom: var(--border);
+  }
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+  }
+
+  .nav-logo:hover {
+    color: var(--red);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover {
+    color: var(--black);
+  }
+
+  .nav-cta {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+
+    .nav-cta {
+      display: none;
+    }
+  }
+</style>
