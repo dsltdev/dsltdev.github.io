@@ -1,0 +1,967 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Progreso | NeuroFamilia">
+  <div class="app-layout">
+    <aside class="sidebar glass-card">
+      <div class="sidebar-header">
+        <a href="/" class="nav-logo">
+          <span class="logo-icon">🧠</span>
+          <span class="logo-text">NeuroFamilia</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/app" class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#contenido" class="nav-item">
+          <span class="nav-icon">📚</span>
+          <span>Contenido</span>
+        </a>
+        <a href="#quizzes" class="nav-item">
+          <span class="nav-icon">🧠</span>
+          <span>Quizzes</span>
+        </a>
+        <a href="#progreso" class="nav-item active">
+          <span class="nav-icon">📈</span>
+          <span>Progreso</span>
+        </a>
+        <a href="#comunidad" class="nav-item">
+          <span class="nav-icon">👥</span>
+          <span>Comunidad</span>
+        </a>
+        <a href="#coaching" class="nav-item">
+          <span class="nav-icon">🎓</span>
+          <span>Coaching</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">M</div>
+          <div class="user-details">
+            <span class="user-name">María González</span>
+            <span class="user-plan">Plan Pro</span>
+          </div>
+        </div>
+        <button class="logout-btn">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Tu progreso familiar 📈</h1>
+          <p class="topbar-subtitle">Seguí el crecimiento y los logros de tu familia</p>
+        </div>
+        <div class="topbar-right">
+          <div class="period-selector">
+            <button class="period-btn active">Semana</button>
+            <button class="period-btn">Mes</button>
+            <button class="period-btn">Año</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="progress-overview">
+        <div class="overview-card glass-card">
+          <div class="overview-icon">🎯</div>
+          <div class="overview-info">
+            <span class="overview-value">85%</span>
+            <span class="overview-label">Meta mensual</span>
+          </div>
+          <div class="overview-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 85%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="overview-card glass-card">
+          <div class="overview-icon">🏆</div>
+          <div class="overview-info">
+            <span class="overview-value">12</span>
+            <span class="overview-label">Insignias ganadas</span>
+          </div>
+          <div class="overview-trend positive">+3 este mes</div>
+        </div>
+
+        <div class="overview-card glass-card">
+          <div class="overview-icon">📚</div>
+          <div class="overview-info">
+            <span class="overview-value">24</span>
+            <span class="overview-label">Contenidos completados</span>
+          </div>
+          <div class="overview-trend positive">+8 este mes</div>
+        </div>
+
+        <div class="overview-card glass-card">
+          <div class="overview-icon">⏱️</div>
+          <div class="overview-info">
+            <span class="overview-value">18.5h</span>
+            <span class="overview-label">Tiempo total de estudio</span>
+          </div>
+          <div class="overview-trend positive">+5.2h este mes</div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-card glass-card">
+          <div class="chart-header">
+            <h3>Actividad semanal</h3>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot"></span> Contenido</span>
+              <span class="legend-item"><span class="legend-dot secondary"></span> Quizzes</span>
+            </div>
+          </div>
+          <div class="chart-content">
+            <div class="chart-bars">
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 60%;"></div>
+                  <div class="bar secondary" style="height: 30%;"></div>
+                </div>
+                <span class="day-label">Lun</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 80%;"></div>
+                  <div class="bar secondary" style="height: 50%;"></div>
+                </div>
+                <span class="day-label">Mar</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 45%;"></div>
+                  <div class="bar secondary" style="height: 20%;"></div>
+                </div>
+                <span class="day-label">Mié</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 90%;"></div>
+                  <div class="bar secondary" style="height: 60%;"></div>
+                </div>
+                <span class="day-label">Jue</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 70%;"></div>
+                  <div class="bar secondary" style="height: 40%;"></div>
+                </div>
+                <span class="day-label">Vie</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 50%;"></div>
+                  <div class="bar secondary" style="height: 25%;"></div>
+                </div>
+                <span class="day-label">Sáb</span>
+              </div>
+              <div class="chart-day">
+                <div class="bars-container">
+                  <div class="bar primary" style="height: 30%;"></div>
+                  <div class="bar secondary" style="height: 15%;"></div>
+                </div>
+                <span class="day-label">Dom</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="streak-card glass-card">
+          <h3>Racha de aprendizaje</h3>
+          <div class="streak-display">
+            <div class="streak-number">7</div>
+            <div class="streak-text">
+              <span class="streak-label">días consecutivos</span>
+              <span class="streak-sublabel">¡Récord personal!</span>
+            </div>
+          </div>
+          <div class="streak-calendar">
+            <div class="calendar-day completed">L</div>
+            <div class="calendar-day completed">M</div>
+            <div class="calendar-day completed">M</div>
+            <div class="calendar-day completed">J</div>
+            <div class="calendar-day completed">V</div>
+            <div class="calendar-day completed">S</div>
+            <div class="calendar-day completed">D</div>
+          </div>
+          <div class="streak-message">
+            <span class="streak-emoji">🔥</span>
+            <span>¡Mantené la racha! Estás haciendo un gran trabajo.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="badges-section">
+        <h2>Tus insignias</h2>
+        <div class="badges-grid">
+          <div class="badge-card glass-card earned">
+            <div class="badge-icon">🌟</div>
+            <span class="badge-name">Primera vez</span>
+            <span class="badge-desc">Completaste tu primer quiz</span>
+          </div>
+          <div class="badge-card glass-card earned">
+            <div class="badge-icon">📚</div>
+            <span class="badge-name">Lector ávido</span>
+            <span class="badge-desc">Leíste 10 artículos</span>
+          </div>
+          <div class="badge-card glass-card earned">
+            <div class="badge-icon">🧠</div>
+            <span class="badge-name">Experto</span>
+            <span class="badge-desc">Obtuviste 90%+ en 3 quizzes</span>
+          </div>
+          <div class="badge-card glass-card earned">
+            <div class="badge-icon">🔥</div>
+            <span class="badge-name">Racha de fuego</span>
+            <span class="badge-desc">7 días consecutivos</span>
+          </div>
+          <div class="badge-card glass-card">
+            <div class="badge-icon">💎</div>
+            <span class="badge-name">Maestro</span>
+            <span class="badge-desc">Completá todos los módulos</span>
+          </div>
+          <div class="badge-card glass-card">
+            <div class="badge-icon">🎓</div>
+            <span class="badge-name">Certificado</span>
+            <span class="badge-desc">Obtené tu certificado final</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="children-section">
+        <div class="section-header">
+          <h2>Progreso por hijo/a</h2>
+          <button class="btn btn-secondary">+ Agregar hijo/a</button>
+        </div>
+        <div class="children-grid">
+          <div class="child-card glass-card">
+            <div class="child-header">
+              <div class="child-avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">S</div>
+              <div class="child-info">
+                <span class="child-name">Sofía</span>
+                <span class="child-age">8 años</span>
+              </div>
+            </div>
+            <div class="child-stats">
+              <div class="child-stat">
+                <span class="stat-value">15</span>
+                <span class="stat-label">Contenidos</span>
+              </div>
+              <div class="child-stat">
+                <span class="stat-value">3</span>
+                <span class="stat-label">Quizzes</span>
+              </div>
+              <div class="child-stat">
+                <span class="stat-value">5</span>
+                <span class="stat-label">Insignias</span>
+              </div>
+            </div>
+            <div class="child-progress">
+              <span class="progress-label">Progreso general</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 70%;"></div>
+              </div>
+              <span class="progress-value">70%</span>
+            </div>
+          </div>
+
+          <div class="child-card glass-card">
+            <div class="child-header">
+              <div class="child-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">L</div>
+              <div class="child-info">
+                <span class="child-name">Lucas</span>
+                <span class="child-age">14 años</span>
+              </div>
+            </div>
+            <div class="child-stats">
+              <div class="child-stat">
+                <span class="stat-value">9</span>
+                <span class="stat-label">Contenidos</span>
+              </div>
+              <div class="child-stat">
+                <span class="stat-value">2</span>
+                <span class="stat-label">Quizzes</span>
+              </div>
+              <div class="child-stat">
+                <span class="stat-value">4</span>
+                <span class="stat-label">Insignias</span>
+              </div>
+            </div>
+            <div class="child-progress">
+              <span class="progress-label">Progreso general</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 55%;"></div>
+              </div>
+              <span class="progress-value">55%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .app-layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    border-right: 1px solid var(--glass-border);
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .nav-item:hover {
+    background: var(--glass-bg-hover);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent-light);
+  }
+
+  .nav-icon {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .user-plan {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 1.5rem 2rem;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .topbar h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .topbar-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .period-selector {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.25rem;
+  }
+
+  .period-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .period-btn:hover {
+    color: var(--text);
+  }
+
+  .period-btn.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* Progress Overview */
+  .progress-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .overview-card {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .overview-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-bg);
+    border-radius: 12px;
+  }
+
+  .overview-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .overview-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .overview-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .overview-progress {
+    flex: 1;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--glass-bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+
+  .overview-trend {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .overview-trend.positive {
+    color: var(--success);
+  }
+
+  /* Chart Section */
+  .chart-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-card {
+    padding: 1.5rem;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  .legend-dot.secondary {
+    background: var(--accent-light);
+    opacity: 0.5;
+  }
+
+  .chart-content {
+    height: 200px;
+  }
+
+  .chart-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 100%;
+    padding-bottom: 1.5rem;
+  }
+
+  .chart-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .bars-container {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 150px;
+  }
+
+  .bar {
+    width: 16px;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s;
+  }
+
+  .bar.primary {
+    background: var(--accent);
+  }
+
+  .bar.secondary {
+    background: var(--accent-light);
+    opacity: 0.5;
+  }
+
+  .day-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* Streak Card */
+  .streak-card {
+    padding: 1.5rem;
+  }
+
+  .streak-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .streak-display {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .streak-number {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .streak-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .streak-label {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .streak-sublabel {
+    font-size: 0.8rem;
+    color: var(--success);
+  }
+
+  .streak-calendar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .calendar-day {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-bg);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .calendar-day.completed {
+    background: var(--success);
+    color: white;
+  }
+
+  .streak-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--success);
+  }
+
+  .streak-emoji {
+    font-size: 1.25rem;
+  }
+
+  /* Badges Section */
+  .badges-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .badges-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+  }
+
+  .badge-card {
+    padding: 1.25rem;
+    text-align: center;
+    opacity: 0.5;
+  }
+
+  .badge-card.earned {
+    opacity: 1;
+  }
+
+  .badge-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-name {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .badge-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* Children Section */
+  .children-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .children-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .child-card {
+    padding: 1.5rem;
+  }
+
+  .child-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .child-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: white;
+  }
+
+  .child-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .child-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .child-age {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .child-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .child-stat {
+    text-align: center;
+  }
+
+  .child-stat .stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .child-stat .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .child-progress {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .progress-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .progress-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .sidebar {
+      width: 80px;
+    }
+
+    .sidebar-header .logo-text,
+    .nav-item span:not(.nav-icon),
+    .user-details,
+    .logout-btn {
+      display: none;
+    }
+
+    .nav-item {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+
+    .user-info {
+      justify-content: center;
+    }
+
+    .main-content {
+      margin-left: 80px;
+    }
+
+    .progress-overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-section {
+      grid-template-columns: 1fr;
+    }
+
+    .badges-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 1rem;
+    }
+
+    .topbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .progress-overview {
+      grid-template-columns: 1fr;
+    }
+
+    .badges-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .children-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -22,9 +22,13 @@ const currentYear = new Date().getFullYear();
 <style>
   .footer {
     padding: 2rem 5%;
-    background: var(--black);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--white);
-    border-top: none;
+    position: relative;
+    z-index: 1;
   }
 
   .footer-content {
@@ -43,12 +47,13 @@ const currentYear = new Date().getFullYear();
     font-family: var(--font-mono);
     font-size: 1.25rem;
     font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .footer-copy {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .footer-right {
@@ -61,12 +66,13 @@ const currentYear = new Date().getFullYear();
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--gray);
-    transition: color 0.15s;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
   }
 
   .footer-right a:hover {
     color: var(--white);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 
   @media (max-width: 768px) {
@@ -84,6 +90,15 @@ const currentYear = new Date().getFullYear();
     .footer-right {
       flex-direction: column;
       gap: 0.75rem;
+    }
+  }
+
+  /* Accessibility: Reduced transparency support */
+  @media (prefers-reduced-transparency: reduce) {
+    .footer {
+      background: rgba(20, 20, 35, 0.95);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 </style>

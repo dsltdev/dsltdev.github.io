@@ -1,22 +1,1046 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Projects from '../components/Projects.astro';
-import Skills from '../components/Skills.astro';
-import Contact from '../components/Contact.astro';
-import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
-  <Navbar />
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">NeuroFamilia</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Características</a>
+        <a href="#pricing">Precios</a>
+        <a href="#testimonials">Testimonios</a>
+      </div>
+      <div class="nav-actions">
+        <a href="#login" class="btn btn-secondary btn-sm">Iniciar sesión</a>
+        <a href="#register" class="btn btn-primary btn-sm">Empezar gratis</a>
+      </div>
+    </div>
+  </nav>
+
   <main>
-    <Hero />
-    <About />
-    <Projects />
-    <Skills />
-    <Contact />
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <span class="badge">✨ Nuevo: Coaching familiar 1:1</span>
+            <h1>Neuroeducación para familias modernas</h1>
+            <p class="hero-subtitle">
+              Herramientas basadas en neurociencia para entender el desarrollo de tus hijos, 
+              mejorar la comunicación familiar y criar con consciencia.
+            </p>
+            <div class="hero-cta">
+              <a href="#register" class="btn btn-primary btn-lg">
+                Empezá gratis - 7 días de prueba
+                <span>→</span>
+              </a>
+              <a href="#demo" class="btn btn-secondary btn-lg">
+                <span>▶</span>
+                Ver demo
+              </a>
+            </div>
+            <div class="hero-proof">
+              <div class="proof-avatars">
+                <div class="avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">M</div>
+                <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">L</div>
+                <div class="avatar" style="background: linear-gradient(135deg, #10b981, #059669);">A</div>
+                <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">R</div>
+              </div>
+              <p class="proof-text">
+                <strong>+2,500 familias</strong> ya están transformando su parenting
+              </p>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="app-preview glass-card">
+              <div class="preview-header">
+                <div class="preview-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="preview-title">NeuroFamilia Dashboard</span>
+              </div>
+              <div class="preview-content">
+                <div class="preview-card">
+                  <div class="card-icon">📊</div>
+                  <div class="card-info">
+                    <span class="card-label">Progreso Semanal</span>
+                    <span class="card-value">+12%</span>
+                  </div>
+                </div>
+                <div class="preview-card">
+                  <div class="card-icon">🎯</div>
+                  <div class="card-info">
+                    <span class="card-label">Meta del mes</span>
+                    <span class="card-value">85%</span>
+                  </div>
+                </div>
+                <div class="preview-list">
+                  <div class="list-item">
+                    <span class="item-dot success"></span>
+                    <span>Completar módulo de emociones</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="item-dot warning"></span>
+                    <span>Quiz de estilos parentales</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="item-dot"></span>
+                    <span>Leer artículo: Límites sanos</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item glass-card">
+            <span class="stat-number">2,500+</span>
+            <span class="stat-label">Familias activas</span>
+          </div>
+          <div class="stat-item glass-card">
+            <span class="stat-number">150+</span>
+            <span class="stat-label">Artículos expertos</span>
+          </div>
+          <div class="stat-item glass-card">
+            <span class="stat-number">98%</span>
+            <span class="stat-label">Satisfacción</span>
+          </div>
+          <div class="stat-item glass-card">
+            <span class="stat-number">4.9★</span>
+            <span class="stat-label">Calificación media</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Características</span>
+          <h2 class="section-title">Todo lo que necesitas para criar con consciencia</h2>
+          <p class="section-subtitle">
+            Herramientas diseñadas por neurocientíficos y pedagogos para apoyar tu camino como padre o madre.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📚</div>
+            <h3>Contenido por edad</h3>
+            <p>
+              Artículos, guías y videos adaptados a cada etapa del desarrollo: 
+              primera infancia, etapa escolar y adolescentes.
+            </p>
+          </div>
+
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Quizzes inteligentes</h3>
+            <p>
+              Evalúa tu estilo parental, descubre fortalezas y recibe recomendaciones 
+              personalizadas basadas en evidencia científica.
+            </p>
+          </div>
+
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📈</div>
+            <h3>Tracker de progreso</h3>
+            <p>
+              Seguí el crecimiento de tu familia con insignias, logros y gráficos 
+              visuales que celebran cada paso adelante.
+            </p>
+          </div>
+
+          <div class="feature-card glass-card">
+            <div class="feature-icon">👥</div>
+            <h3>Comunidad de padres</h3>
+            <p>
+              Conectá con otros padres, compartí experiencias y encontrá apoyo 
+              en grupos moderados por expertos.
+            </p>
+          </div>
+
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🎓</div>
+            <h3>Coaching 1:1</h3>
+            <p>
+              Sesiones personalizadas con neuroeducadores certificados para 
+              resolver tus dudas específicas.
+            </p>
+          </div>
+
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📱</div>
+            <h3>Acceso desde cualquier lado</h3>
+            <p>
+              Usá NeuroFamilia desde tu celular, tablet o computadora. 
+              Tu progreso se sincroniza automáticamente.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Precios</span>
+          <h2 class="section-title">Elegí el plan perfecto para tu familia</h2>
+          <p class="section-subtitle">
+            Empezá gratis y升级 cuando estés listo. Sin sorpresas, cancelá cuando quieras.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card glass-card">
+            <div class="pricing-header">
+              <h3>Básico</h3>
+              <div class="price">
+                <span class="amount">Gratis</span>
+              </div>
+              <p class="pricing-desc">Perfecto para conocer NeuroFamilia</p>
+            </div>
+            <ul class="pricing-features">
+              <li><span class="check">✓</span> 5 artículos por mes</li>
+              <li><span class="check">✓</span> 1 quiz por mes</li>
+              <li><span class="check">✓</span> Tracker básico</li>
+              <li><span class="check">✓</span> Acceso a comunidad</li>
+            </ul>
+            <a href="#register" class="btn btn-outline btn-block">Empezar gratis</a>
+          </div>
+
+          <div class="pricing-card glass-card popular">
+            <div class="popular-badge">Más popular</div>
+            <div class="pricing-header">
+              <h3>Pro</h3>
+              <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">9.99</span>
+                <span class="period">/mes</span>
+              </div>
+              <p class="pricing-desc">Para familias comprometidas</p>
+            </div>
+            <ul class="pricing-features">
+              <li><span class="check">✓</span> Contenido ilimitado</li>
+              <li><span class="check">✓</span> Quizzes ilimitados</li>
+              <li><span class="check">✓</span> Tracker avanzado con insignias</li>
+              <li><span class="check">✓</span> Comunidad premium</li>
+              <li><span class="check">✓</span> Soporte prioritario</li>
+            </ul>
+            <a href="#register" class="btn btn-primary btn-block">Empezar prueba gratis</a>
+          </div>
+
+          <div class="pricing-card glass-card">
+            <div class="pricing-header">
+              <h3>Familiar</h3>
+              <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">14.99</span>
+                <span class="period">/mes</span>
+              </div>
+              <p class="pricing-desc">La experiencia completa</p>
+            </div>
+            <ul class="pricing-features">
+              <li><span class="check">✓</span> Todo de Pro</li>
+              <li><span class="check">✓</span> 2 sesiones coaching/mes</li>
+              <li><span class="check">✓</span> Grupos de apoyo exclusivos</li>
+              <li><span class="check">✓</span> Webinars en vivo</li>
+              <li><span class="check">✓</span> Acceso anticipado a funciones</li>
+            </ul>
+            <a href="#register" class="btn btn-outline btn-block">Empezar prueba gratis</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Testimonios</span>
+          <h2 class="section-title">Lo que dicen las familias</h2>
+        </div>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card glass-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "NeuroFamilia me ayudó a entender por qué mi hijo de 8 años reaccionaba de cierta manera. 
+              Los quizzes fueron reveladores y el coaching me dio herramientas concretas."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">M</div>
+              <div class="author-info">
+                <span class="author-name">María González</span>
+                <span class="author-role">Madre de 2 hijos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card glass-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Como padre primerizo, estaba perdido. El contenido por edad me da exactamente lo que necesito 
+              en cada momento. La comunidad es súper amigable."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">L</div>
+              <div class="author-info">
+                <span class="author-name">Luis Ramírez</span>
+                <span class="author-role">Padre primerizo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card glass-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "El tracker de progreso es motivador. Ver los logros de mi familia me hace seguir adelante. 
+              Las sesiones de coaching cambiaron nuestra dinámica familiar."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">A</div>
+              <div class="author-info">
+                <span class="author-name">Ana Martínez</span>
+                <span class="author-role">Madre de adolescente</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-content glass-card">
+          <h2>¿Listo para transformar tu familia?</h2>
+          <p>Unite a +2,500 familias que ya estáncriando con consciencia. Empezá gratis hoy.</p>
+          <a href="#register" class="btn btn-primary btn-lg">
+            Empezá gratis - 7 días de prueba
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
-  <Footer />
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo">
+            <span class="logo-icon">🧠</span>
+            <span class="logo-text">NeuroFamilia</span>
+          </a>
+          <p>Neuroeducación para familias modernas.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Producto</h4>
+            <a href="#features">Características</a>
+            <a href="#pricing">Precios</a>
+            <a href="#testimonials">Testimonios</a>
+          </div>
+          <div class="footer-col">
+            <h4>Recursos</h4>
+            <a href="#blog">Blog</a>
+            <a href="#guides">Guías</a>
+            <a href="#webinars">Webinars</a>
+          </div>
+          <div class="footer-col">
+            <h4>Soporte</h4>
+            <a href="#help">Centro de ayuda</a>
+            <a href="#contact">Contacto</a>
+            <a href="#community">Comunidad</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 NeuroFamilia. Todos los derechos reservados.</p>
+        <div class="footer-legal">
+          <a href="#privacy">Privacidad</a>
+          <a href="#terms">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 </Layout>
+
+<style>
+  /* Navbar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+    background: rgba(11, 12, 16, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding-top: 150px;
+    padding-bottom: 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .hero-text h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text);
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .hero-proof {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .proof-avatars {
+    display: flex;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: white;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+  }
+
+  .avatar:first-child {
+    margin-left: 0;
+  }
+
+  .proof-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .proof-text strong {
+    color: var(--text);
+  }
+
+  /* App Preview */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  .app-preview {
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .preview-dots {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .preview-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--muted);
+    opacity: 0.5;
+  }
+
+  .preview-dots span:nth-child(1) { background: #ef4444; opacity: 1; }
+  .preview-dots span:nth-child(2) { background: #f59e0b; opacity: 1; }
+  .preview-dots span:nth-child(3) { background: #10b981; opacity: 1; }
+
+  .preview-title {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .preview-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .preview-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+  }
+
+  .card-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .card-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  .item-dot.success { background: var(--success); }
+  .item-dot.warning { background: var(--warning); }
+
+  /* Stats */
+  .stats {
+    padding: 60px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  /* Features */
+  .features {
+    position: relative;
+    z-index: 1;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 2rem;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .feature-card p {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Pricing */
+  .pricing {
+    position: relative;
+    z-index: 1;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .pricing-card {
+    padding: 2rem;
+    position: relative;
+  }
+
+  .pricing-card.popular {
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 0.375rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 999px;
+  }
+
+  .pricing-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .pricing-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .currency {
+    font-size: 1.25rem;
+    color: var(--muted);
+  }
+
+  .amount {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .period {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .pricing-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .check {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  /* Testimonials */
+  .testimonials {
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+
+  .testimonial-stars {
+    color: #f59e0b;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .author-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* CTA */
+  .cta {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-content {
+    padding: 4rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .cta-content h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .cta-content p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 60px 0 30px;
+    border-top: 1px solid var(--glass-border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 4rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand p {
+    color: var(--muted);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .footer-col h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .footer-col a {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 0.375rem 0;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover {
+    color: var(--text);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .footer-bottom p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-legal a {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .footer-legal a:hover {
+    color: var(--text);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .hero-text {
+      align-items: center;
+    }
+
+    .hero-cta {
+      justify-content: center;
+    }
+
+    .hero-proof {
+      justify-content: center;
+    }
+
+    .hero-visual {
+      order: -1;
+    }
+
+    .features-grid,
+    .pricing-grid,
+    .testimonials-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pricing-card.popular {
+      transform: scale(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .features-grid,
+    .pricing-grid,
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .cta-content {
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-cta {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn-lg {
+      width: 100%;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

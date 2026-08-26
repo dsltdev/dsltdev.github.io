@@ -69,12 +69,19 @@
     flex-direction: column;
     gap: 0.25rem;
     padding: 1rem;
-    border: var(--border);
-    transition: background 0.15s;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
   }
 
   .contact-method:hover {
-    background: var(--light-gray);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
   }
 
   .method-label {
@@ -82,19 +89,27 @@
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .method-value {
     font-family: var(--font-mono);
     font-size: 0.9rem;
     font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .contact-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
   }
 
   .form-group {
@@ -108,23 +123,32 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .form-group input,
   .form-group textarea {
     padding: 1rem;
-    border: var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     font-family: var(--font-sans);
     font-size: 1rem;
-    background: var(--white);
-    transition: background 0.15s;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    transition: all 0.3s ease;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
   }
 
   .form-group input:focus,
   .form-group textarea:focus {
     outline: none;
-    background: var(--light-gray);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
   }
 
   .form-group textarea {
@@ -141,6 +165,21 @@
     .contact-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
+    }
+  }
+
+  /* Accessibility: Reduced transparency support */
+  @media (prefers-reduced-transparency: reduce) {
+    .contact-method,
+    .contact-form {
+      background: rgba(30, 30, 50, 0.95);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: rgba(20, 20, 35, 0.9);
     }
   }
 </style>

@@ -87,29 +87,33 @@ const skills = [
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .skill-percentage {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .skill-bar {
     height: 4px;
-    background: var(--light-gray);
-    border: 1px solid var(--black);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
   }
 
   .skill-fill {
     height: 100%;
-    background: var(--black);
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.8), rgba(255, 100, 100, 0.8));
+    border-radius: 2px;
+    transition: width 0.5s ease;
   }
 
   .skills-extra {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: var(--border);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .extra-label {
@@ -117,7 +121,7 @@ const skills = [
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
     margin-bottom: 1rem;
   }
 

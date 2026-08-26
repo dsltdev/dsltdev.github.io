@@ -1,0 +1,703 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Comunidad | NeuroFamilia">
+  <div class="app-layout">
+    <aside class="sidebar glass-card">
+      <div class="sidebar-header">
+        <a href="/" class="nav-logo">
+          <span class="logo-icon">🧠</span>
+          <span class="logo-text">NeuroFamilia</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/app" class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#contenido" class="nav-item">
+          <span class="nav-icon">📚</span>
+          <span>Contenido</span>
+        </a>
+        <a href="#quizzes" class="nav-item">
+          <span class="nav-icon">🧠</span>
+          <span>Quizzes</span>
+        </a>
+        <a href="#progreso" class="nav-item">
+          <span class="nav-icon">📈</span>
+          <span>Progreso</span>
+        </a>
+        <a href="#comunidad" class="nav-item active">
+          <span class="nav-icon">👥</span>
+          <span>Comunidad</span>
+        </a>
+        <a href="#coaching" class="nav-item">
+          <span class="nav-icon">🎓</span>
+          <span>Coaching</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">M</div>
+          <div class="user-details">
+            <span class="user-name">María González</span>
+            <span class="user-plan">Plan Pro</span>
+          </div>
+        </div>
+        <button class="logout-btn">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Comunidad de padres 👥</h1>
+          <p class="topbar-subtitle">Conectá con otros padres y compartí experiencias</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary">+ Nueva publicación</button>
+        </div>
+      </header>
+
+      <div class="community-tabs">
+        <button class="tab-btn active">Feed</button>
+        <button class="tab-btn">Grupos</button>
+        <button class="tab-btn">Eventos</button>
+        <button class="tab-btn">Mentores</button>
+      </div>
+
+      <div class="community-content">
+        <div class="feed-section">
+          <div class="post-card glass-card">
+            <div class="post-header">
+              <div class="post-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">L</div>
+              <div class="post-author">
+                <span class="author-name">Luis Ramírez</span>
+                <span class="author-time">Hace 2 horas</span>
+              </div>
+              <span class="post-tag">Pregunta</span>
+            </div>
+            <div class="post-content">
+              <p>¿Alguien más ha tenido problemas con el sueño de su hijo de 3 años? Nuestro pequeño se despierta varias veces en la noche y no sabemos cómo ayudarlo. Hemos probado varias rutinas pero nada parece funcionar.</p>
+            </div>
+            <div class="post-tags">
+              <span class="tag">Sueño</span>
+              <span class="tag">Primera infancia</span>
+              <span class="tag">Rutinas</span>
+            </div>
+            <div class="post-actions">
+              <button class="action-btn">
+                <span>❤️</span>
+                <span>24</span>
+              </button>
+              <button class="action-btn">
+                <span>💬</span>
+                <span>12 comentarios</span>
+              </button>
+              <button class="action-btn">
+                <span>🔗</span>
+                <span>Compartir</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="post-card glass-card">
+            <div class="post-header">
+              <div class="post-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">A</div>
+              <div class="post-author">
+                <span class="author-name">Ana Martínez</span>
+                <span class="author-time">Hace 5 horas</span>
+              </div>
+              <span class="post-tag success">Logro</span>
+            </div>
+            <div class="post-content">
+              <p>¡Quiero compartir un logro! Después de 3 meses aplicando las estrategias de comunicación que aprendí aquí, mi adolescente de 16 años finalmente empezó a compartir más sobre su día. ¡La paciencia y las herramientas funcionan!</p>
+            </div>
+            <div class="post-tags">
+              <span class="tag">Comunicación</span>
+              <span class="tag">Adolescentes</span>
+              <span class="tag">Éxito</span>
+            </div>
+            <div class="post-actions">
+              <button class="action-btn">
+                <span>❤️</span>
+                <span>56</span>
+              </button>
+              <button class="action-btn">
+                <span>💬</span>
+                <span>18 comentarios</span>
+              </button>
+              <button class="action-btn">
+                <span>🔗</span>
+                <span>Compartir</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="post-card glass-card">
+            <div class="post-header">
+              <div class="post-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">M</div>
+              <div class="post-author">
+                <span class="author-name">María López</span>
+                <span class="author-time">Ayer</span>
+              </div>
+              <span class="post-tag">Recurso</span>
+            </div>
+            <div class="post-content">
+              <p>Encontré este artículo sobre neurociencia del sueño que me ayudó mucho. Lo comparto por si a alguien le sirve: "Los 5 errores que los padres cometemos al acostar a sus hijos". Básicamente, la luz azul y las rutinas inconsistentes son los principales culpables.</p>
+            </div>
+            <div class="post-tags">
+              <span class="tag">Sueño</span>
+              <span class="tag">Neurociencia</span>
+              <span class="tag">Recomendación</span>
+            </div>
+            <div class="post-actions">
+              <button class="action-btn">
+                <span>❤️</span>
+                <span>38</span>
+              </button>
+              <button class="action-btn">
+                <span>💬</span>
+                <span>8 comentarios</span>
+              </button>
+              <button class="action-btn">
+                <span>🔗</span>
+                <span>Compartir</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="groups-card glass-card">
+            <h3>Tus grupos</h3>
+            <div class="group-list">
+              <div class="group-item">
+                <div class="group-icon" style="background: rgba(236, 72, 153, 0.2);">👶</div>
+                <div class="group-info">
+                  <span class="group-name">Padres de primera infancia</span>
+                  <span class="group-members">342 miembros</span>
+                </div>
+              </div>
+              <div class="group-item">
+                <div class="group-icon" style="background: rgba(59, 130, 246, 0.2);">📚</div>
+                <div class="group-info">
+                  <span class="group-name">Club de lectura neuroeducación</span>
+                  <span class="group-members">128 miembros</span>
+                </div>
+              </div>
+              <div class="group-item">
+                <div class="group-icon" style="background: rgba(16, 185, 129, 0.2);">🧘</div>
+                <div class="group-info">
+                  <span class="group-name">Mindfulness para padres</span>
+                  <span class="group-members">89 miembros</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-block">Explorar grupos</button>
+          </div>
+
+          <div class="events-card glass-card">
+            <h3>Próximos eventos</h3>
+            <div class="event-list">
+              <div class="event-item">
+                <div class="event-date">
+                  <span class="day">28</span>
+                  <span class="month">Mar</span>
+                </div>
+                <div class="event-info">
+                  <span class="event-title">Webinar: Neurociencia del juego</span>
+                  <span class="event-time">7:00 PM - 8:30 PM</span>
+                </div>
+              </div>
+              <div class="event-item">
+                <div class="event-date">
+                  <span class="day">05</span>
+                  <span class="month">Abr</span>
+                </div>
+                <div class="event-info">
+                  <span class="event-title">Taller: Comunicación no violenta</span>
+                  <span class="event-time">10:00 AM - 12:00 PM</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-block">Ver todos los eventos</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .app-layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    border-right: 1px solid var(--glass-border);
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .nav-item:hover {
+    background: var(--glass-bg-hover);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent-light);
+  }
+
+  .nav-icon {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .user-plan {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 1.5rem 2rem;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .topbar h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .topbar-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* Community Tabs */
+  .community-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover {
+    background: var(--glass-bg);
+    color: var(--text);
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* Community Content */
+  .community-content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+  }
+
+  .feed-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-card {
+    padding: 1.5rem;
+  }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+  }
+
+  .post-author {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .author-time {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .post-tag {
+    padding: 0.25rem 0.75rem;
+    background: rgba(99, 102, 241, 0.15);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent-light);
+  }
+
+  .post-tag.success {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+  }
+
+  .post-content {
+    margin-bottom: 1rem;
+  }
+
+  .post-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .post-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: var(--glass-bg);
+    color: var(--text);
+  }
+
+  /* Sidebar Section */
+  .sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .groups-card,
+  .events-card {
+    padding: 1.5rem;
+  }
+
+  .groups-card h3,
+  .events-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .group-list,
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .group-item,
+  .event-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .group-item:hover,
+  .event-item:hover {
+    background: var(--glass-bg-hover);
+  }
+
+  .group-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.25rem;
+  }
+
+  .group-info,
+  .event-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group-name,
+  .event-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .group-members,
+  .event-time {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .event-date {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.15);
+    border-radius: 8px;
+  }
+
+  .event-date .day {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    line-height: 1;
+  }
+
+  .event-date .month {
+    font-size: 0.65rem;
+    color: var(--accent-light);
+    text-transform: uppercase;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .sidebar {
+      width: 80px;
+    }
+
+    .sidebar-header .logo-text,
+    .nav-item span:not(.nav-icon),
+    .user-details,
+    .logout-btn {
+      display: none;
+    }
+
+    .nav-item {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+
+    .user-info {
+      justify-content: center;
+    }
+
+    .main-content {
+      margin-left: 80px;
+    }
+
+    .community-content {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar-section {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 1rem;
+    }
+
+    .topbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .community-tabs {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+    }
+
+    .tab-btn {
+      white-space: nowrap;
+    }
+
+    .sidebar-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

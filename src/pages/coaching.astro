@@ -1,0 +1,816 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Coaching | NeuroFamilia">
+  <div class="app-layout">
+    <aside class="sidebar glass-card">
+      <div class="sidebar-header">
+        <a href="/" class="nav-logo">
+          <span class="logo-icon">🧠</span>
+          <span class="logo-text">NeuroFamilia</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/app" class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#contenido" class="nav-item">
+          <span class="nav-icon">📚</span>
+          <span>Contenido</span>
+        </a>
+        <a href="#quizzes" class="nav-item">
+          <span class="nav-icon">🧠</span>
+          <span>Quizzes</span>
+        </a>
+        <a href="#progreso" class="nav-item">
+          <span class="nav-icon">📈</span>
+          <span>Progreso</span>
+        </a>
+        <a href="#comunidad" class="nav-item">
+          <span class="nav-icon">👥</span>
+          <span>Comunidad</span>
+        </a>
+        <a href="#coaching" class="nav-item active">
+          <span class="nav-icon">🎓</span>
+          <span>Coaching</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">M</div>
+          <div class="user-details">
+            <span class="user-name">María González</span>
+            <span class="user-plan">Plan Pro</span>
+          </div>
+        </div>
+        <button class="logout-btn">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Coaching familiar 🎓</h1>
+          <p class="topbar-subtitle">Sesiones personalizadas con expertos en neuroeducación</p>
+        </div>
+      </header>
+
+      <div class="coaching-hero glass-card">
+        <div class="hero-content">
+          <span class="badge">✨ Nuevo</span>
+          <h2>Sesiones 1:1 con neuroeducadores</h2>
+          <p>Recibí asesoramiento personalizado para los desafíos específicos de tu familia. Nuestros expertos te guían con estrategias basadas en evidencia científica.</p>
+          <div class="hero-stats">
+            <div class="stat">
+              <span class="stat-value">98%</span>
+              <span class="stat-label">Satisfacción</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">500+</span>
+              <span class="stat-label">Sesiones realizadas</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">4.9★</span>
+              <span class="stat-label">Calificación</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg">Agendar primera sesión gratis</button>
+        </div>
+      </div>
+
+      <div class="experts-section">
+        <h2>Nuestros expertos</h2>
+        <div class="experts-grid">
+          <div class="expert-card glass-card">
+            <div class="expert-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">DR</div>
+            <div class="expert-info">
+              <h3>Dra. Laura Rodríguez</h3>
+              <span class="expert-title">Neuropsicóloga infantil</span>
+              <p>Especialista en desarrollo cognitivo y emocional de 0 a 12 años. 15 años de experiencia.</p>
+              <div class="expert-tags">
+                <span class="tag">Primera infancia</span>
+                <span class="tag">Desarrollo</span>
+              </div>
+            </div>
+            <div class="expert-action">
+              <button class="btn btn-primary btn-block">Agendar sesión</button>
+            </div>
+          </div>
+
+          <div class="expert-card glass-card">
+            <div class="expert-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">CM</div>
+            <div class="expert-info">
+              <h3>Carlos Mendoza</h3>
+              <span class="expert-title">Coach familiar certificado</span>
+              <p>Experto en comunicación familiar y resolución de conflictos. Enfoque en padres de adolescentes.</p>
+              <div class="expert-tags">
+                <span class="tag">Adolescentes</span>
+                <span class="tag">Comunicación</span>
+              </div>
+            </div>
+            <div class="expert-action">
+              <button class="btn btn-primary btn-block">Agendar sesión</button>
+            </div>
+          </div>
+
+          <div class="expert-card glass-card">
+            <div class="expert-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">SG</div>
+            <div class="expert-info">
+              <h3>Dra. Sofía García</h3>
+              <span class="expert-title">Pedagoga y terapeuta familiar</span>
+              <p>Especialista en dificultades de aprendizaje y trastornos del desarrollo. Enfoque integral.</p>
+              <div class="expert-tags">
+                <span class="tag">Aprendizaje</span>
+                <span class="tag">Terapia</span>
+              </div>
+            </div>
+            <div class="expert-action">
+              <button class="btn btn-primary btn-block">Agendar sesión</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sessions-section">
+        <h2>Tus sesiones</h2>
+        <div class="sessions-grid">
+          <div class="session-card glass-card">
+            <div class="session-header">
+              <div class="session-status upcoming">Próxima</div>
+              <span class="session-date">28 Mar 2026</span>
+            </div>
+            <div class="session-content">
+              <div class="session-expert">
+                <div class="expert-avatar small" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">DR</div>
+                <div class="expert-info">
+                  <span class="expert-name">Dra. Laura Rodríguez</span>
+                  <span class="expert-topic">Desarrollo emocional</span>
+                </div>
+              </div>
+              <div class="session-details">
+                <span class="detail">⏱️ 45 minutos</span>
+                <span class="detail">📹 Videollamada</span>
+                <span class="detail">🕐 10:00 AM</span>
+              </div>
+            </div>
+            <div class="session-actions">
+              <button class="btn btn-secondary">Reprogramar</button>
+              <button class="btn btn-primary">Unirse a sesión</button>
+            </div>
+          </div>
+
+          <div class="session-card glass-card">
+            <div class="session-header">
+              <div class="session-status completed">Completada</div>
+              <span class="session-date">15 Mar 2026</span>
+            </div>
+            <div class="session-content">
+              <div class="session-expert">
+                <div class="expert-avatar small" style="background: linear-gradient(135deg, #10b981, #059669);">CM</div>
+                <div class="expert-info">
+                  <span class="expert-name">Carlos Mendoza</span>
+                  <span class="expert-topic">Comunicación con adolescentes</span>
+                </div>
+              </div>
+              <div class="session-details">
+                <span class="detail">⏱️ 45 minutos</span>
+                <span class="detail">📹 Videollamada</span>
+                <span class="detail">⭐ 5.0</span>
+              </div>
+            </div>
+            <div class="session-actions">
+              <button class="btn btn-outline">Ver resumen</button>
+              <button class="btn btn-secondary">Agendar otra</button>
+            </div>
+          </div>
+
+          <div class="session-card glass-card">
+            <div class="session-header">
+              <div class="session-status completed">Completada</div>
+              <span class="session-date">01 Mar 2026</span>
+            </div>
+            <div class="session-content">
+              <div class="session-expert">
+                <div class="expert-avatar small" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">DR</div>
+                <div class="expert-info">
+                  <span class="expert-name">Dra. Laura Rodríguez</span>
+                  <span class="expert-topic">Límites y disciplina positiva</span>
+                </div>
+              </div>
+              <div class="session-details">
+                <span class="detail">⏱️ 45 minutos</span>
+                <span class="detail">📹 Videollamada</span>
+                <span class="detail">⭐ 4.8</span>
+              </div>
+            </div>
+            <div class="session-actions">
+              <button class="btn btn-outline">Ver resumen</button>
+              <button class="btn btn-secondary">Agendar otra</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-section">
+        <h2>Planes de coaching</h2>
+        <div class="pricing-grid">
+          <div class="pricing-card glass-card">
+            <h3>Sesión única</h3>
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">45</span>
+            </div>
+            <ul class="features">
+              <li><span class="check">✓</span> 45 minutos</li>
+              <li><span class="check">✓</span> 1 experto a elección</li>
+              <li><span class="check">✓</span> Resumen post-sesión</li>
+              <li><span class="check">✓</span> Seguimiento por email</li>
+            </ul>
+            <button class="btn btn-outline btn-block">Agendar sesión</button>
+          </div>
+
+          <div class="pricing-card glass-card popular">
+            <div class="popular-badge">Más popular</div>
+            <h3>Plan mensual</h3>
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">120</span>
+              <span class="period">/mes</span>
+            </div>
+            <ul class="features">
+              <li><span class="check">✓</span> 3 sesiones/mes</li>
+              <li><span class="check">✓</span> Acceso a todos los expertos</li>
+              <li><span class="check">✓</span> Plan de seguimiento personalizado</li>
+              <li><span class="check">✓</span> Soporte prioritario</li>
+              <li><span class="check">✓</span> Recursos exclusivos</li>
+            </ul>
+            <button class="btn btn-primary btn-block">Empezar ahora</button>
+          </div>
+
+          <div class="pricing-card glass-card">
+            <h3>Plan trimestral</h3>
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">299</span>
+              <span class="period">/trimestre</span>
+            </div>
+            <ul class="features">
+              <li><span class="check">✓</span> 10 sesiones</li>
+              <li><span class="check">✓</span> Ahorro de $50</li>
+              <li><span class="check">✓</span> Acceso ilimitado expertos</li>
+              <li><span class="check">✓</span> Plan completo seguimiento</li>
+              <li><span class="check">✓</span> Webinars exclusivos</li>
+            </ul>
+            <button class="btn btn-outline btn-block">Agendar plan</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .app-layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    border-right: 1px solid var(--glass-border);
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .nav-item:hover {
+    background: var(--glass-bg-hover);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent-light);
+  }
+
+  .nav-icon {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .user-plan {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 1.5rem 2rem;
+  }
+
+  .topbar {
+    margin-bottom: 1.5rem;
+  }
+
+  .topbar h1 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .topbar-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* Coaching Hero */
+  .coaching-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .hero-content {
+    max-width: 600px;
+  }
+
+  .hero-content h2 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .hero-content p {
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .hero-stats .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-stats .stat-value {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .hero-stats .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Experts Section */
+  .experts-section {
+    margin-bottom: 2rem;
+  }
+
+  .experts-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .experts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .expert-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .expert-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: white;
+  }
+
+  .expert-avatar.small {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  .expert-info {
+    flex: 1;
+  }
+
+  .expert-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .expert-title {
+    font-size: 0.85rem;
+    color: var(--accent-light);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .expert-info p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .expert-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  /* Sessions Section */
+  .sessions-section {
+    margin-bottom: 2rem;
+  }
+
+  .sessions-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .session-card {
+    padding: 1.5rem;
+  }
+
+  .session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .session-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .session-status.upcoming {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent-light);
+  }
+
+  .session-status.completed {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+  }
+
+  .session-date {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .session-content {
+    margin-bottom: 1rem;
+  }
+
+  .session-expert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .expert-name {
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+  }
+
+  .expert-topic {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .session-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .session-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .session-actions .btn {
+    flex: 1;
+  }
+
+  /* Pricing Section */
+  .pricing-section {
+    margin-bottom: 2rem;
+  }
+
+  .pricing-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .pricing-card {
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .pricing-card.popular {
+    border-color: var(--accent);
+    transform: scale(1.02);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .pricing-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .currency {
+    font-size: 1.25rem;
+    color: var(--muted);
+  }
+
+  .amount {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .period {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .features {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .check {
+    color: var(--success);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .sidebar {
+      width: 80px;
+    }
+
+    .sidebar-header .logo-text,
+    .nav-item span:not(.nav-icon),
+    .user-details,
+    .logout-btn {
+      display: none;
+    }
+
+    .nav-item {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+
+    .user-info {
+      justify-content: center;
+    }
+
+    .main-content {
+      margin-left: 80px;
+    }
+
+    .experts-grid,
+    .sessions-grid,
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pricing-card.popular {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 1rem;
+    }
+
+    .coaching-hero {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .hero-stats {
+      justify-content: center;
+    }
+
+    .experts-grid,
+    .sessions-grid,
+    .pricing-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

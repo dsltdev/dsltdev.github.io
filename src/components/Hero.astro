@@ -82,7 +82,7 @@ export default developer;</code></pre>
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .hero-name {
@@ -92,11 +92,12 @@ export default developer;</code></pre>
     line-height: 0.9;
     letter-spacing: -0.05em;
     text-transform: uppercase;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
   }
 
   .hero-tagline {
     font-size: 1.25rem;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.7);
     max-width: 400px;
   }
 
@@ -112,7 +113,7 @@ export default developer;</code></pre>
     gap: 2rem;
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: var(--border-thin);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .stat {
@@ -133,13 +134,13 @@ export default developer;</code></pre>
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--gray);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .stat-divider {
     width: 1px;
     height: 40px;
-    background: var(--gray);
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .hero-visual {
@@ -148,11 +149,22 @@ export default developer;</code></pre>
   }
 
   .code-block {
-    background: var(--light-gray);
-    border: var(--border);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     padding: 1.5rem;
     width: 100%;
     max-width: 400px;
+    transition: all 0.3s ease;
+  }
+
+  .code-block:hover {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
   }
 
   .code-block pre {
@@ -163,7 +175,7 @@ export default developer;</code></pre>
     font-family: var(--font-mono);
     font-size: 0.85rem;
     line-height: 1.6;
-    color: var(--black);
+    color: rgba(255, 255, 255, 0.9);
   }
 
   @media (max-width: 1024px) {
@@ -199,6 +211,15 @@ export default developer;</code></pre>
     .stat-divider {
       width: 40px;
       height: 1px;
+    }
+  }
+
+  /* Accessibility: Reduced transparency support */
+  @media (prefers-reduced-transparency: reduce) {
+    .code-block {
+      background: rgba(30, 30, 50, 0.95);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 </style>
