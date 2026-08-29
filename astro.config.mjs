@@ -13,7 +13,7 @@ export default defineConfig({
       cssMinify: true
     },
     server: {
-      allowedHosts: ['dsltdev.com', 'www.dsltdev.com']
+      allowedHosts: ['dsltdev.com', 'www.dsltdev.com', '.trycloudflare.com']
     }
   }
 });

@@ -195,7 +195,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="section-label">Precios</span>
           <h2 class="section-title">Elegí el plan perfecto para tu familia</h2>
           <p class="section-subtitle">
-            Empezá gratis y升级 cuando estés listo. Sin sorpresas, cancelá cuando quieras.
+            Empezá gratis y pasá a un plan superior cuando estés listo. Sin sorpresas, cancelá cuando quieras.
           </p>
         </div>
 
@@ -317,11 +317,48 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
+    <section id="register" class="register-section">
+      <div class="container">
+        <div class="register-panel glass-card">
+          <div class="register-copy">
+            <span class="section-label">Tu primer paso</span>
+            <h2 class="section-title">Empezá a criar con más calma y claridad.</h2>
+            <p>
+              Creá tu cuenta gratis y recibí acceso inmediato a contenido por edad, un quiz inicial y tu tracker familiar.
+            </p>
+            <ul class="register-benefits">
+              <li><span>✓</span> 7 días de prueba sin tarjeta</li>
+              <li><span>✓</span> Recomendaciones según tu familia</li>
+              <li><span>✓</span> Podés cancelar cuando quieras</li>
+            </ul>
+          </div>
+          <form class="register-form" id="register-form">
+            <div class="form-heading">
+              <h3>Crear cuenta gratis</h3>
+              <p>Solo necesitamos lo esencial para empezar.</p>
+            </div>
+            <label for="register-name">Tu nombre</label>
+            <input id="register-name" name="name" type="text" placeholder="María" autocomplete="given-name" required />
+            <label for="register-email">Tu correo</label>
+            <input id="register-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required />
+            <label for="register-stage">¿Qué etapa querés acompañar?</label>
+            <select id="register-stage" name="stage">
+              <option value="primera-infancia">Primera infancia</option>
+              <option value="etapa-escolar">Etapa escolar</option>
+              <option value="adolescencia">Adolescencia</option>
+            </select>
+            <button class="btn btn-primary btn-block" type="submit">Crear mi cuenta gratis <span>→</span></button>
+            <p class="form-note" id="register-message" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="cta">
       <div class="container">
         <div class="cta-content glass-card">
           <h2>¿Listo para transformar tu familia?</h2>
-          <p>Unite a +2,500 familias que ya estáncriando con consciencia. Empezá gratis hoy.</p>
+          <p>Unite a +2,500 familias que ya están criando con consciencia. Empezá gratis hoy.</p>
           <a href="#register" class="btn btn-primary btn-lg">
             Empezá gratis - 7 días de prueba
             <span>→</span>
@@ -372,6 +409,31 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </footer>
 </Layout>
+
+<script>
+  const registerForm = document.querySelector<HTMLFormElement>('#register-form');
+  const registerMessage = document.querySelector<HTMLElement>('#register-message');
+
+  registerForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(registerForm);
+    const profile = {
+      name: String(formData.get('name') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+      stage: String(formData.get('stage') ?? 'primera-infancia')
+    };
+
+    localStorage.setItem('neurofamilia_profile', JSON.stringify(profile));
+    if (registerMessage) {
+      registerMessage.textContent = `Listo, ${profile.name}. Preparando tu espacio familiar...`;
+      registerMessage.classList.add('success');
+    }
+
+    window.setTimeout(() => {
+      window.location.href = '/app';
+    }, 700);
+  });
+</script>
 
 <style>
   /* Navbar */

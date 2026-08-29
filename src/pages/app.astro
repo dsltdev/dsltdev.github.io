@@ -43,8 +43,8 @@ import Layout from '../layouts/Layout.astro';
         <div class="user-info">
           <div class="user-avatar">M</div>
           <div class="user-details">
-            <span class="user-name">María González</span>
-            <span class="user-plan">Plan Pro</span>
+            <span class="user-name" id="user-name">Tu familia</span>
+            <span class="user-plan">Plan Básico</span>
           </div>
         </div>
         <button class="logout-btn">Cerrar sesión</button>
@@ -54,7 +54,7 @@ import Layout from '../layouts/Layout.astro';
     <main class="main-content">
       <header class="topbar">
         <div class="topbar-left">
-          <h1>Buenos días, María 👋</h1>
+          <h1>Buenos días, <span id="welcome-name">familia</span> 👋</h1>
           <p class="topbar-subtitle">¿Qué querés aprender hoy?</p>
         </div>
         <div class="topbar-right">
@@ -130,7 +130,7 @@ import Layout from '../layouts/Layout.astro';
               </div>
               <div class="content-body">
                 <h3>Entendiendo las emociones del niño</h3>
-                <p>Apreñe a identificar y validar las emociones de tu hijo de 0 a 6 años.</p>
+                <p>Aprendé a identificar y validar las emociones de tu hijo de 0 a 6 años.</p>
                 <div class="content-meta">
                   <span>📖 8 min</span>
                   <span>🧠 Quiz incluido</span>
@@ -209,6 +209,24 @@ import Layout from '../layouts/Layout.astro';
     </main>
   </div>
 </Layout>
+
+<script>
+  const savedProfile = localStorage.getItem('neurofamilia_profile');
+
+  if (savedProfile) {
+    try {
+      const profile = JSON.parse(savedProfile);
+      const firstName = String(profile.name ?? '').trim().split(' ')[0] || 'familia';
+      const userName = document.querySelector<HTMLElement>('#user-name');
+      const welcomeName = document.querySelector<HTMLElement>('#welcome-name');
+
+      if (userName) userName.textContent = String(profile.name ?? 'Tu familia');
+      if (welcomeName) welcomeName.textContent = firstName;
+    } catch {
+      localStorage.removeItem('neurofamilia_profile');
+    }
+  }
+</script>
 
 <style>
   .app-layout {

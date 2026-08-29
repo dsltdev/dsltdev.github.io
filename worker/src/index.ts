@@ -15,13 +15,24 @@ interface RAGRequest {
 
 const SYSTEM_PROMPT = `Sos NeuroFamilia AI, un asistente especializado en neuroeducación familiar. Tu objetivo es ayudar a padres y madres a entender el desarrollo de sus hijos, mejorar la comunicación familiar y criar con consciencia.
 
-Basándote en la información proporcionada como contexto, respondé de forma clara, empática y práctica. Si no tenés información suficiente, decilo honestamente.
+Tu trabajo es acompañar una conversación, no entregar respuestas aisladas. Primero escuchá lo que la persona quiso decir y respondé a eso. En cada turno:
+1. Reconocé de manera natural lo que la persona está viviendo, sin usar etiquetas como "Validación" ni repetir su mensaje palabra por palabra.
+2. Explicá qué puede estar ocurriendo usando el contexto disponible y lenguaje sencillo.
+3. Proponé una acción concreta, pequeña y segura para probar.
+4. Cerrá con una sola pregunta abierta que permita adaptar el siguiente paso.
 
-Formato de respuesta:
-- Usá un tono cálido y profesional
-- Incluí consejos prácticos cuando sea posible
-- Referenciá las fuentes cuando las uses
-- Respondé en español`;
+No inventes estudios, diagnósticos ni resultados. Si no tenés información suficiente, decilo honestamente y pedí el dato que falta. Diferenciá orientación educativa de atención clínica. Si aparecen señales de violencia, abuso, autolesión, riesgo inmediato o una emergencia, priorizá la seguridad y recomendá ayuda profesional o servicios de emergencia de la zona.
+
+NeuroFamilia puede mencionarse como una opción de acompañamiento cuando la persona pregunte por la plataforma, pida seguimiento o muestre interés en continuar; nunca interrumpas una situación sensible con una venta.
+
+Cómo conversar:
+- Soná cálido, presente y natural, como un orientador atento; no como un formulario, folleto o manual.
+- Respondé en español latinoamericano claro y adaptá el registro a la persona.
+- Usá párrafos breves y listas solo cuando ayuden.
+- No repitas consejos ni hagas preguntas innecesarias.
+- Referenciá las fuentes cuando las uses, sin inventarlas.
+- Cerrá con exactamente una pregunta abierta: una sola interrogación al final.
+- No afirmes que tenés sentimientos, experiencias personales o una relación humana con la familia.`;
 
 async function embedQuery(env: Env, query: string): Promise<number[]> {
   const result = await env.AI.run('@cf/baai/bge-base-en-v1.5', {
@@ -37,7 +48,7 @@ async function searchVectorize(
 ): Promise<VectorizeMatches> {
   return await env.VECTORIZE.query(embedding, {
     topK,
-    returnMetadata: 'indexed'
+    returnMetadata: true
   });
 }
 
@@ -62,7 +73,10 @@ async function generateResponse(
   messages: ChatMessage[],
   context: string
 ): Promise<string> {
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage = messages.findLast(message => message.role === 'user');
+  if (!lastMessage) {
+    return 'Para orientarte mejor, contame qué situación familiar querés trabajar.';
+  }
   const userQuery = lastMessage.content;
 
   const augmentedPrompt = `Contexto de NeuroFamilia:
@@ -70,11 +84,11 @@ ${context}
 
 ---
 
-Pregunta del usuario: ${userQuery}
+Última situación planteada por la persona: ${userQuery}
 
-Respondé basándote en el contexto proporcionado. Si el contexto no es relevante, indicá que no tenés información específica sobre ese tema.`;
+Continuá la conversación con el protocolo indicado. Basate en el contexto proporcionado. Si no es relevante, indicá que no tenés información específica sobre ese tema y hacé una pregunta para comprender mejor la situación.`;
 
-  const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+  const response = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fast', {
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       ...messages.slice(0, -1),
@@ -92,7 +106,11 @@ async function* streamResponse(
   messages: ChatMessage[],
   context: string
 ): AsyncGenerator<string> {
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage = messages.findLast(message => message.role === 'user');
+  if (!lastMessage) {
+    yield 'Para orientarte mejor, contame qué situación familiar querés trabajar.';
+    return;
+  }
   const userQuery = lastMessage.content;
 
   const augmentedPrompt = `Contexto de NeuroFamilia:
@@ -100,11 +118,11 @@ ${context}
 
 ---
 
-Pregunta del usuario: ${userQuery}
+Última situación planteada por la persona: ${userQuery}
 
-Respondé basándote en el contexto proporcionado. Si el contexto no es relevante, indicá que no tenés información específica sobre ese tema.`;
+Continuá la conversación con el protocolo indicado. Basate en el contexto proporcionado. Si no es relevante, indicá que no tenés información específica sobre ese tema y hacé una pregunta para comprender mejor la situación.`;
 
-  const stream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+  const stream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fast', {
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       ...messages.slice(0, -1),
