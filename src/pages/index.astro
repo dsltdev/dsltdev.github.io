@@ -1,95 +1,54 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
 ---
 
-<Layout>
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="/" class="nav-logo">
-        <span class="logo-icon">🧠</span>
-        <span class="logo-text">NeuroFamilia</span>
-      </a>
-      <div class="nav-links">
-        <a href="#features">Características</a>
-        <a href="#pricing">Precios</a>
-        <a href="#testimonials">Testimonios</a>
-      </div>
-      <div class="nav-actions">
-        <a href="#login" class="btn btn-secondary btn-sm">Iniciar sesión</a>
-        <a href="#register" class="btn btn-primary btn-sm">Empezar gratis</a>
-      </div>
-    </div>
-  </nav>
+<Layout title="DSLT — Desarrollo web para negocios en Colombia" description="Creamos sitios web y apps que venden. Para negocios en Medellín y toda Colombia.">
+  <Loader />
+  <ScrollProgress />
+  <Navbar />
 
   <main>
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-grid"></div>
+      </div>
       <div class="container">
         <div class="hero-content">
           <div class="hero-text">
-            <span class="badge">✨ Nuevo: Coaching familiar 1:1</span>
-            <h1>Neuroeducación para familias modernas</h1>
+            <span class="badge">DSLT · Medellín</span>
+            <h1>Tu negocio necesita<br><span class="accent">presencia digital.</span></h1>
             <p class="hero-subtitle">
-              Herramientas basadas en neurociencia para entender el desarrollo de tus hijos, 
-              mejorar la comunicación familiar y criar con consciencia.
+              Sitios web, apps y sistemas que realmente venden. Sin complicaciones, sin mensualidades ocultas.
             </p>
             <div class="hero-cta">
-              <a href="#register" class="btn btn-primary btn-lg">
-                Empezá gratis - 7 días de prueba
-                <span>→</span>
-              </a>
-              <a href="#demo" class="btn btn-secondary btn-lg">
-                <span>▶</span>
-                Ver demo
-              </a>
-            </div>
-            <div class="hero-proof">
-              <div class="proof-avatars">
-                <div class="avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">M</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">L</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #10b981, #059669);">A</div>
-                <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">R</div>
-              </div>
-              <p class="proof-text">
-                <strong>+2,500 familias</strong> ya están transformando su parenting
-              </p>
+              <a href="#contact" class="btn btn-primary">Hablemos →</a>
+              <a href="#services" class="btn btn-secondary">Ver servicios</a>
             </div>
           </div>
           <div class="hero-visual">
-            <div class="app-preview glass-card">
-              <div class="preview-header">
-                <div class="preview-dots">
-                  <span></span><span></span><span></span>
-                </div>
-                <span class="preview-title">NeuroFamilia Dashboard</span>
+            <div class="glass-card hero-card">
+              <div class="card-header">
+                <span class="card-dot"></span>
+                <span class="card-title">dsltd</span>
               </div>
-              <div class="preview-content">
-                <div class="preview-card">
-                  <div class="card-icon">📊</div>
-                  <div class="card-info">
-                    <span class="card-label">Progreso Semanal</span>
-                    <span class="card-value">+12%</span>
-                  </div>
+              <div class="card-body">
+                <div class="card-stat">
+                  <span class="stat-value">50+</span>
+                  <span class="stat-label">proyectos lanzados</span>
                 </div>
-                <div class="preview-card">
-                  <div class="card-icon">🎯</div>
-                  <div class="card-info">
-                    <span class="card-label">Meta del mes</span>
-                    <span class="card-value">85%</span>
-                  </div>
+                <div class="card-stat">
+                  <span class="stat-value">30+</span>
+                  <span class="stat-label">clientes activos</span>
                 </div>
-                <div class="preview-list">
-                  <div class="list-item">
-                    <span class="item-dot success"></span>
-                    <span>Completar módulo de emociones</span>
-                  </div>
-                  <div class="list-item">
-                    <span class="item-dot warning"></span>
-                    <span>Quiz de estilos parentales</span>
-                  </div>
-                  <div class="list-item">
-                    <span class="item-dot"></span>
-                    <span>Leer artículo: Límites sanos</span>
-                  </div>
+                <div class="card-stat">
+                  <span class="stat-value">5+</span>
+                  <span class="stat-label">años de experiencia</span>
                 </div>
               </div>
             </div>
@@ -98,420 +57,222 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <section class="stats">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-item glass-card">
-            <span class="stat-number">2,500+</span>
-            <span class="stat-label">Familias activas</span>
-          </div>
-          <div class="stat-item glass-card">
-            <span class="stat-number">150+</span>
-            <span class="stat-label">Artículos expertos</span>
-          </div>
-          <div class="stat-item glass-card">
-            <span class="stat-number">98%</span>
-            <span class="stat-label">Satisfacción</span>
-          </div>
-          <div class="stat-item glass-card">
-            <span class="stat-number">4.9★</span>
-            <span class="stat-label">Calificación media</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="features">
+    <section id="services" class="services">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Características</span>
-          <h2 class="section-title">Todo lo que necesitas para criar con consciencia</h2>
-          <p class="section-subtitle">
-            Herramientas diseñadas por neurocientíficos y pedagogos para apoyar tu camino como padre o madre.
-          </p>
+          <span class="section-label">// SERVICIOS</span>
+          <h2 class="section-title">Lo que hacemos</h2>
+          <p class="section-subtitle">Soluciones digitales completas para negocios que quieren crecer.</p>
         </div>
 
-        <div class="features-grid">
-          <div class="feature-card glass-card">
-            <div class="feature-icon">📚</div>
-            <h3>Contenido por edad</h3>
-            <p>
-              Artículos, guías y videos adaptados a cada etapa del desarrollo: 
-              primera infancia, etapa escolar y adolescentes.
-            </p>
+        <div class="services-grid">
+          <div class="service-card glass-card">
+            <div class="service-icon">🌐</div>
+            <h3>Sitios web</h3>
+            <p>Sitios modernos, rápidos y que convierten visitantes en clientes. Landing pages, sitios corporativos, e-commerce.</p>
           </div>
 
-          <div class="feature-card glass-card">
-            <div class="feature-icon">🧠</div>
-            <h3>Quizzes inteligentes</h3>
-            <p>
-              Evalúa tu estilo parental, descubre fortalezas y recibe recomendaciones 
-              personalizadas basadas en evidencia científica.
-            </p>
+          <div class="service-card glass-card">
+            <div class="service-icon">📱</div>
+            <h3>Apps móviles</h3>
+            <p>Aplicaciones para iOS y Android que tus clientes van a querer usar. React Native, Flutter.</p>
           </div>
 
-          <div class="feature-card glass-card">
-            <div class="feature-icon">📈</div>
-            <h3>Tracker de progreso</h3>
-            <p>
-              Seguí el crecimiento de tu familia con insignias, logros y gráficos 
-              visuales que celebran cada paso adelante.
-            </p>
+          <div class="service-card glass-card">
+            <div class="service-icon">⚡</div>
+            <h3>Sistemas a medida</h3>
+            <p>CRMs, dashboards, plataformas internas. Automatizá lo que hoy hacés a mano.</p>
           </div>
 
-          <div class="feature-card glass-card">
-            <div class="feature-icon">👥</div>
-            <h3>Comunidad de padres</h3>
-            <p>
-              Conectá con otros padres, compartí experiencias y encontrá apoyo 
-              en grupos moderados por expertos.
-            </p>
+          <div class="service-card glass-card">
+            <div class="service-icon">🤖</div>
+            <h3>IA & Automatización</h3>
+            <p>Chatbots, generación de contenido, workflows con inteligencia artificial integrada.</p>
           </div>
 
-          <div class="feature-card glass-card">
-            <div class="feature-icon">🎓</div>
-            <h3>Coaching 1:1</h3>
-            <p>
-              Sesiones personalizadas con neuroeducadores certificados para 
-              resolver tus dudas específicas.
-            </p>
+          <div class="service-card glass-card">
+            <div class="service-icon">🎨</div>
+            <h3>Diseño UI/UX</h3>
+            <p>Interfaces que se sienten bien. Diseño centrado en el usuario, prototipos rápidos.</p>
           </div>
 
-          <div class="feature-card glass-card">
-            <div class="feature-icon">📱</div>
-            <h3>Acceso desde cualquier lado</h3>
-            <p>
-              Usá NeuroFamilia desde tu celular, tablet o computadora. 
-              Tu progreso se sincroniza automáticamente.
-            </p>
+          <div class="service-card glass-card">
+            <div class="service-icon">☁️</div>
+            <h3>Infraestructura</h3>
+            <p>Deploy, DNS, dominios, hosting. Nos encargamos de que todo funcione sin que te preocupes.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="pricing" class="pricing">
+    <section class="process">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Precios</span>
-          <h2 class="section-title">Elegí el plan perfecto para tu familia</h2>
-          <p class="section-subtitle">
-            Empezá gratis y pasá a un plan superior cuando estés listo. Sin sorpresas, cancelá cuando quieras.
-          </p>
+          <span class="section-label">// PROCESO</span>
+          <h2 class="section-title">Cómo trabajamos</h2>
+          <p class="section-subtitle">Simple, rápido y sin sorpresas.</p>
         </div>
 
-        <div class="pricing-grid">
-          <div class="pricing-card glass-card">
-            <div class="pricing-header">
-              <h3>Básico</h3>
-              <div class="price">
-                <span class="amount">Gratis</span>
-              </div>
-              <p class="pricing-desc">Perfecto para conocer NeuroFamilia</p>
-            </div>
-            <ul class="pricing-features">
-              <li><span class="check">✓</span> 5 artículos por mes</li>
-              <li><span class="check">✓</span> 1 quiz por mes</li>
-              <li><span class="check">✓</span> Tracker básico</li>
-              <li><span class="check">✓</span> Acceso a comunidad</li>
-            </ul>
-            <a href="#register" class="btn btn-outline btn-block">Empezar gratis</a>
+        <div class="process-grid">
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3>Conversamos</h3>
+            <p>Nos contás qué necesitás. Sin formularios eternos, sin jerga técnica.</p>
           </div>
-
-          <div class="pricing-card glass-card popular">
-            <div class="popular-badge">Más popular</div>
-            <div class="pricing-header">
-              <h3>Pro</h3>
-              <div class="price">
-                <span class="currency">$</span>
-                <span class="amount">9.99</span>
-                <span class="period">/mes</span>
-              </div>
-              <p class="pricing-desc">Para familias comprometidas</p>
-            </div>
-            <ul class="pricing-features">
-              <li><span class="check">✓</span> Contenido ilimitado</li>
-              <li><span class="check">✓</span> Quizzes ilimitados</li>
-              <li><span class="check">✓</span> Tracker avanzado con insignias</li>
-              <li><span class="check">✓</span> Comunidad premium</li>
-              <li><span class="check">✓</span> Soporte prioritario</li>
-            </ul>
-            <a href="#register" class="btn btn-primary btn-block">Empezar prueba gratis</a>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3>Diseñamos</h3>
+            <p>Te mostramos cómo va a quedar antes de escribir una línea de código.</p>
           </div>
-
-          <div class="pricing-card glass-card">
-            <div class="pricing-header">
-              <h3>Familiar</h3>
-              <div class="price">
-                <span class="currency">$</span>
-                <span class="amount">14.99</span>
-                <span class="period">/mes</span>
-              </div>
-              <p class="pricing-desc">La experiencia completa</p>
-            </div>
-            <ul class="pricing-features">
-              <li><span class="check">✓</span> Todo de Pro</li>
-              <li><span class="check">✓</span> 2 sesiones coaching/mes</li>
-              <li><span class="check">✓</span> Grupos de apoyo exclusivos</li>
-              <li><span class="check">✓</span> Webinars en vivo</li>
-              <li><span class="check">✓</span> Acceso anticipado a funciones</li>
-            </ul>
-            <a href="#register" class="btn btn-outline btn-block">Empezar prueba gratis</a>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3>Construimos</h3>
+            <p>Desarrollamos tu proyecto en sprints cortos. Vos ves el progreso en tiempo real.</p>
+          </div>
+          <div class="process-arrow">→</div>
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3>Lanzamos</h3>
+            <p>Deploy, configuración, soporte. Tu negocio online funcionando.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="testimonials" class="testimonials">
+    <section class="tech">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Testimonios</span>
-          <h2 class="section-title">Lo que dicen las familias</h2>
+          <span class="section-label">// STACK</span>
+          <h2 class="section-title">Tecnologías</h2>
+          <p class="section-subtitle">Elegimos la herramienta correcta para cada proyecto.</p>
         </div>
 
-        <div class="testimonials-grid">
-          <div class="testimonial-card glass-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">
-              "NeuroFamilia me ayudó a entender por qué mi hijo de 8 años reaccionaba de cierta manera. 
-              Los quizzes fueron reveladores y el coaching me dio herramientas concretas."
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">M</div>
-              <div class="author-info">
-                <span class="author-name">María González</span>
-                <span class="author-role">Madre de 2 hijos</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-card glass-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">
-              "Como padre primerizo, estaba perdido. El contenido por edad me da exactamente lo que necesito 
-              en cada momento. La comunidad es súper amigable."
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">L</div>
-              <div class="author-info">
-                <span class="author-name">Luis Ramírez</span>
-                <span class="author-role">Padre primerizo</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-card glass-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">
-              "El tracker de progreso es motivador. Ver los logros de mi familia me hace seguir adelante. 
-              Las sesiones de coaching cambiaron nuestra dinámica familiar."
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">A</div>
-              <div class="author-info">
-                <span class="author-name">Ana Martínez</span>
-                <span class="author-role">Madre de adolescente</span>
-              </div>
-            </div>
-          </div>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Next.js</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">AWS</span>
+          <span class="tech-tag">Cloudflare</span>
+          <span class="tech-tag">Tailwind</span>
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Firebase</span>
         </div>
       </div>
     </section>
 
-    <section id="register" class="register-section">
+    <section id="contact" class="contact-section">
       <div class="container">
-        <div class="register-panel glass-card">
-          <div class="register-copy">
-            <span class="section-label">Tu primer paso</span>
-            <h2 class="section-title">Empezá a criar con más calma y claridad.</h2>
-            <p>
-              Creá tu cuenta gratis y recibí acceso inmediato a contenido por edad, un quiz inicial y tu tracker familiar.
-            </p>
-            <ul class="register-benefits">
-              <li><span>✓</span> 7 días de prueba sin tarjeta</li>
-              <li><span>✓</span> Recomendaciones según tu familia</li>
-              <li><span>✓</span> Podés cancelar cuando quieras</li>
-            </ul>
-          </div>
-          <form class="register-form" id="register-form">
-            <div class="form-heading">
-              <h3>Crear cuenta gratis</h3>
-              <p>Solo necesitamos lo esencial para empezar.</p>
-            </div>
-            <label for="register-name">Tu nombre</label>
-            <input id="register-name" name="name" type="text" placeholder="María" autocomplete="given-name" required />
-            <label for="register-email">Tu correo</label>
-            <input id="register-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required />
-            <label for="register-stage">¿Qué etapa querés acompañar?</label>
-            <select id="register-stage" name="stage">
-              <option value="primera-infancia">Primera infancia</option>
-              <option value="etapa-escolar">Etapa escolar</option>
-              <option value="adolescencia">Adolescencia</option>
-            </select>
-            <button class="btn btn-primary btn-block" type="submit">Crear mi cuenta gratis <span>→</span></button>
-            <p class="form-note" id="register-message" role="status"></p>
-          </form>
-        </div>
-      </div>
-    </section>
+        <div class="contact-grid">
+          <div class="contact-left">
+            <span class="section-label">// CONTACTO</span>
+            <h2 class="section-title">¿Listo para empezar?</h2>
+            <p class="section-subtitle">Contanos tu idea. Sin compromiso, sin costo.</p>
 
-    <section class="cta">
-      <div class="container">
-        <div class="cta-content glass-card">
-          <h2>¿Listo para transformar tu familia?</h2>
-          <p>Unite a +2,500 familias que ya están criando con consciencia. Empezá gratis hoy.</p>
-          <a href="#register" class="btn btn-primary btn-lg">
-            Empezá gratis - 7 días de prueba
-            <span>→</span>
-          </a>
+            <div class="contact-methods">
+              <a href="mailto:dsltdev@icloud.com" class="contact-method glass-card">
+                <span class="method-label">Email</span>
+                <span class="method-value">dsltdev@icloud.com</span>
+              </a>
+              <a href="https://github.com/dsltdev" class="contact-method glass-card" target="_blank">
+                <span class="method-label">GitHub</span>
+                <span class="method-value">@dsltdev</span>
+              </a>
+              <a href="https://linkedin.com/in/davidlopez" class="contact-method glass-card" target="_blank">
+                <span class="method-label">LinkedIn</span>
+                <span class="method-value">/in/davidlopez</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-right">
+            <form class="contact-form glass-card" action="https://formspree.io/f/xwkzbgln" method="POST">
+              <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" required placeholder="Tu nombre">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="tu@email.com">
+              </div>
+              <div class="form-group">
+                <label for="message">¿Qué necesitás?</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Contanos sobre tu proyecto..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar →</button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <a href="/" class="nav-logo">
-            <span class="logo-icon">🧠</span>
-            <span class="logo-text">NeuroFamilia</span>
-          </a>
-          <p>Neuroeducación para familias modernas.</p>
-        </div>
-        <div class="footer-links">
-          <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="#features">Características</a>
-            <a href="#pricing">Precios</a>
-            <a href="#testimonials">Testimonios</a>
-          </div>
-          <div class="footer-col">
-            <h4>Recursos</h4>
-            <a href="#blog">Blog</a>
-            <a href="#guides">Guías</a>
-            <a href="#webinars">Webinars</a>
-          </div>
-          <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="#help">Centro de ayuda</a>
-            <a href="#contact">Contacto</a>
-            <a href="#community">Comunidad</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2026 NeuroFamilia. Todos los derechos reservados.</p>
-        <div class="footer-legal">
-          <a href="#privacy">Privacidad</a>
-          <a href="#terms">Términos</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <Footer />
 </Layout>
 
-<script>
-  const registerForm = document.querySelector<HTMLFormElement>('#register-form');
-  const registerMessage = document.querySelector<HTMLElement>('#register-message');
-
-  registerForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(registerForm);
-    const profile = {
-      name: String(formData.get('name') ?? '').trim(),
-      email: String(formData.get('email') ?? '').trim(),
-      stage: String(formData.get('stage') ?? 'primera-infancia')
-    };
-
-    localStorage.setItem('neurofamilia_profile', JSON.stringify(profile));
-    if (registerMessage) {
-      registerMessage.textContent = `Listo, ${profile.name}. Preparando tu espacio familiar...`;
-      registerMessage.classList.add('success');
-    }
-
-    window.setTimeout(() => {
-      window.location.href = '/app';
-    }, 700);
-  });
-</script>
-
 <style>
-  /* Navbar */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 1rem 0;
-    background: rgba(11, 12, 16, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-  }
-
-  .nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .logo-icon {
-    font-size: 1.5rem;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .nav-links a {
-    color: var(--muted);
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover {
-    color: var(--text);
-  }
-
-  .nav-actions {
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  .btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
   /* Hero */
   .hero {
-    padding-top: 150px;
-    padding-bottom: 100px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
     position: relative;
-    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .hero-orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 230, 138, 0.18) 0%, transparent 70%);
+    top: -10%;
+    left: -5%;
+  }
+
+  .hero-orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 179, 107, 0.12) 0%, transparent 70%);
+    bottom: -10%;
+    right: -5%;
+    animation-delay: -4s;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 230, 138, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 230, 138, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
   }
 
   .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 4rem;
     align-items: center;
+    position: relative;
+    z-index: 1;
   }
 
   .hero-text {
@@ -522,16 +283,24 @@ import Layout from '../layouts/Layout.astro';
 
   .hero-text h1 {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.1;
     color: var(--text);
+  }
+
+  .accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hero-subtitle {
     font-size: 1.15rem;
     color: var(--muted);
     line-height: 1.7;
+    max-width: 480px;
   }
 
   .hero-cta {
@@ -540,485 +309,304 @@ import Layout from '../layouts/Layout.astro';
     margin-top: 0.5rem;
   }
 
-  .btn-lg {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-  }
-
-  .hero-proof {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .proof-avatars {
-    display: flex;
-  }
-
-  .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: white;
-    border: 2px solid var(--bg);
-    margin-left: -8px;
-  }
-
-  .avatar:first-child {
-    margin-left: 0;
-  }
-
-  .proof-text {
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .proof-text strong {
-    color: var(--text);
-  }
-
-  /* App Preview */
   .hero-visual {
     display: flex;
     justify-content: center;
   }
 
-  .app-preview {
+  .hero-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
+    padding: 0;
     overflow: hidden;
   }
 
-  .preview-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid var(--glass-border);
-  }
-
-  .preview-dots {
-    display: flex;
-    gap: 0.375rem;
-  }
-
-  .preview-dots span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--muted);
-    opacity: 0.5;
-  }
-
-  .preview-dots span:nth-child(1) { background: #ef4444; opacity: 1; }
-  .preview-dots span:nth-child(2) { background: #f59e0b; opacity: 1; }
-  .preview-dots span:nth-child(3) { background: #10b981; opacity: 1; }
-
-  .preview-title {
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .preview-content {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .preview-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-  }
-
-  .card-icon {
-    font-size: 1.5rem;
-  }
-
-  .card-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .card-value {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .preview-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .list-item {
+  .card-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    font-size: 0.9rem;
-    color: var(--muted);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 230, 138, 0.08);
   }
 
-  .item-dot {
+  .card-dot {
     width: 8px;
     height: 8px;
+    background: var(--accent);
     border-radius: 50%;
-    background: var(--muted);
+    box-shadow: 0 0 12px var(--accent);
+    animation: glow 2s ease-in-out infinite;
   }
 
-  .item-dot.success { background: var(--success); }
-  .item-dot.warning { background: var(--warning); }
-
-  /* Stats */
-  .stats {
-    padding: 60px 0;
-    position: relative;
-    z-index: 1;
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-
-  .stat-item {
+  .card-body {
     padding: 1.5rem;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
-  .stat-number {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 2rem;
+  .card-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
     font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.25rem;
+    color: var(--accent);
   }
 
   .stat-label {
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  /* Features */
-  .features {
+  /* Services */
+  .services {
     position: relative;
     z-index: 1;
   }
 
-  .features-grid {
+  .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
-  .feature-card {
+  .service-card {
     padding: 2rem;
+    text-align: left;
   }
 
-  .feature-icon {
-    font-size: 2.5rem;
+  .service-icon {
+    font-size: 2rem;
     margin-bottom: 1rem;
   }
 
-  .feature-card h3 {
+  .service-card h3 {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
     color: var(--text);
   }
 
-  .feature-card p {
+  .service-card p {
     color: var(--muted);
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  /* Process */
+  .process {
+    position: relative;
+    z-index: 1;
+  }
+
+  .process-grid {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .process-step {
+    flex: 1;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .step-number {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.3;
+    margin-bottom: 1rem;
+  }
+
+  .process-step h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .process-step p {
+    color: var(--muted);
+    font-size: 0.9rem;
     line-height: 1.6;
   }
 
-  /* Pricing */
-  .pricing {
+  .process-arrow {
+    font-size: 1.5rem;
+    color: var(--accent);
+    opacity: 0.3;
+    padding-top: 2rem;
+  }
+
+  /* Tech */
+  .tech {
     position: relative;
     z-index: 1;
   }
 
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    align-items: start;
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
   }
 
-  .pricing-card {
-    padding: 2rem;
-    position: relative;
-  }
-
-  .pricing-card.popular {
-    border-color: var(--accent);
-    transform: scale(1.05);
-  }
-
-  .popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--accent);
-    color: white;
-    padding: 0.375rem 1rem;
-    font-size: 0.75rem;
+  .tech-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.625rem 1.25rem;
+    background: rgba(0, 230, 138, 0.06);
+    color: var(--accent);
+    border: 1px solid rgba(0, 230, 138, 0.12);
     border-radius: 999px;
+    transition: all 0.3s ease;
   }
 
-  .pricing-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
+  .tech-tag:hover {
+    background: rgba(0, 230, 138, 0.12);
+    border-color: rgba(0, 230, 138, 0.25);
+    box-shadow: 0 0 20px rgba(0, 230, 138, 0.1);
+    transform: translateY(-2px);
   }
 
-  .pricing-header h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text);
-  }
-
-  .price {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.25rem;
-  }
-
-  .currency {
-    font-size: 1.25rem;
-    color: var(--muted);
-  }
-
-  .amount {
-    font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .period {
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .pricing-desc {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-top: 0.5rem;
-  }
-
-  .pricing-features {
-    list-style: none;
-    margin-bottom: 1.5rem;
-  }
-
-  .pricing-features li {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.625rem 0;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .check {
-    color: var(--success);
-    font-weight: 600;
-  }
-
-  .btn-block {
-    width: 100%;
-  }
-
-  /* Testimonials */
-  .testimonials {
+  /* Contact */
+  .contact-section {
     position: relative;
     z-index: 1;
   }
 
-  .testimonials-grid {
+  .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
   }
 
-  .testimonial-card {
-    padding: 1.5rem;
-  }
-
-  .testimonial-stars {
-    color: #f59e0b;
-    margin-bottom: 1rem;
-    letter-spacing: 0.1em;
-  }
-
-  .testimonial-text {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-  }
-
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .author-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: white;
-  }
-
-  .author-info {
+  .contact-methods {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
   }
 
-  .author-name {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 0.9rem;
+  .contact-method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 1.125rem;
+    text-decoration: none;
   }
 
-  .author-role {
-    font-size: 0.8rem;
+  .method-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     color: var(--muted);
   }
 
-  /* CTA */
-  .cta {
-    position: relative;
-    z-index: 1;
-  }
-
-  .cta-content {
-    padding: 4rem;
-    text-align: center;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-    border-color: rgba(99, 102, 241, 0.3);
-  }
-
-  .cta-content h2 {
-    font-family: var(--font-display);
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  .method-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
     font-weight: 700;
-    margin-bottom: 1rem;
     color: var(--text);
   }
 
-  .cta-content p {
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin-bottom: 2rem;
-  }
-
-  /* Footer */
-  .footer {
-    padding: 60px 0 30px;
-    border-top: 1px solid var(--glass-border);
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-content {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
-    gap: 4rem;
-    margin-bottom: 3rem;
-  }
-
-  .footer-brand p {
-    color: var(--muted);
-    margin-top: 1rem;
-    font-size: 0.9rem;
-  }
-
-  .footer-links {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-  }
-
-  .footer-col h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 1rem;
-  }
-
-  .footer-col a {
-    display: block;
-    color: var(--muted);
-    font-size: 0.9rem;
-    padding: 0.375rem 0;
-    transition: color 0.2s;
-  }
-
-  .footer-col a:hover {
-    color: var(--text);
-  }
-
-  .footer-bottom {
+  .contact-form {
+    padding: 2rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2rem;
-    border-top: 1px solid var(--glass-border);
-  }
-
-  .footer-bottom p {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .footer-legal {
-    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
   }
 
-  .footer-legal a {
-    font-size: 0.85rem;
+  .contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 230, 138, 0.3), transparent);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     color: var(--muted);
   }
 
-  .footer-legal a:hover {
+  .form-group input,
+  .form-group textarea {
+    padding: 0.875rem 1rem;
+    border: 1px solid rgba(0, 230, 138, 0.1);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    background: rgba(0, 230, 138, 0.03);
     color: var(--text);
+    transition: all 0.3s ease;
   }
 
-  /* Responsive */
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(122, 154, 138, 0.6);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    background: rgba(0, 230, 138, 0.06);
+    border-color: rgba(0, 230, 138, 0.3);
+    box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.08);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+  }
+
+  @keyframes glow {
+    0%, 100% { opacity: 0.5; box-shadow: 0 0 12px var(--accent); }
+    50% { opacity: 1; box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(0, 230, 138, 0.3); }
+  }
+
   @media (max-width: 1024px) {
     .hero-content {
       grid-template-columns: 1fr;
@@ -1029,11 +617,11 @@ import Layout from '../layouts/Layout.astro';
       align-items: center;
     }
 
-    .hero-cta {
-      justify-content: center;
+    .hero-subtitle {
+      margin: 0 auto;
     }
 
-    .hero-proof {
+    .hero-cta {
       justify-content: center;
     }
 
@@ -1041,68 +629,47 @@ import Layout from '../layouts/Layout.astro';
       order: -1;
     }
 
-    .features-grid,
-    .pricing-grid,
-    .testimonials-grid {
+    .services-grid {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .pricing-card.popular {
-      transform: scale(1);
+    .process-grid {
+      flex-wrap: wrap;
+    }
+
+    .process-arrow {
+      display: none;
+    }
+
+    .process-step {
+      flex: 1 1 calc(50% - 1rem);
     }
   }
 
   @media (max-width: 768px) {
-    .nav-links {
-      display: none;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .features-grid,
-    .pricing-grid,
-    .testimonials-grid {
+    .services-grid {
       grid-template-columns: 1fr;
     }
 
-    .footer-content {
+    .contact-grid {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 3rem;
     }
 
-    .footer-links {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .footer-bottom {
+    .hero-cta {
       flex-direction: column;
-      gap: 1rem;
-      text-align: center;
-    }
-
-    .cta-content {
-      padding: 2rem;
     }
   }
 
   @media (max-width: 480px) {
-    .hero-cta {
-      flex-direction: column;
-      width: 100%;
+    .process-step {
+      flex: 1 1 100%;
     }
+  }
 
-    .btn-lg {
-      width: 100%;
-    }
-
-    .stats-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .footer-links {
-      grid-template-columns: 1fr;
+  @media (prefers-reduced-transparency: reduce) {
+    .hero-orb {
+      display: none;
     }
   }
 </style>
