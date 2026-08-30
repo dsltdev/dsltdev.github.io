@@ -57,6 +57,39 @@ import ScrollProgress from '../components/ScrollProgress.astro';
       </div>
     </section>
 
+    <section class="product-showcase">
+      <div class="container">
+        <div class="product-showcase-grid">
+          <div class="product-showcase-text">
+            <span class="section-label">// PRODUCTO</span>
+            <h2 class="section-title">DSLT Content Generator</h2>
+            <p class="section-subtitle" style="text-align:left;max-width:100%">
+              Generador de contenido para negocios en Colombia. Escribís qué vendés, te devolvemos posts de Instagram, WhatsApp y guiones de historia — en el tono de acá, listo para copiar.
+            </p>
+            <div class="product-facts">
+              <span><strong>300</strong> créditos gratis</span>
+              <span><strong>Sin</strong> mensualidad</span>
+              <span>Pago en <strong>COP</strong></span>
+            </div>
+            <a href="/app" class="btn btn-primary" style="margin-top:1rem">Probar gratis →</a>
+          </div>
+          <div class="product-showcase-visual">
+            <div class="product-card-preview">
+              <div class="product-card-bar">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="product-post-preview">
+                <div class="product-post-meta">Instagram · Arepería Laureles</div>
+                <h3>Hoy sí hay de todo.</h3>
+                <p>Arepas rellenas, domicilio hasta las 10. Si estás por la 70, pedí por WhatsApp y en 20 minutos estás comiendo.</p>
+                <div class="product-post-tags">#Laureles #Medellín #Domicilio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="services" class="services">
       <div class="container">
         <div class="section-header" data-reveal>
@@ -88,6 +121,12 @@ import ScrollProgress from '../components/ScrollProgress.astro';
             <div class="service-icon">🤖</div>
             <h3>IA & Automatización</h3>
             <p>Chatbots, generación de contenido, workflows con inteligencia artificial integrada.</p>
+          </div>
+
+          <div class="service-card glass-card" data-reveal>
+            <div class="service-icon">✍️</div>
+            <h3>Generador de contenido</h3>
+            <p>Herramienta SaaS para generar posts de Instagram, WhatsApp y historias para negocios en Colombia.</p>
           </div>
 
           <div class="service-card glass-card" data-reveal>
@@ -142,12 +181,12 @@ import ScrollProgress from '../components/ScrollProgress.astro';
                 <span class="project-year">2024</span>
                 <span class="project-type">IA / Automatización</span>
               </div>
-              <h3 class="project-title">DSLTD — Content Generator</h3>
-              <p class="project-desc">Generador de contenido para redes sociales con IA. Instagram, WhatsApp, historias — en el tono de cada negocio.</p>
+              <h3 class="project-title">DSLT Content Generator</h3>
+              <p class="project-desc">Generador de contenido para redes sociales con IA. Instagram, WhatsApp, historias — en el tono de cada negocio colombiano.</p>
               <div class="project-tags">
-                <span class="tag">Next.js</span>
-                <span class="tag">OpenAI</span>
+                <span class="tag">Astro</span>
                 <span class="tag">Cloudflare Workers</span>
+                <span class="tag">OpenAI</span>
               </div>
             </div>
           </article>
@@ -308,6 +347,107 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 </Layout>
 
 <style>
+  /* Product Showcase */
+  .product-showcase {
+    position: relative;
+    z-index: 1;
+    padding: 80px 0;
+  }
+
+  .product-showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .product-showcase-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .product-facts {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  .product-facts strong {
+    color: var(--text);
+    font-weight: 650;
+  }
+
+  .product-showcase-visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-card-preview {
+    width: 100%;
+    max-width: 380px;
+    background: #F3EEE6;
+    border: 1px solid #D9D0C3;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 18px 40px rgba(28, 25, 22, 0.15);
+  }
+
+  .product-card-bar {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .product-card-bar .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #D9D0C3;
+  }
+
+  .product-post-preview {
+    border: 1px solid #D9D0C3;
+    border-radius: 10px;
+    padding: 1rem 1.05rem;
+    background: #fff;
+  }
+
+  .product-post-meta {
+    font-size: 0.75rem;
+    color: #6B635A;
+    margin-bottom: 0.45rem;
+  }
+
+  .product-post-preview h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+    color: #1C1916;
+  }
+
+  .product-post-preview p {
+    font-size: 0.92rem;
+    color: #3a342e;
+    line-height: 1.5;
+  }
+
+  .product-post-tags {
+    margin-top: 0.7rem;
+    font-size: 0.78rem;
+    color: #8E2E12;
+  }
+
+  @media (max-width: 860px) {
+    .product-showcase-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
   /* Hero */
   .hero {
     min-height: 100vh;
