@@ -3,20 +3,36 @@
 
 <nav class="navbar">
   <div class="nav-container">
-    <a href="/" class="nav-logo">
+    <a href="#hero" class="nav-logo">
       <span class="nav-logo-icon">▸</span>
       DL
     </a>
-    
-    <div class="nav-links">
-      <a href="#home" class="nav-link">Inicio</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#projects" class="nav-link">Projects</a>
-      <a href="#skills" class="nav-link">Skills</a>
-      <a href="#contact" class="nav-link">Contact</a>
-    </div>
 
-    <a href="#contact" class="nav-cta btn btn-primary">Contactar</a>
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <div class="nav-menu" id="nav-menu">
+      <div class="nav-links">
+        <a href="#hero" class="nav-link">Inicio</a>
+        <a href="#services" class="nav-link">Servicios</a>
+        <a href="#portfolio" class="nav-link">Portafolio</a>
+        <a href="#process" class="nav-link">Proceso</a>
+        <a href="#tech" class="nav-link">Stack</a>
+        <a href="#contact" class="nav-link">Contacto</a>
+      </div>
+
+      <a href="#contact" class="nav-cta btn btn-primary">Contactar</a>
+    </div>
   </div>
 </nav>
 
@@ -69,6 +85,12 @@
     transform: translateX(3px);
   }
 
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+  }
+
   .nav-links {
     display: flex;
     gap: 2.25rem;
@@ -109,13 +131,80 @@
     font-size: 0.75rem;
   }
 
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-toggle-bar {
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
   @media (max-width: 768px) {
+    .nav-toggle {
+      display: flex;
+    }
+
+    .nav-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1.5rem;
+      padding: 1.5rem 5% 2rem;
+      background: rgba(5, 10, 8, 0.97);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      border-bottom: 1px solid rgba(0, 230, 138, 0.06);
+      transform: translateY(-8px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out), visibility 0.25s;
+    }
+
+    .nav-menu.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
     .nav-links {
-      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
     }
 
     .nav-cta {
-      display: none;
+      justify-content: center;
+      text-align: center;
     }
   }
 
@@ -125,5 +214,48 @@
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
+
+    .nav-menu {
+      background: rgba(5, 10, 8, 0.98);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
 </style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-menu');
+
+  if (toggle && menu) {
+    const closeMenu = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('is-open');
+    };
+
+    const openMenu = () => {
+      toggle.setAttribute('aria-expanded', 'true');
+      menu.classList.add('is-open');
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeMenu();
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as Node;
+      if (!menu.contains(target) && !toggle.contains(target)) {
+        closeMenu();
+      }
+    });
+  }
+</script>
