@@ -19,8 +19,8 @@ import ScrollProgress from '../components/ScrollProgress.astro';
         <div class="hero-grid"></div>
       </div>
       <div class="container">
-        <div class="hero-content">
-          <div class="hero-text">
+        <div class="hero-content" data-reveal-group>
+          <div class="hero-text" data-reveal>
             <span class="badge">DSLT · Medellín</span>
             <h1>Tu negocio necesita<br><span class="accent">presencia digital.</span></h1>
             <p class="hero-subtitle">
@@ -31,7 +31,7 @@ import ScrollProgress from '../components/ScrollProgress.astro';
               <a href="#services" class="btn btn-secondary">Ver servicios</a>
             </div>
           </div>
-          <div class="hero-visual">
+          <div class="hero-visual" data-reveal>
             <div class="glass-card hero-card">
               <div class="card-header">
                 <span class="card-dot"></span>
@@ -59,44 +59,44 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 
     <section id="services" class="services">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header" data-reveal>
           <span class="section-label">// SERVICIOS</span>
           <h2 class="section-title">Lo que hacemos</h2>
           <p class="section-subtitle">Soluciones digitales completas para negocios que quieren crecer.</p>
         </div>
 
-        <div class="services-grid">
-          <div class="service-card glass-card">
+        <div class="services-grid" data-reveal-group>
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">🌐</div>
             <h3>Sitios web</h3>
             <p>Sitios modernos, rápidos y que convierten visitantes en clientes. Landing pages, sitios corporativos, e-commerce.</p>
           </div>
 
-          <div class="service-card glass-card">
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">📱</div>
             <h3>Apps móviles</h3>
             <p>Aplicaciones para iOS y Android que tus clientes van a querer usar. React Native, Flutter.</p>
           </div>
 
-          <div class="service-card glass-card">
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">⚡</div>
             <h3>Sistemas a medida</h3>
             <p>CRMs, dashboards, plataformas internas. Automatizá lo que hoy hacés a mano.</p>
           </div>
 
-          <div class="service-card glass-card">
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">🤖</div>
             <h3>IA & Automatización</h3>
             <p>Chatbots, generación de contenido, workflows con inteligencia artificial integrada.</p>
           </div>
 
-          <div class="service-card glass-card">
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">🎨</div>
             <h3>Diseño UI/UX</h3>
             <p>Interfaces que se sienten bien. Diseño centrado en el usuario, prototipos rápidos.</p>
           </div>
 
-          <div class="service-card glass-card">
+          <div class="service-card glass-card" data-reveal>
             <div class="service-icon">☁️</div>
             <h3>Infraestructura</h3>
             <p>Deploy, DNS, dominios, hosting. Nos encargamos de que todo funcione sin que te preocupes.</p>
@@ -107,14 +107,14 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 
     <section id="portfolio" class="portfolio">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header" data-reveal>
           <span class="section-label">// PORTAFOLIO</span>
           <h2 class="section-title">Proyectos recientes</h2>
           <p class="section-subtitle">Algo de lo que ya hicimos.</p>
         </div>
 
-        <div class="portfolio-grid">
-          <article class="project-card glass-card">
+        <div class="portfolio-grid" data-reveal-group>
+          <article class="project-card glass-card" data-reveal>
             <div class="project-image">
               <div class="project-placeholder">📱</div>
             </div>
@@ -133,7 +133,7 @@ import ScrollProgress from '../components/ScrollProgress.astro';
             </div>
           </article>
 
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" data-reveal>
             <div class="project-image">
               <div class="project-placeholder">🤖</div>
             </div>
@@ -152,7 +152,7 @@ import ScrollProgress from '../components/ScrollProgress.astro';
             </div>
           </article>
 
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" data-reveal>
             <div class="project-image">
               <div class="project-placeholder">📊</div>
             </div>
@@ -171,7 +171,7 @@ import ScrollProgress from '../components/ScrollProgress.astro';
             </div>
           </article>
 
-          <article class="project-card glass-card">
+          <article class="project-card glass-card" data-reveal>
             <div class="project-image">
               <div class="project-placeholder">🏥</div>
             </div>
@@ -199,32 +199,32 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 
     <section id="process" class="process">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header" data-reveal>
           <span class="section-label">// PROCESO</span>
           <h2 class="section-title">Cómo trabajamos</h2>
           <p class="section-subtitle">Simple, rápido y sin sorpresas.</p>
         </div>
 
-        <div class="process-grid">
-          <div class="process-step">
+        <div class="process-grid" data-reveal-group>
+          <div class="process-step" data-reveal>
             <div class="step-number">01</div>
             <h3>Conversamos</h3>
             <p>Nos contás qué necesitás. Sin formularios eternos, sin jerga técnica.</p>
           </div>
           <div class="process-arrow">→</div>
-          <div class="process-step">
+          <div class="process-step" data-reveal>
             <div class="step-number">02</div>
             <h3>Diseñamos</h3>
             <p>Te mostramos cómo va a quedar antes de escribir una línea de código.</p>
           </div>
           <div class="process-arrow">→</div>
-          <div class="process-step">
+          <div class="process-step" data-reveal>
             <div class="step-number">03</div>
             <h3>Construimos</h3>
             <p>Desarrollamos tu proyecto en sprints cortos. Vos ves el progreso en tiempo real.</p>
           </div>
           <div class="process-arrow">→</div>
-          <div class="process-step">
+          <div class="process-step" data-reveal>
             <div class="step-number">04</div>
             <h3>Lanzamos</h3>
             <p>Deploy, configuración, soporte. Tu negocio online funcionando.</p>
@@ -235,33 +235,33 @@ import ScrollProgress from '../components/ScrollProgress.astro';
 
     <section id="tech" class="tech">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header" data-reveal>
           <span class="section-label">// STACK</span>
           <h2 class="section-title">Tecnologías</h2>
           <p class="section-subtitle">Elegimos la herramienta correcta para cada proyecto.</p>
         </div>
 
-        <div class="tech-tags">
-          <span class="tech-tag">React</span>
-          <span class="tech-tag">Next.js</span>
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">Node.js</span>
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">PostgreSQL</span>
-          <span class="tech-tag">Docker</span>
-          <span class="tech-tag">AWS</span>
-          <span class="tech-tag">Cloudflare</span>
-          <span class="tech-tag">Tailwind</span>
-          <span class="tech-tag">React Native</span>
-          <span class="tech-tag">Firebase</span>
+        <div class="tech-tags" data-reveal-group>
+          <span class="tech-tag" data-reveal>React</span>
+          <span class="tech-tag" data-reveal>Next.js</span>
+          <span class="tech-tag" data-reveal>TypeScript</span>
+          <span class="tech-tag" data-reveal>Node.js</span>
+          <span class="tech-tag" data-reveal>Python</span>
+          <span class="tech-tag" data-reveal>PostgreSQL</span>
+          <span class="tech-tag" data-reveal>Docker</span>
+          <span class="tech-tag" data-reveal>AWS</span>
+          <span class="tech-tag" data-reveal>Cloudflare</span>
+          <span class="tech-tag" data-reveal>Tailwind</span>
+          <span class="tech-tag" data-reveal>React Native</span>
+          <span class="tech-tag" data-reveal>Firebase</span>
         </div>
       </div>
     </section>
 
     <section id="contact" class="contact-section">
       <div class="container">
-        <div class="contact-grid">
-          <div class="contact-left">
+        <div class="contact-grid" data-reveal-group>
+          <div class="contact-left" data-reveal>
             <span class="section-label">// CONTACTO</span>
             <h2 class="section-title">¿Listo para empezar?</h2>
             <p class="section-subtitle">Contanos tu idea. Sin compromiso, sin costo.</p>
@@ -282,7 +282,7 @@ import ScrollProgress from '../components/ScrollProgress.astro';
             </div>
           </div>
 
-          <div class="contact-right">
+          <div class="contact-right" data-reveal>
             <form class="contact-form glass-card" action="https://formspree.io/f/xwkzbgln" method="POST">
               <div class="form-group">
                 <label for="name">Nombre</label>
