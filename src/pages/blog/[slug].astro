@@ -1,0 +1,308 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('post');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} — DSLT Blog`} description={post.data.description}>
+  <Navbar />
+
+  <main>
+    <article class="article">
+      <div class="container">
+        <header class="article-header" data-reveal-group>
+          <a href="/blog" class="back-link" data-reveal>← Volver al blog</a>
+          <div class="article-meta" data-reveal>
+            <span class="article-category">{post.data.category}</span>
+            <span class="article-date">{new Date(post.data.publishDate).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+          </div>
+          <h1 class="article-title" data-reveal>{post.data.title}</h1>
+          <p class="article-desc" data-reveal>{post.data.description}</p>
+          <div class="article-tags" data-reveal>
+            {post.data.tags.map((tag) => (
+              <span class="article-tag">{tag}</span>
+            ))}
+          </div>
+        </header>
+
+        <div class="article-body" data-reveal>
+          <Content />
+        </div>
+
+        <footer class="article-footer" data-reveal>
+          <div class="author-card glass-card">
+            <div class="author-avatar">DL</div>
+            <div class="author-info">
+              <span class="author-name">{post.data.author}</span>
+              <span class="author-role">Founder, DSLT</span>
+            </div>
+          </div>
+
+          <div class="cta-banner glass-card">
+            <h3>¿Listo para generar contenido?</h3>
+            <p>300 créditos gratis. Sin tarjeta.</p>
+            <a href="/app" class="btn btn-primary">Empezar gratis →</a>
+          </div>
+        </footer>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .article {
+    padding: 120px 0 4rem;
+  }
+
+  .article .container {
+    max-width: 720px;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .article-header {
+    margin-bottom: 3rem;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-category {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    padding: 0.2rem 0.6rem;
+    background: rgba(0, 230, 138, 0.08);
+    border-radius: 999px;
+  }
+
+  .article-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .article-desc {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .article-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    background: rgba(0, 230, 138, 0.04);
+    color: var(--muted);
+    border: 1px solid rgba(0, 230, 138, 0.08);
+    border-radius: 999px;
+  }
+
+  .article-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .article-body :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2.5rem 0 1rem;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .article-body :global(p) {
+    margin: 1rem 0;
+    color: rgba(232, 245, 238, 0.85);
+  }
+
+  .article-body :global(ul), .article-body :global(ol) {
+    padding-left: 1.5em;
+    margin: 1rem 0;
+  }
+
+  .article-body :global(li) {
+    margin: 0.5rem 0;
+    color: rgba(232, 245, 238, 0.85);
+  }
+
+  .article-body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .article-body :global(a) {
+    color: var(--accent-light);
+    text-decoration: underline;
+  }
+
+  .article-body :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    background: rgba(0, 230, 138, 0.04);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-style: italic;
+    color: rgba(232, 245, 238, 0.9);
+  }
+
+  .article-body :global(code) {
+    background: rgba(0, 230, 138, 0.06);
+    border-radius: 4px;
+    padding: 0.15em 0.35em;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  .article-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  .article-body :global(th), .article-body :global(td) {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 230, 138, 0.08);
+    font-size: 0.9rem;
+  }
+
+  .article-body :global(th) {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: rgba(0, 230, 138, 0.03);
+  }
+
+  .article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 230, 138, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #050a08;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .author-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .cta-banner {
+    text-align: center;
+    padding: 2.5rem 2rem;
+  }
+
+  .cta-banner h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-banner p {
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .article {
+      padding: 100px 0 3rem;
+    }
+  }
+</style>

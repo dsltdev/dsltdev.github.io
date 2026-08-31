@@ -1,0 +1,237 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('post')).sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+---
+
+<Layout title="Blog — DSLT Content Generator" description="Guías, tips y herramientas de marketing digital para negocios en Colombia. Contenido para Instagram, WhatsApp y más.">
+  <Navbar />
+
+  <main>
+    <section class="blog-hero">
+      <div class="container">
+        <div class="blog-hero-content" data-reveal-group>
+          <span class="section-label" data-reveal>// BLOG</span>
+          <h1 class="blog-title" data-reveal>Marketing digital<br><span class="accent">para negocios reales.</span></h1>
+          <p class="blog-subtitle" data-reveal>Guías prácticas, ideas de contenido y herramientas para negocios en Colombia.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-list">
+      <div class="container">
+        <div class="posts-grid" data-reveal-group>
+          {posts.map((post) => (
+            <article class="post-card glass-card" data-reveal>
+              <div class="post-meta">
+                <span class="post-category">{post.data.category}</span>
+                <span class="post-date">{new Date(post.data.publishDate).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              </div>
+              <h2 class="post-title">
+                <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+              </h2>
+              <p class="post-desc">{post.data.description}</p>
+              <div class="post-tags">
+                {post.data.tags.slice(0, 3).map((tag) => (
+                  <span class="post-tag">{tag}</span>
+                ))}
+              </div>
+              <a href={`/blog/${post.slug}`} class="post-link">Leer más →</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="blog-cta">
+      <div class="container">
+        <div class="cta-card glass-card" data-reveal>
+          <h2>¿Querés generar contenido para tu negocio?</h2>
+          <p>300 créditos gratis. Sin tarjeta. Listo para usar.</p>
+          <a href="/app" class="btn btn-primary">Empezar gratis →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .blog-hero {
+    padding: 140px 0 60px;
+    text-align: center;
+  }
+
+  .blog-hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    padding: 0.35rem 0.85rem;
+    background: rgba(0, 230, 138, 0.06);
+    border: 1px solid rgba(0, 230, 138, 0.12);
+    border-radius: 999px;
+  }
+
+  .blog-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .blog-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 500px;
+  }
+
+  .blog-list {
+    padding: 2rem 0 5rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post-category {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    padding: 0.2rem 0.6rem;
+    background: rgba(0, 230, 138, 0.08);
+    border-radius: 999px;
+  }
+
+  .post-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .post-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .post-title a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .post-title a:hover {
+    color: var(--accent);
+  }
+
+  .post-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .post-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    background: rgba(0, 230, 138, 0.04);
+    color: var(--muted);
+    border: 1px solid rgba(0, 230, 138, 0.08);
+    border-radius: 999px;
+  }
+
+  .post-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+
+  .post-link:hover {
+    opacity: 0.8;
+  }
+
+  .blog-cta {
+    padding: 2rem 0 6rem;
+  }
+
+  .cta-card {
+    text-align: center;
+    padding: 3.5rem 2rem;
+  }
+
+  .cta-card h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-card p {
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-hero {
+      padding: 120px 0 40px;
+    }
+  }
+</style>

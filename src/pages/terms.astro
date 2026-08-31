@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Términos de Servicio — DSLT" description="Términos y condiciones de uso del generador de contenido DSLT.">
+  <Navbar />
+
+  <main>
+    <section class="legal-page">
+      <div class="container">
+        <div class="legal-content" data-reveal-group>
+          <a href="/" class="back-link" data-reveal>← Volver al inicio</a>
+          <h1 class="legal-title" data-reveal>Términos de Servicio</h1>
+          <p class="legal-updated" data-reveal>Última actualización: 30 de agosto de 2026</p>
+
+          <div class="legal-body" data-reveal>
+            <h2>1. Aceptación de los términos</h2>
+            <p>Al acceder y utilizar el generador de contenido DSLT ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con alguno de estos términos, no utilice el Servicio.</p>
+
+            <h2>2. Descripción del servicio</h2>
+            <p>DSLT Content Generator es una herramienta de inteligencia artificial que genera contenido para redes sociales (Instagram, WhatsApp, historias) basado en la descripción de un negocio proporcionada por el usuario.</p>
+            <p>El Servicio se proporciona "tal cual" y "según disponibilidad". Nos reservamos el derecho de modificar, suspender o discontinuar cualquier parte del Servicio en cualquier momento.</p>
+
+            <h2>3. Registro y cuentas</h2>
+            <p>Para utilizar el Servicio, debe crear una cuenta proporcionando información precisa y completa. Usted es responsable de:</p>
+            <ul>
+              <li>Mantener la confidencialidad de su contraseña</li>
+              <li>Todas las actividades que ocurran bajo su cuenta</li>
+              <li>Notificarnos inmediatamente de cualquier uso no autorizado</li>
+            </ul>
+
+            <h2>4. Créditos y pagos</h2>
+            <p>El Servicio utiliza un sistema de créditos:</p>
+            <ul>
+              <li>Los usuarios nuevos reciben 300 créditos de bienvenida de forma gratuita</li>
+              <li>Los créditos se utilizan al generar contenido</li>
+              <li>Los créditos adicionales se pueden adquirir a través de planes de suscripción</li>
+              <li>Los créditos sin uso en planes Pro y Business se acumulan mientras la suscripción esté activa</li>
+              <li>Al cancelar la suscripción, se pierden los créditos acumulados</li>
+            </ul>
+
+            <h2>5. Uso aceptable</h2>
+            <p>Usted acepta no utilizar el Servicio para:</p>
+            <ul>
+              <li>Generar contenido ilegal, difamatorio, acosador o spam</li>
+              <li>Suplantar a otra persona o entidad</li>
+              <li>Violar derechos de propiedad intelectual de terceros</li>
+              <li>Intentar acceder a áreas restringidas del Servicio</li>
+              <li>Realizar ingeniería inversa del Servicio</li>
+            </ul>
+
+            <h2>6. Propiedad intelectual</h2>
+            <p>El contenido generado por el Servicio es de su propiedad. Sin embargo, usted reconoce que:</p>
+            <ul>
+              <li>El contenido generado por IA puede no ser único</li>
+              <li>Usted es responsable de verificar la exactitud del contenido generado</li>
+              <li>No garantizamos que el contenido generado no infrinja derechos de terceros</li>
+            </ul>
+
+            <h2>7. Limitación de responsabilidad</h2>
+            <p>En ningún caso DSLT será responsable por daños indirectos, incidentales, especiales, consecuentes o punitivos, incluyendo pero no limitado a pérdida de beneficios, datos o uso.</p>
+
+            <h2>8. Modificaciones</h2>
+            <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigor inmediatamente después de su publicación. El uso continuado del Servicio después de las modificaciones constituye aceptación de los nuevos términos.</p>
+
+            <h2>9. Cancelación</h2>
+            <p>Puede cancelar su cuenta en cualquier momento desde el panel de configuración. La cancelación es efectiva inmediatamente y no genera reembolsos proporcionales.</p>
+
+            <h2>10. Contacto</h2>
+            <p>Si tiene preguntas sobre estos Términos de Servicio, contáctenos a través de <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 140px 0 4rem;
+  }
+
+  .legal-content {
+    max-width: 700px;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .legal-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-updated {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-body h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .legal-body p {
+    color: rgba(232, 245, 238, 0.8);
+    line-height: 1.8;
+    margin: 0.75rem 0;
+  }
+
+  .legal-body ul {
+    padding-left: 1.5em;
+    margin: 0.75rem 0;
+  }
+
+  .legal-body li {
+    color: rgba(232, 245, 238, 0.8);
+    line-height: 1.7;
+    margin: 0.4rem 0;
+  }
+
+  .legal-body a {
+    color: var(--accent-light);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 120px 0 3rem;
+    }
+  }
+</style>

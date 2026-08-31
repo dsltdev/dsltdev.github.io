@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Política de Privacidad — DSLT" description="Cómo recopilamos, usamos y protegemos tu información en el generador de contenido DSLT.">
+  <Navbar />
+
+  <main>
+    <section class="legal-page">
+      <div class="container">
+        <div class="legal-content" data-reveal-group>
+          <a href="/" class="back-link" data-reveal>← Volver al inicio</a>
+          <h1 class="legal-title" data-reveal>Política de Privacidad</h1>
+          <p class="legal-updated" data-reveal>Última actualización: 30 de agosto de 2026</p>
+
+          <div class="legal-body" data-reveal>
+            <h2>1. Información que recopilamos</h2>
+            <p>Recopilamos información que usted nos proporciona directamente:</p>
+            <ul>
+              <li><strong>Información de registro:</strong> nombre de usuario, correo electrónico, contraseña (encriptada)</li>
+              <li><strong>Información de pago:</strong> procesada por terceros (Wompi, Stripe). No almacenamos datos de tarjetas de crédito</li>
+              <li><strong>Contenido generado:</strong> las descripciones de negocio y contenido creado a través del Servicio</li>
+              <li><strong>Datos de uso:</strong> interacciones con el Servicio, frecuencia de uso, características utilizadas</li>
+            </ul>
+
+            <h2>2. Cómo utilizamos su información</h2>
+            <p>Utilizamos la información recopilada para:</p>
+            <ul>
+              <li>Proveer y mantener el Servicio</li>
+              <li>Procesar transacciones y gestionar su cuenta</li>
+              <li>Mejorar el Servicio y desarrollar nuevas funcionalidades</li>
+              <li>Enviar comunicaciones relacionadas con su cuenta</li>
+              <li>Prevenir fraude y abuso del Servicio</li>
+            </ul>
+
+            <h2>3. Compartición de información</h2>
+            <p>No vendemos su información personal. Podemos compartir información con:</p>
+            <ul>
+              <li><strong>Proveedores de servicios:</strong> Cloudflare (hosting), OpenRouter (IA), Wompi/Stripe (pagos)</li>
+              <li><strong>Cuando sea requerido por ley:</strong> en respuesta a solicitudes legales válidas</li>
+              <li><strong>Con su consentimiento:</strong> para cualquier otro propósito con su autorización explícita</li>
+            </ul>
+
+            <h2>4. Seguridad de los datos</h2>
+            <p>Implementamos medidas de seguridad técnicas y organizativas para proteger su información:</p>
+            <ul>
+              <li>Encriptación en tránsito (TLS/SSL)</li>
+              <li>Contraseñas encriptadas con bcrypt</li>
+              <li>Acceso restringido a datos personales</li>
+              <li>Monitoreo continuo de seguridad</li>
+            </ul>
+
+            <h2>5. Retención de datos</h2>
+            <p>Mantenemos su información mientras su cuenta esté activa. Al eliminar su cuenta:</p>
+            <ul>
+              <li>Datos personales se eliminan en un plazo de 30 días</li>
+              <li>Datos anonimizados pueden mantenerse para fines analíticos</li>
+              <li>Ciertos datos pueden retenerse por requisitos legales</li>
+            </ul>
+
+            <h2>6. Sus derechos</h2>
+            <p>Usted tiene derecho a:</p>
+            <ul>
+              <li>Acceder a sus datos personales</li>
+              <li>Corregir datos inexactos</li>
+              <li>Solicitar la eliminación de sus datos</li>
+              <li>Portar sus datos a otro servicio</li>
+              <li>Oponerse al procesamiento de sus datos</li>
+            </ul>
+
+            <h2>7. Cookies</h2>
+            <p>Utilizamos cookies esenciales para el funcionamiento del Servicio. No utilizamos cookies de rastreo de terceros para publicidad.</p>
+
+            <h2>8. Servicios de terceros</h2>
+            <p>El Servicio utiliza servicios de terceros que tienen sus propias políticas de privacidad:</p>
+            <ul>
+              <li><strong>Cloudflare:</strong> Hosting y protección DDoS</li>
+              <li><strong>OpenRouter:</strong> Procesamiento de IA</li>
+              <li><strong>Wompi:</strong> Procesamiento de pagos en Colombia</li>
+              <li><strong>Stripe:</strong> Procesamiento de pagos internacionales</li>
+            </ul>
+
+            <h2>9. Menores de edad</h2>
+            <p>El Servicio no está dirigido a menores de 18 años. No recopilamos conscientemente información de menores.</p>
+
+            <h2>10. Cambios en esta política</h2>
+            <p>Podemos actualizar esta política periodicamente. Los cambios significativos se notificarán por correo electrónico o a través del Servicio.</p>
+
+            <h2>11. Contacto</h2>
+            <p>Si tiene preguntas sobre esta Política de Privacidad, contáctenos a través de <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 140px 0 4rem;
+  }
+
+  .legal-content {
+    max-width: 700px;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .legal-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-updated {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-body h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .legal-body p {
+    color: rgba(232, 245, 238, 0.8);
+    line-height: 1.8;
+    margin: 0.75rem 0;
+  }
+
+  .legal-body ul {
+    padding-left: 1.5em;
+    margin: 0.75rem 0;
+  }
+
+  .legal-body li {
+    color: rgba(232, 245, 238, 0.8);
+    line-height: 1.7;
+    margin: 0.4rem 0;
+  }
+
+  .legal-body a {
+    color: var(--accent-light);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 120px 0 3rem;
+    }
+  }
+</style>
