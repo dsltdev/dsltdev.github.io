@@ -90,6 +90,38 @@ import ScrollProgress from '../components/ScrollProgress.astro';
       </div>
     </section>
 
+    <section class="pricing-preview">
+      <div class="container">
+        <div class="pricing-preview-grid" data-reveal-group>
+          <div class="pricing-preview-text" data-reveal>
+            <span class="section-label">// PRECIOS</span>
+            <h2 class="section-title">Empezá gratis.<br>Escalá cuando quieras.</h2>
+            <p class="section-subtitle" style="text-align:left;max-width:100%">
+              300 créditos gratis al registrarte. Sin tarjeta, sin compromiso. Cuando tu negocio necesite más, elegí el plan que mejor se adapte.
+            </p>
+            <div class="pricing-preview-tiers">
+              <div class="tier-item">
+                <span class="tier-name">Gratis</span>
+                <span class="tier-price">$0</span>
+                <span class="tier-desc">300 créditos</span>
+              </div>
+              <div class="tier-item tier-highlight">
+                <span class="tier-name">Pro</span>
+                <span class="tier-price">$19.900<span class="tier-currency">COP</span></span>
+                <span class="tier-desc">50.000 créditos/mes</span>
+              </div>
+              <div class="tier-item">
+                <span class="tier-name">Business</span>
+                <span class="tier-price">$49.900<span class="tier-currency">COP</span></span>
+                <span class="tier-desc">200.000 créditos/mes</span>
+              </div>
+            </div>
+            <a href="/pricing" class="btn btn-secondary" style="margin-top:1rem">Ver todos los planes →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="services" class="services">
       <div class="container">
         <div class="section-header" data-reveal>
@@ -604,6 +636,82 @@ import ScrollProgress from '../components/ScrollProgress.astro';
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  /* Pricing Preview */
+  .pricing-preview {
+    position: relative;
+    z-index: 1;
+    padding: 80px 0;
+  }
+
+  .pricing-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .pricing-preview-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pricing-preview-tiers {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .tier-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    background: rgba(0, 230, 138, 0.03);
+    border: 1px solid rgba(0, 230, 138, 0.08);
+    border-radius: var(--radius-sm);
+    min-width: 140px;
+    transition: all 0.3s ease;
+  }
+
+  .tier-item:hover {
+    border-color: rgba(0, 230, 138, 0.2);
+    background: rgba(0, 230, 138, 0.06);
+  }
+
+  .tier-highlight {
+    border-color: rgba(0, 230, 138, 0.25);
+    background: rgba(0, 230, 138, 0.06);
+  }
+
+  .tier-name {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .tier-price {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .tier-currency {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 0.2rem;
+  }
+
+  .tier-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
   }
 
   /* Services */

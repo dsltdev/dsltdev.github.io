@@ -1,0 +1,758 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Pricing — DSLT Content Generator" description="Elegí el plan que mejor se adapte a tu negocio. Desde gratis hasta planes pro para equipos.">
+  <Navbar />
+
+  <main>
+    <section class="pricing-hero">
+      <div class="container">
+        <div class="pricing-hero-content" data-reveal-group>
+          <span class="section-label" data-reveal>// PRECIOS</span>
+          <h1 class="pricing-title" data-reveal>Precios simples,<br><span class="accent">sin sorpresas.</span></h1>
+          <p class="pricing-subtitle" data-reveal>Empezá gratis. Escalá cuando tu negocio crezca.</p>
+
+          <div class="billing-toggle" data-reveal>
+            <span class="toggle-label" id="toggle-monthly-label">Mensual</span>
+            <button class="toggle-switch" id="billing-toggle" aria-label="Cambiar a facturación anual" aria-pressed="false">
+              <span class="toggle-knob"></span>
+            </button>
+            <span class="toggle-label" id="toggle-yearly-label">Anual</span>
+            <span class="toggle-badge">-20%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing-cards">
+      <div class="container">
+        <div class="cards-grid">
+          <!-- FREE -->
+          <div class="pricing-card glass-card" data-reveal>
+            <div class="card-tier">Gratis</div>
+            <div class="card-price">
+              <span class="price-amount">$0</span>
+              <span class="price-period">para siempre</span>
+            </div>
+            <p class="card-desc">Ideal para probar. 300 créditos de bienvenida.</p>
+            <a href="/app" class="btn btn-secondary card-btn">Empezar gratis</a>
+            <ul class="feature-list">
+              <li class="feature-item"><span class="feature-check">✓</span> 300 créditos de bienvenida</li>
+              <li class="feature-item"><span class="feature-check">✓</span> 3 modelos de IA</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Historial de conversaciones</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Posts de Instagram</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Textos para WhatsApp</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Guiones de historia</li>
+              <li class="feature-item feature-disabled"><span class="feature-check">—</span> Sin prioridad en cola</li>
+              <li class="feature-item feature-disabled"><span class="feature-check">—</span> Sin soporte prioritario</li>
+            </ul>
+          </div>
+
+          <!-- PRO -->
+          <div class="pricing-card glass-card card-featured" data-reveal>
+            <div class="card-badge">Más popular</div>
+            <div class="card-tier">Pro</div>
+            <div class="card-price">
+              <span class="price-currency">$</span>
+              <span class="price-amount price-monthly">19.900</span>
+              <span class="price-amount price-yearly" style="display:none">15.900</span>
+              <span class="price-currency">COP</span>
+              <span class="price-period">/mes</span>
+            </div>
+            <p class="card-desc">Para negocios que generan contenido seguido.</p>
+            <a href="/app" class="btn btn-primary card-btn">Elegir Pro</a>
+            <ul class="feature-list">
+              <li class="feature-item"><span class="feature-check">✓</span> 50.000 créditos/mes</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Todos los modelos de IA</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Historial ilimitado</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Instagram + WhatsApp + Historias</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Modelos premium (GPT-4, Claude)</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Prioridad en cola</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Soporte prioritario por email</li>
+              <li class="feature-item feature-disabled"><span class="feature-check">—</span> Sin API access</li>
+            </ul>
+          </div>
+
+          <!-- BUSINESS -->
+          <div class="pricing-card glass-card" data-reveal>
+            <div class="card-tier">Business</div>
+            <div class="card-price">
+              <span class="price-currency">$</span>
+              <span class="price-amount price-monthly">49.900</span>
+              <span class="price-amount price-yearly" style="display:none">39.900</span>
+              <span class="price-currency">COP</span>
+              <span class="price-period">/mes</span>
+            </div>
+            <p class="card-desc">Para agencias y equipos que necesitan escalar.</p>
+            <a href="/app" class="btn btn-secondary card-btn">Elegir Business</a>
+            <ul class="feature-list">
+              <li class="feature-item"><span class="feature-check">✓</span> 200.000 créditos/mes</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Todos los modelos de IA</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Historial ilimitado</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Todo lo de Pro</li>
+              <li class="feature-item"><span class="feature-check">✓</span> API access para integraciones</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Soporte prioritario por WhatsApp</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Personalización de prompts</li>
+              <li class="feature-item"><span class="feature-check">✓</span> Dashboard de uso del equipo</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="comparison">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-label">// COMPARATIVA</span>
+          <h2 class="section-title">Compará los planes</h2>
+        </div>
+
+        <div class="comparison-table glass-card" data-reveal>
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Gratis</th>
+                <th class="col-highlight">Pro</th>
+                <th>Business</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Créditos mensuales</td>
+                <td>300 (bienvenida)</td>
+                <td class="col-highlight">50.000</td>
+                <td>200.000</td>
+              </tr>
+              <tr>
+                <td>Modelos de IA</td>
+                <td>3 básicos</td>
+                <td class="col-highlight">Todos (60+)</td>
+                <td>Todos (60+)</td>
+              </tr>
+              <tr>
+                <td>Modelos premium</td>
+                <td>—</td>
+                <td class="col-highlight">✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <td>Historial de conversaciones</td>
+                <td>Últimas 20</td>
+                <td class="col-highlight">Ilimitado</td>
+                <td>Ilimitado</td>
+              </tr>
+              <tr>
+                <td>Tipos de contenido</td>
+                <td>Instagram, WhatsApp, Historias</td>
+                <td class="col-highlight">Todos</td>
+                <td>Todos + custom</td>
+              </tr>
+              <tr>
+                <td>Prioridad en cola</td>
+                <td>—</td>
+                <td class="col-highlight">✓</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <td>API access</td>
+                <td>—</td>
+                <td class="col-highlight">—</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <td>Soporte</td>
+                <td>Comunidad</td>
+                <td class="col-highlight">Email prioritario</td>
+                <td>WhatsApp dedicado</td>
+              </tr>
+              <tr>
+                <td>Prompt personalizado</td>
+                <td>—</td>
+                <td class="col-highlight">—</td>
+                <td>✓</td>
+              </tr>
+              <tr>
+                <td>Dashboard de equipo</td>
+                <td>—</td>
+                <td class="col-highlight">—</td>
+                <td>✓</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <span class="section-label">// FAQ</span>
+          <h2 class="section-title">Preguntas frecuentes</h2>
+        </div>
+
+        <div class="faq-grid" data-reveal-group>
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Qué son los créditos?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Cada mensaje que enviás al generador consume créditos dependiendo del modelo que elijas. Los modelos baratos consumen menos, los premium consumen más. 1 crédito ≈ 1 token de procesamiento.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Puedo cambiar de plan en cualquier momento?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Sí. Podés upgrades o downgrades en cualquier momento. El cambio se aplica inmediatamente y se ajusta la facturación de forma proporcional.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Cómo funciona el plan gratis?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Al registrarte recibís 300 créditos gratis. No necesitás tarjeta de crédito. Los créditos se agotan con el uso, y podés recargar cuando quieras.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Qué modelos de IA están disponibles?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Trabajamos con los mejores modelos: GPT-4o, Claude 3.5, Gemini, Llama, DeepSeek, Mistral y más. Los usuarios Pro y Business tienen acceso a todos, incluyendo los premium.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Puedo pagar con PSE o efectivo?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Sí. Aceptamos PSE, tarjeta de crédito/débito, y efectivo en puntos de pago a través de Wompi. También aceptamos pagos internacionales con Stripe.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Los créditos sin uso se acumulan?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Los créditos del plan Pro y Business se acumulan mes a mes mientras tu suscripción esté activa. Si cancelás, perdés los créditos acumulados.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Necesito saber de marketing para usarlo?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>No. Solo escribí qué vendés y dónde estás. El generador se encarga del tono, el formato y el contenido optimizado para cada plataforma.</p>
+            </div>
+          </details>
+
+          <details class="faq-item glass-card" data-reveal>
+            <summary class="faq-question">
+              <span>¿Puedo cancelar mi suscripción?</span>
+              <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Sí, sin penalidades. Cancelás cuando quieras desde tu dashboard. Tu plan sigue activo hasta el final del período pagado.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-final">
+      <div class="container">
+        <div class="cta-card glass-card" data-reveal>
+          <h2>¿Listo para generar contenido?</h2>
+          <p>Empezá gratis. 300 créditos, sin tarjeta.</p>
+          <div class="cta-actions">
+            <a href="/app" class="btn btn-primary">Crear cuenta gratis →</a>
+            <a href="#contact" class="btn btn-secondary">Hablar con nosotros</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const toggle = document.getElementById('billing-toggle');
+  const monthlyLabel = document.getElementById('toggle-monthly-label');
+  const yearlyLabel = document.getElementById('toggle-yearly-label');
+  const monthlyPrices = document.querySelectorAll('.price-monthly');
+  const yearlyPrices = document.querySelectorAll('.price-yearly');
+
+  let isYearly = false;
+
+  toggle?.addEventListener('click', () => {
+    isYearly = !isYearly;
+    toggle.setAttribute('aria-pressed', String(isYearly));
+    toggle.classList.toggle('active', isYearly);
+    monthlyLabel?.classList.toggle('active', !isYearly);
+    yearlyLabel?.classList.toggle('active', isYearly);
+
+    monthlyPrices.forEach(el => (el as HTMLElement).style.display = isYearly ? 'none' : 'inline');
+    yearlyPrices.forEach(el => (el as HTMLElement).style.display = isYearly ? 'inline' : 'none');
+  });
+
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('toggle', () => {
+      const icon = item.querySelector('.faq-icon');
+      if (icon) icon.textContent = item.open ? '−' : '+';
+    });
+  });
+</script>
+
+<style>
+  /* Hero */
+  .pricing-hero {
+    padding: 140px 0 60px;
+    text-align: center;
+  }
+
+  .pricing-hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    padding: 0.35rem 0.85rem;
+    background: rgba(0, 230, 138, 0.06);
+    border: 1px solid rgba(0, 230, 138, 0.12);
+    border-radius: 999px;
+  }
+
+  .pricing-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .pricing-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 440px;
+  }
+
+  /* Toggle */
+  .billing-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .toggle-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    transition: color 0.3s ease;
+  }
+
+  .toggle-label.active {
+    color: var(--text);
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    background: rgba(0, 230, 138, 0.08);
+    border: 1px solid rgba(0, 230, 138, 0.15);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .toggle-switch.active {
+    background: rgba(0, 230, 138, 0.2);
+    border-color: var(--accent);
+  }
+
+  .toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    transition: transform 0.3s var(--ease-spring);
+    box-shadow: 0 2px 8px rgba(0, 230, 138, 0.3);
+  }
+
+  .toggle-switch.active .toggle-knob {
+    transform: translateX(22px);
+  }
+
+  .toggle-badge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(0, 230, 138, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  /* Cards */
+  .pricing-cards {
+    padding: 2rem 0 5rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .pricing-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+  }
+
+  .card-featured {
+    border-color: rgba(0, 230, 138, 0.3);
+    background: rgba(0, 230, 138, 0.06);
+    box-shadow: 0 8px 48px rgba(0, 230, 138, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-featured::before {
+    opacity: 1 !important;
+  }
+
+  .card-badge {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #050a08;
+    background: var(--accent);
+    padding: 0.3rem 1rem;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  }
+
+  .card-tier {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .card-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .price-currency {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .price-period {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-left: 0.25rem;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .card-btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(0, 230, 138, 0.06);
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .feature-check {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .feature-disabled {
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  .feature-disabled .feature-check {
+    color: var(--muted);
+  }
+
+  /* Comparison Table */
+  .comparison {
+    padding: 2rem 0 5rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 0.75rem;
+  }
+
+  .comparison-table {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .comparison-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.9rem 1.25rem;
+    text-align: left;
+    font-size: 0.88rem;
+    border-bottom: 1px solid rgba(0, 230, 138, 0.05);
+  }
+
+  .comparison-table th {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: rgba(0, 230, 138, 0.03);
+  }
+
+  .comparison-table td:first-child {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .comparison-table td {
+    color: var(--muted);
+  }
+
+  .col-highlight {
+    background: rgba(0, 230, 138, 0.04);
+    color: var(--text) !important;
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* FAQ */
+  .faq {
+    padding: 2rem 0 5rem;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .faq-item[open] {
+    background: rgba(0, 230, 138, 0.06);
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-question::marker { display: none; }
+
+  .faq-icon {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* CTA Final */
+  .cta-final {
+    padding: 2rem 0 6rem;
+  }
+
+  .cta-card {
+    text-align: center;
+    padding: 3.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .cta-card h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-card p {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .card-featured {
+      order: -1;
+    }
+
+    .comparison-table {
+      overflow-x: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pricing-hero {
+      padding: 120px 0 40px;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 0.7rem 0.8rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toggle-knob { transition: none; }
+  }
+</style>
