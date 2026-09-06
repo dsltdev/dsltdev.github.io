@@ -29,17 +29,21 @@
         </div>
 
         <div class="about-details">
-          <div class="detail-item">
-            <span class="detail-label">Ubicación</span>
-            <span class="detail-value">Medellín, Colombia</span>
+          <div class="about-details-head">
+            <span class="about-details-dot"></span>
+            cat ./status.json
           </div>
           <div class="detail-item">
-            <span class="detail-label">Disponibilidad</span>
-            <span class="detail-value available">● Abierto a proyectos</span>
+            <span class="detail-label">ubicacion</span>
+            <span class="detail-value">"Medellín, Colombia"</span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">Especialidad</span>
-            <span class="detail-value">Fintech / Pagos / Cloudflare Workers</span>
+            <span class="detail-label">disponibilidad</span>
+            <span class="detail-value available">"abierto_a_proyectos"</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">especialidad</span>
+            <span class="detail-value">"Fintech / Pagos / Cloudflare Workers"</span>
           </div>
         </div>
 
@@ -82,77 +86,69 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    padding: 1.5rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    box-shadow: var(--glass-shadow);
     margin-bottom: 2rem;
-    transition: all 0.4s var(--ease-out);
-    position: relative;
     overflow: hidden;
   }
 
-  .about-details::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 230, 138, 0.3), transparent);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  .about-details-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
   }
 
-  .about-details:hover {
-    background: var(--glass-bg-hover);
-    border-color: rgba(0, 230, 138, 0.2);
-    box-shadow: 0 12px 48px rgba(0, 230, 138, 0.08), 0 8px 32px rgba(0, 0, 0, 0.4);
-    transform: translateY(-4px);
-  }
-
-  .about-details:hover::before {
-    opacity: 1;
+  .about-details-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
   }
 
   .detail-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(0, 230, 138, 0.06);
+    gap: 1rem;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    border-left: 2px solid transparent;
+    transition: border-color 0.2s ease, background 0.2s ease;
   }
 
   .detail-item:last-child {
     border-bottom: none;
-    padding-bottom: 0;
   }
 
-  .detail-item:first-child {
-    padding-top: 0;
+  .detail-item:hover {
+    border-left-color: var(--accent);
+    background: var(--glass-bg);
   }
 
   .detail-label {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+    letter-spacing: 0.03em;
+    color: var(--muted-dim);
   }
 
   .detail-value {
     font-family: var(--font-mono);
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text);
+    text-align: right;
   }
 
   .detail-value.available {
-    color: var(--accent);
-    text-shadow: 0 0 12px rgba(0, 230, 138, 0.4);
+    color: var(--success);
   }
 
   .about-cta {

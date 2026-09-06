@@ -2,29 +2,27 @@
 ---
 
 <section id="home" class="hero">
-  <div class="hero-bg">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-grid"></div>
-  </div>
-  
+  <div class="hero-grid-bg" aria-hidden="true"></div>
+
   <div class="hero-content">
-    <div class="hero-text">
-      <div class="hero-label animate-fade-in-up">
-        <span class="hero-dot"></span>
-        Fintech e integraciones de pago / Medellín
-      </div>
+    <div class="hero-main">
+      <p class="hero-kicker">
+        <span class="hero-kicker-dot"></span>
+        fintech · pagos · trading — Medellín, Colombia
+      </p>
 
-      <h1 class="hero-name animate-fade-in-up delay-100">
-        David<br>
-        López
-      </h1>
+      <h1 class="hero-name">David López</h1>
 
-      <p class="hero-tagline animate-fade-in-up delay-200">
+      <p class="hero-prompt" aria-live="polite">
+        <span class="hero-prompt-sigil">&gt;</span>
+        <span class="hero-prompt-text" id="heroTyped"></span><span class="hero-prompt-cursor">_</span>
+      </p>
+
+      <p class="hero-tagline">
         Wallets, pasarelas de pago y sistemas de trading, en producción con dinero real.
       </p>
 
-      <div class="hero-cta animate-fade-in-up delay-300">
+      <div class="hero-cta">
         <a href="#projects" class="btn btn-primary">
           <span>Ver proyectos</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -35,25 +33,30 @@
       </div>
     </div>
 
-    <div class="hero-visual animate-fade-in-up delay-300">
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
-          </div>
-          <span class="code-filename">developer.ts</span>
-        </div>
-        <pre><code><span class="code-keyword">const</span> <span class="code-var">developer</span> = {'{'}
-  <span class="code-prop">name</span>: <span class="code-string">"David López"</span>,
-  <span class="code-prop">role</span>: <span class="code-string">"Fintech Engineer"</span>,
-  <span class="code-prop">status</span>: <span class="code-string">"disponible"</span>
-{'}'};
-
-<span class="code-keyword">export default</span> <span class="code-var">developer</span>;</code></pre>
-        <div class="code-glow"></div>
+    <aside class="hero-audit" aria-label="Panel decorativo de log de auditoría">
+      <div class="hero-audit-titlebar">
+        <span class="hero-audit-dot"></span>
+        <span class="hero-audit-title">tail -f audit.log</span>
+        <span class="hero-audit-badge">LIVE</span>
       </div>
+      <div class="hero-audit-body" id="auditLog"></div>
+    </aside>
+  </div>
+
+  <div class="hero-ticker" aria-hidden="true">
+    <div class="hero-ticker-track">
+      <span>WOMPI</span><span class="sep">/</span>
+      <span>BANCOLOMBIA</span><span class="sep">/</span>
+      <span>TRUORA</span><span class="sep">/</span>
+      <span>CLOUDFLARE WORKERS</span><span class="sep">/</span>
+      <span>TYPESCRIPT</span><span class="sep">/</span>
+      <span>PYTHON</span><span class="sep">/</span>
+      <span>WOMPI</span><span class="sep">/</span>
+      <span>BANCOLOMBIA</span><span class="sep">/</span>
+      <span>TRUORA</span><span class="sep">/</span>
+      <span>CLOUDFLARE WORKERS</span><span class="sep">/</span>
+      <span>TYPESCRIPT</span><span class="sep">/</span>
+      <span>PYTHON</span><span class="sep">/</span>
     </div>
   </div>
 </section>
@@ -62,260 +65,326 @@
   .hero {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    padding-top: 100px;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 90px;
     position: relative;
     overflow: hidden;
   }
 
-  .hero-bg {
+  .hero-grid-bg {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    overflow: hidden;
-  }
-
-  .hero-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    animation: float 8s ease-in-out infinite;
-  }
-
-  .hero-orb-1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(0, 230, 138, 0.2) 0%, transparent 70%);
-    top: -10%;
-    left: -5%;
-    animation-delay: 0s;
-  }
-
-  .hero-orb-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(0, 179, 107, 0.15) 0%, transparent 70%);
-    bottom: -10%;
-    right: -5%;
-    animation-delay: -4s;
-  }
-
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(0, 230, 138, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 230, 138, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    opacity: 0.35;
   }
 
   .hero-content {
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 0 5%;
+    padding: 2.5rem 5% 3rem;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 4rem;
-    align-items: center;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: start;
     width: 100%;
     position: relative;
     z-index: 1;
   }
 
-  .hero-text {
+  .hero-main {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.1rem;
+    padding-top: 1.5rem;
   }
 
-  .hero-label {
+  .hero-kicker {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent);
+    letter-spacing: 0.12em;
+    color: var(--muted);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
 
-  .hero-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
+  .hero-kicker-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--success);
     border-radius: 50%;
-    box-shadow: 0 0 12px var(--accent);
-    animation: glow 2s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--success-glow);
+    flex-shrink: 0;
   }
 
   .hero-name {
     font-family: var(--font-display);
-    font-size: clamp(4rem, 10vw, 8rem);
+    font-size: clamp(2.75rem, 6vw, 4.75rem);
     font-weight: 700;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
-    text-transform: uppercase;
-    background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 50%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .hero-name::after {
+    content: '.';
+    color: var(--accent);
+  }
+
+  .hero-prompt {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    color: var(--accent-light);
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    min-height: 1.6em;
+  }
+
+  .hero-prompt-sigil {
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .hero-prompt-cursor {
+    color: var(--accent);
+    animation: hero-blink 1s step-end infinite;
   }
 
   .hero-tagline {
-    font-size: 1.3rem;
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
     color: var(--muted);
-    max-width: 400px;
+    max-width: 480px;
     line-height: 1.7;
+    margin-top: 0.25rem;
   }
 
   .hero-cta {
     display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
+    gap: 0.85rem;
+    margin-top: 1rem;
   }
 
-  .hero-visual {
-    display: flex;
-    justify-content: center;
-  }
-
-  .code-block {
-    background: rgba(5, 10, 8, 0.8);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
+  /* Panel de auditoría */
+  .hero-audit {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(0, 230, 138, 0.05),
-      inset 0 1px 0 rgba(0, 230, 138, 0.1);
-    width: 100%;
-    max-width: 420px;
-    transition: all 0.5s var(--ease-out);
-    position: relative;
     overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
   }
 
-  .code-block:hover {
-    border-color: rgba(0, 230, 138, 0.25);
-    box-shadow: 
-      0 16px 48px rgba(0, 0, 0, 0.5),
-      0 0 0 1px rgba(0, 230, 138, 0.1),
-      0 0 60px rgba(0, 230, 138, 0.08);
-    transform: translateY(-6px);
-  }
-
-  .code-glow {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(0, 230, 138, 0.06) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-  }
-
-  .code-block:hover .code-glow {
-    opacity: 1;
-  }
-
-  .code-header {
+  .hero-audit-titlebar {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.875rem 1.25rem;
-    border-bottom: 1px solid rgba(0, 230, 138, 0.08);
+    gap: 0.6rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
   }
 
-  .code-dots {
-    display: flex;
-    gap: 6px;
-  }
-
-  .dot {
-    width: 10px;
-    height: 10px;
+  .hero-audit-dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow-strong);
+    animation: hero-pulse 1.4s ease-in-out infinite;
   }
 
-  .dot-red { background: #ff5f57; }
-  .dot-yellow { background: #febc2e; }
-  .dot-green { background: #28c840; }
-
-  .code-filename {
+  .hero-audit-title {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--muted);
   }
 
-  .code-block pre {
-    margin: 0;
-    padding: 1.25rem;
-  }
-
-  .code-block code {
+  .hero-audit-badge {
+    margin-left: auto;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: rgba(232, 245, 238, 0.8);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid rgba(224, 162, 62, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.4rem;
   }
 
-  .code-keyword { color: #c792ea; }
-  .code-var { color: #82aaff; }
-  .code-prop { color: #00e68a; }
-  .code-string { color: #c3e88d; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.05); }
+  .hero-audit-body {
+    padding: 0.9rem 0.9rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.9;
+    min-height: 14rem;
+    color: var(--muted);
   }
 
-  @keyframes glow {
-    0%, 100% { opacity: 0.5; box-shadow: 0 0 12px var(--accent); }
-    50% { opacity: 1; box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(0, 230, 138, 0.3); }
+  .hero-audit-body :global(.log-row) {
+    display: grid;
+    grid-template-columns: 4.6rem 2.6rem 1fr;
+    gap: 0.55rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hero-audit-body :global(.log-time) { color: var(--muted-dim); }
+  .hero-audit-body :global(.log-status-200) { color: var(--success); font-weight: 600; }
+  .hero-audit-body :global(.log-status-401) { color: var(--warning); font-weight: 600; }
+  .hero-audit-body :global(.log-status-fix) { color: var(--accent); font-weight: 700; }
+  .hero-audit-body :global(.log-path) { color: var(--text); }
+  .hero-audit-body :global(.log-note) { color: var(--muted-dim); }
+
+  @keyframes hero-pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes hero-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  /* Ticker de integraciones */
+  .hero-ticker {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    padding: 0.85rem 0;
+  }
+
+  .hero-ticker-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted-dim);
+    animation: hero-ticker-scroll 32s linear infinite;
+  }
+
+  .hero-ticker-track .sep {
+    color: var(--border-strong);
+  }
+
+  @keyframes hero-ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-ticker-track { animation: none; }
+    .hero-audit-dot { animation: none; }
+    .hero-prompt-cursor { animation: none; }
   }
 
   @media (max-width: 1024px) {
     .hero-content {
       grid-template-columns: 1fr;
-      text-align: left;
     }
 
-    .hero-visual {
-      order: -1;
-    }
-
-    .code-block {
-      max-width: 100%;
-    }
-
-    .hero-bg {
-      opacity: 0.5;
+    .hero-main {
+      padding-top: 0;
     }
   }
 
   @media (max-width: 640px) {
-    .hero-name {
-      font-size: clamp(3rem, 12vw, 5rem);
-    }
-
     .hero-cta {
       flex-direction: column;
     }
-  }
 
-  @media (prefers-reduced-transparency: reduce) {
-    .code-block {
-      background: rgba(12, 22, 16, 0.98);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-
-    .hero-orb {
-      display: none;
+    .hero-audit-body :global(.log-row) {
+      grid-template-columns: 3.8rem 2.2rem 1fr;
+      font-size: 0.68rem;
     }
   }
 </style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Efecto de escritura sobre la línea de identidad
+  const typedEl = document.getElementById('heroTyped');
+  const typedText = 'auditor de sistemas donde el dinero se mueve de verdad';
+
+  if (typedEl) {
+    if (prefersReducedMotion) {
+      typedEl.textContent = typedText;
+    } else {
+      let i = 0;
+      const typeNext = () => {
+        if (i <= typedText.length) {
+          typedEl.textContent = typedText.slice(0, i);
+          i++;
+          setTimeout(typeNext, 28);
+        }
+      };
+      typeNext();
+    }
+  }
+
+  // Panel de auditoría: timestamps reales (Date del navegador), rutas y montos ilustrativos
+  const auditLog = document.getElementById('auditLog');
+
+  if (auditLog) {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const baseTime = new Date();
+    const stamp = (offsetSec: number) => {
+      const d = new Date(baseTime.getTime() + offsetSec * 1000);
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+
+    type Row = { offset: number; status: '200' | '401' | 'fix'; method: string; path: string; note?: string };
+
+    const rows: Row[] = [
+      { offset: 0, status: '200', method: 'GET', path: '/wallet/balance' },
+      { offset: 3, status: '200', method: 'GET', path: '/wompi/transacciones' },
+      { offset: 6, status: '401', method: 'POST', path: '/bancolombia/webhook', note: 'firma inválida' },
+      { offset: 8, status: '200', method: 'POST', path: '/bancolombia/webhook', note: 'reintento OK' },
+      { offset: 12, status: 'fix', method: '', path: 'dedup de fills', note: 'race condition corregido' },
+      { offset: 16, status: '200', method: 'GET', path: '/trading/señales' },
+      { offset: 20, status: '200', method: 'POST', path: '/auth/jwt', note: '7 servicios' },
+    ];
+
+    const statusLabel = (s: Row['status']) => (s === 'fix' ? 'FIX' : s);
+
+    const buildRow = (r: Row) => {
+      const div = document.createElement('div');
+      div.className = 'log-row';
+      div.innerHTML = `<span class="log-time">${stamp(r.offset)}</span><span class="log-status-${r.status}">${statusLabel(r.status)}</span><span class="log-path">${r.method ? r.method + ' ' : ''}${r.path}${r.note ? `<span class="log-note"> — ${r.note}</span>` : ''}</span>`;
+      return div;
+    };
+
+    if (prefersReducedMotion) {
+      rows.forEach((r) => auditLog.appendChild(buildRow(r)));
+    } else {
+      let idx = 0;
+      const appendNext = () => {
+        if (idx < rows.length) {
+          auditLog.appendChild(buildRow(rows[idx]));
+          idx++;
+          setTimeout(appendNext, 420);
+        } else {
+          // Loop suave: reinicia el panel para mantener sensación de "live"
+          setTimeout(() => {
+            auditLog.innerHTML = '';
+            idx = 0;
+            appendNext();
+          }, 4000);
+        }
+      };
+      setTimeout(appendNext, 900);
+    }
+  }
+</script>

@@ -179,7 +179,7 @@ const skills = [
     align-items: baseline;
     gap: 0.5rem;
     padding: 0.55rem 0.7rem;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     border: 1px solid transparent;
     cursor: pointer;
     font-family: var(--font-display);
@@ -191,7 +191,7 @@ const skills = [
 
   .skill-tab:hover {
     color: var(--text);
-    background: rgba(0, 230, 138, 0.05);
+    background: var(--glass-bg);
   }
 
   .skill-tab-code {
@@ -204,9 +204,9 @@ const skills = [
 
   .skill-stage {
     min-height: 16rem;
-    border: 1px solid rgba(0, 230, 138, 0.12);
-    border-radius: 14px;
-    background: rgba(5, 10, 8, 0.5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
     padding: 1.15rem 1.2rem 1.2rem;
   }
 
@@ -285,8 +285,8 @@ const skills = [
   #sk-integraciones:checked ~ .skill-body .skill-tab-integraciones,
   #sk-ci:checked ~ .skill-body .skill-tab-ci {
     color: var(--text);
-    border-color: rgba(0, 230, 138, 0.28);
-    background: rgba(0, 230, 138, 0.08);
+    border-color: var(--accent-dim);
+    background: var(--glass-bg-hover);
   }
 
   #sk-dinero:checked ~ .skill-body .skill-panel-dinero,

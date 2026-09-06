@@ -8,9 +8,9 @@ const currentYear = new Date().getFullYear();
     <div class="footer-content">
       <div class="footer-left">
         <span class="footer-logo">
-          <span class="footer-logo-icon">▸</span>DL
+          <span class="footer-logo-icon">[</span>DL<span class="footer-logo-icon">]</span>
         </span>
-        <p class="footer-copy">&copy; {currentYear} David López</p>
+        <p class="footer-copy">&copy; {currentYear} David López · build estático</p>
       </div>
 
       <div class="footer-right">
@@ -27,10 +27,8 @@ const currentYear = new Date().getFullYear();
 <style>
   .footer {
     padding: 2.5rem 5%;
-    background: rgba(5, 10, 8, 0.8);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-top: 1px solid rgba(0, 230, 138, 0.06);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
     color: var(--text);
     position: relative;
     z-index: 1;
@@ -44,7 +42,7 @@ const currentYear = new Date().getFullYear();
     width: 300px;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.4;
+    opacity: 0.5;
   }
 
   .footer-content {
@@ -133,9 +131,7 @@ const currentYear = new Date().getFullYear();
 
   @media (prefers-reduced-transparency: reduce) {
     .footer {
-      background: rgba(5, 10, 8, 0.98);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background: var(--bg);
     }
   }
 </style>

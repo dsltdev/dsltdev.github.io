@@ -9,11 +9,16 @@
     top: 0;
     left: 0;
     width: 0%;
-    height: 3px;
-    background: linear-gradient(90deg, #00b36b, #00e68a, #33ffaa, #00e68a);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-dim), var(--accent));
     z-index: 10001;
-    transition: width 0.1s ease;
-    box-shadow: 0 0 12px rgba(0, 230, 138, 0.5);
+    transition: width 0.1s linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-progress {
+      transition: none;
+    }
   }
 </style>
 

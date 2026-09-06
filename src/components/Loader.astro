@@ -2,22 +2,12 @@
 ---
 
 <div class="loader" id="loader">
-  <div class="loader-content">
-    <div class="loader-logo">
-      <span class="bracket">{'{'}</span>
-      <span class="letters">DL</span>
-      <span class="bracket">{'}'}</span>
+  <div class="loader-panel">
+    <div class="loader-titlebar">
+      <span class="loader-dot"></span>
+      <span class="loader-titlebar-text">boot.sh</span>
     </div>
-    <div class="loader-bar">
-      <div class="loader-progress" id="loaderProgress"></div>
-    </div>
-    <p class="loader-text">Cargando experiencia...</p>
-  </div>
-  
-  <div class="loader-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+    <pre class="loader-log" id="loaderLog" aria-hidden="true"></pre>
   </div>
 </div>
 
@@ -25,12 +15,13 @@
   .loader {
     position: fixed;
     inset: 0;
-    background: #050a08;
+    background: var(--bg);
     z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    padding: 1.5rem;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
   }
 
   .loader.hidden {
@@ -39,122 +30,132 @@
     pointer-events: none;
   }
 
-  .loader-content {
-    text-align: center;
-    z-index: 1;
-  }
-
-  .loader-logo {
-    font-family: var(--font-mono);
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    animation: pulse-glow 2s ease infinite;
-  }
-
-  .bracket {
-    color: var(--accent);
-  }
-
-  .letters {
-    background: linear-gradient(135deg, #00e68a, #00b36b, #33ffaa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .loader-bar {
-    width: 200px;
-    height: 3px;
-    background: rgba(0, 230, 138, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-    margin: 0 auto 1rem;
-  }
-
-  .loader-progress {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #00b36b, #00e68a, #33ffaa);
-    border-radius: 3px;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 12px rgba(0, 230, 138, 0.4);
-  }
-
-  .loader-text {
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-family: var(--font-mono);
-  }
-
-  .loader-orbs {
-    position: absolute;
-    inset: 0;
+  .loader-panel {
+    width: 100%;
+    max-width: 480px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
     overflow: hidden;
   }
 
-  .orb {
-    position: absolute;
+  .loader-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .loader-dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.3;
-    animation: float-orb 8s ease-in-out infinite;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow-strong);
+    animation: loader-pulse 1.1s ease-in-out infinite;
   }
 
-  .orb-1 {
-    width: 400px;
-    height: 400px;
-    background: #00e68a;
-    top: 20%;
-    left: 20%;
-    animation-delay: 0s;
+  .loader-titlebar-text {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
   }
 
-  .orb-2 {
-    width: 300px;
-    height: 300px;
-    background: #00b36b;
-    top: 60%;
-    right: 20%;
-    animation-delay: 2s;
+  .loader-log {
+    margin: 0;
+    padding: 1.1rem 1.1rem 1.3rem;
+    min-height: 9.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    line-height: 1.65;
+    color: var(--muted);
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
-  .orb-3 {
-    width: 350px;
-    height: 350px;
-    background: #33ffaa;
-    bottom: 20%;
-    left: 40%;
-    animation-delay: 4s;
+  .loader-log :global(.ok) { color: var(--success); }
+  .loader-log :global(.warn) { color: var(--warning); }
+  .loader-log :global(.accent) { color: var(--accent); }
+  .loader-log :global(.cursor) {
+    display: inline-block;
+    width: 0.55em;
+    background: var(--accent);
+    animation: loader-blink 1s step-end infinite;
   }
 
-  @keyframes float-orb {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -30px) scale(1.1); }
-    50% { transform: translate(-20px, 20px) scale(0.9); }
-    75% { transform: translate(20px, 10px) scale(1.05); }
+  @keyframes loader-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes loader-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader { display: none; }
   }
 </style>
 
 <script>
   const loader = document.getElementById('loader');
-  const progress = document.getElementById('loaderProgress');
-  
-  let currentProgress = 0;
-  const interval = setInterval(() => {
-    currentProgress += Math.random() * 15;
-    if (currentProgress >= 100) {
-      currentProgress = 100;
-      clearInterval(interval);
+  const logEl = document.getElementById('loaderLog');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (loader) {
+    if (prefersReducedMotion || !logEl) {
+      loader.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    } else {
+      document.body.style.overflow = 'hidden';
+
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const now = new Date();
+      const t = (offsetMs: number) => {
+        const d = new Date(now.getTime() + offsetMs);
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${d.getMilliseconds().toString().padStart(3, '0')}`;
+      };
+
+      const lines: { text: string; cls?: string; delay: number }[] = [
+        { text: `[ ${t(0)} ] init dsltdev.com — entorno estático`, delay: 0 },
+        { text: `[ ${t(60)} ] montando /proyectos ... `, cls: 'ok', delay: 90 },
+        { text: `[ ${t(140)} ] verificando integraciones: Wompi, Bancolombia, Truora ... `, cls: 'ok', delay: 170 },
+        { text: `[ ${t(230)} ] cargando Cloudflare Workers ... `, cls: 'ok', delay: 240 },
+        { text: `[ ${t(310)} ] listo.`, cls: 'accent', delay: 300 },
+      ];
+
+      let cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      cursor.textContent = ' ';
+
+      let acc = 0;
+      lines.forEach((line, i) => {
+        acc += line.delay;
+        setTimeout(() => {
+          if (!logEl) return;
+          const row = document.createElement('div');
+          if (line.cls) {
+            const label = line.text;
+            row.innerHTML = label.replace(/\.\.\. $/, `... <span class="${line.cls}">OK</span>`);
+          } else {
+            row.textContent = line.text;
+          }
+          logEl.appendChild(row);
+          if (i === lines.length - 1) {
+            row.appendChild(cursor);
+          }
+        }, acc);
+      });
+
+      const totalDelay = acc + 500;
       setTimeout(() => {
         loader?.classList.add('hidden');
         document.body.style.overflow = 'auto';
-      }, 400);
+      }, totalDelay);
     }
-    if (progress) {
-      progress.style.width = `${currentProgress}%`;
-    }
-  }, 100);
-
-  document.body.style.overflow = 'hidden';
+  }
 </script>

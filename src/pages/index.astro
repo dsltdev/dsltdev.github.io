@@ -141,7 +141,7 @@ import About from '../components/About.astro';
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 230, 138, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
   }
 
   .form-group {
@@ -161,26 +161,26 @@ import About from '../components/About.astro';
   .form-group input,
   .form-group textarea {
     padding: 0.875rem 1rem;
-    border: 1px solid rgba(0, 230, 138, 0.1);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     font-family: var(--font-sans);
     font-size: 0.95rem;
-    background: rgba(0, 230, 138, 0.03);
+    background: var(--glass-bg);
     color: var(--text);
     transition: all 0.3s ease;
   }
 
   .form-group input::placeholder,
   .form-group textarea::placeholder {
-    color: rgba(122, 154, 138, 0.6);
+    color: var(--muted-dim);
   }
 
   .form-group input:focus,
   .form-group textarea:focus {
     outline: none;
-    background: rgba(0, 230, 138, 0.06);
-    border-color: rgba(0, 230, 138, 0.3);
-    box-shadow: 0 0 0 3px rgba(0, 230, 138, 0.08);
+    background: var(--glass-bg-hover);
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-glow);
   }
 
   .form-group textarea {
