@@ -1,36 +1,36 @@
 ---
 const projects = [
   {
-    title: "E-Commerce Platform",
-    description: "Plataforma de comercio electrónico completa. Panel admin, pagos, analytics.",
-    tags: ["React", "Node.js", "MongoDB"],
-    year: "2024",
-    link: "#",
-    github: "#"
+    title: "Cybersentinel",
+    description: "Ecosistema fintech en Cloudflare Workers: wallet cripto/COP, exchange, trading con IA. Integraciones reales con Bancolombia, Wompi y Truora, auth JWT compartida entre 7 servicios.",
+    tags: ["Cloudflare Workers", "TypeScript", "D1"],
+    year: "2026",
+    link: "https://wallet.dsltdev.com",
+    github: null
   },
   {
-    title: "AI Task Manager",
-    description: "Gestión de tareas potenciada por IA. Aprende patrones, optimiza productividad.",
-    tags: ["Next.js", "Python", "OpenAI"],
-    year: "2024",
-    link: "#",
-    github: "#"
+    title: "DSLT Señales",
+    description: "SaaS de señales de trading para LATAM: backtesting histórico, sizing con criterio de Kelly, ejecución automática opcional, cobros con Wompi.",
+    tags: ["Python", "FastAPI", "RL"],
+    year: "2026",
+    link: "https://saas.dsltdev.com",
+    github: null
   },
   {
-    title: "Real-time Dashboard",
-    description: "Dashboard de datos en tiempo real. Visualizaciones y alertas.",
-    tags: ["Vue.js", "D3.js", "WebSocket"],
-    year: "2023",
-    link: "#",
-    github: "#"
+    title: "Barbería SaaS",
+    description: "Marketplace de agendamiento para barberías: descubrimiento por ciudad, reservas en tiempo real, sincronización en vivo vía Supabase Realtime.",
+    tags: ["Next.js", "React 19", "Supabase"],
+    year: "2026",
+    link: null,
+    github: "https://github.com/dsltdev/barberia-saas"
   },
   {
-    title: "Social Media App",
-    description: "Red social móvil. Feeds, stories, mensajería instantánea.",
-    tags: ["React Native", "Firebase"],
-    year: "2023",
-    link: "#",
-    github: "#"
+    title: "JARVIS",
+    description: "Asistente personal de terminal: agente con tools de shell/git/filesystem, memoria persistente en SQLite, soporta modelos locales (Ollama) o Claude.",
+    tags: ["TypeScript", "SQLite", "Ollama"],
+    year: "2026",
+    link: null,
+    github: null
   }
 ];
 ---
@@ -65,10 +65,12 @@ const projects = [
             </div>
           </div>
 
-          <div class="project-links">
-            <a href={project.link} class="project-link">Ver ↗</a>
-            <a href={project.github} class="project-link">Código ↗</a>
-          </div>
+          {(project.link || project.github) && (
+            <div class="project-links">
+              {project.link && <a href={project.link} class="project-link" target="_blank" rel="noopener">Ver ↗</a>}
+              {project.github && <a href={project.github} class="project-link" target="_blank" rel="noopener">Código ↗</a>}
+            </div>
+          )}
         </article>
       ))}
     </div>

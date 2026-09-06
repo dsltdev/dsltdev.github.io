@@ -2,12 +2,21 @@
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  canonical?: string;
+  type?: string;
 }
 
-const { 
-  title = "DSLT — Desarrollo web y contenido para negocios en Colombia",
-  description = "Sitios web, apps y contenido para redes. Para negocios en Medellín y toda Colombia."
+const {
+  title = "David López — Fintech e integraciones de pago",
+  description = "Wallets, pasarelas de pago y sistemas de trading en Cloudflare Workers. Proyectos reales, bugs reales, en producción.",
+  image = "/og-default.svg",
+  canonical,
+  type = "website"
 } = Astro.props;
+
+const canonicalUrl = canonical || Astro.url.href;
+const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}`;
 ---
 
 <!doctype html>
@@ -17,6 +26,22 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="David López" />
+    <meta property="og:locale" content="es_CO" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">

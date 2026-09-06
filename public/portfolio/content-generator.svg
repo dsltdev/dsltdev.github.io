@@ -1,0 +1,49 @@
+<svg width="600" height="340" viewBox="0 0 600 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="340" fill="#0a1a10"/>
+  
+  <!-- Browser window -->
+  <rect x="60" y="40" width="480" height="260" rx="12" fill="#111f18" stroke="#1a3025" stroke-width="2"/>
+  <rect x="60" y="40" width="480" height="32" rx="12" fill="#0c1610"/>
+  <rect x="60" y="60" width="480" height="12" fill="#0c1610"/>
+  
+  <!-- Browser dots -->
+  <circle cx="80" cy="56" r="5" fill="#ff4d6a"/>
+  <circle cx="96" cy="56" r="5" fill="#f5c542"/>
+  <circle cx="112" cy="56" r="5" fill="#00e68a"/>
+  
+  <!-- URL bar -->
+  <rect x="130" y="48" width="200" height="16" rx="4" fill="#1a3025"/>
+  <text x="140" y="60" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a9a8a">dsltdev.com/app</text>
+  
+  <!-- App content -->
+  <rect x="72" y="80" width="456" height="208" fill="#050a08"/>
+  
+  <!-- Sidebar -->
+  <rect x="72" y="80" width="120" height="208" fill="#0c1610"/>
+  <rect x="82" y="95" width="100" height="28" rx="6" fill="#00e68a" opacity="0.1"/>
+  <text x="92" y="113" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#00e68a">✨ Generar</text>
+  <rect x="82" y="132" width="100" height="24" rx="6" fill="transparent"/>
+  <text x="92" y="148" font-family="Inter, sans-serif" font-size="9" fill="#7a9a8a">📋 Historial</text>
+  <rect x="82" y="164" width="100" height="24" rx="6" fill="transparent"/>
+  <text x="92" y="180" font-family="Inter, sans-serif" font-size="9" fill="#7a9a8a">⚙️ Ajustes</text>
+  
+  <!-- Main content -->
+  <rect x="204" y="95" width="312" height="40" rx="8" fill="#111f18" stroke="#1a3025" stroke-width="1"/>
+  <text x="216" y="115" font-family="Inter, sans-serif" font-size="9" fill="#7a9a8a">¿Qué vendés?</text>
+  <text x="216" y="127" font-family="Inter, sans-serif" font-size="10" fill="#e8f5ee">Arepera en Medellín</text>
+  
+  <!-- Generated content -->
+  <rect x="204" y="148" width="312" height="130" rx="8" fill="#111f18" stroke="#1a3025" stroke-width="1"/>
+  <text x="216" y="168" font-family="Inter, sans-serif" font-size="8" fill="#00e68a" font-weight="600">INSTAGRAM POST</text>
+  <rect x="216" y="178" width="200" height="4" rx="2" fill="#1a3025"/>
+  <rect x="216" y="188" width="280" height="4" rx="2" fill="#1a3025"/>
+  <rect x="216" y="198" width="240" height="4" rx="2" fill="#1a3025"/>
+  <rect x="216" y="208" width="260" height="4" rx="2" fill="#1a3025"/>
+  <rect x="216" y="225" width="80" height="24" rx="4" fill="#00e68a"/>
+  <text x="230" y="241" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#050a08">Copiar</text>
+  <rect x="306" y="225" width="80" height="24" rx="4" fill="#1a3025"/>
+  <text x="320" y="241" font-family="Inter, sans-serif" font-size="8" fill="#7a9a8a">WhatsApp</text>
+  
+  <!-- Glow effect -->
+  <circle cx="100" cy="280" r="80" fill="#00e68a" opacity="0.04"/>
+</svg>

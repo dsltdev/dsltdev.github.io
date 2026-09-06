@@ -14,9 +14,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+const ogImage = `/og-default.svg`;
+const canonicalUrl = `https://dsltdev.com/blog/${post.id}`;
 ---
 
-<Layout title={`${post.data.title} — DSLT Blog`} description={post.data.description}>
+<Layout 
+  title={`${post.data.title} — DSLT Blog`} 
+  description={post.data.description}
+  image={ogImage}
+  canonical={canonicalUrl}
+  type="article"
+>
   <Navbar />
 
   <main>

@@ -1,0 +1,330 @@
+---
+const skills = [
+  {
+    id: "dinero",
+    name: "Dinero",
+    code: "01",
+    lie: "Un POST 200 y un mock de pasarela. expect(ok). El peso de más no entra en el assert.",
+    edge: "COP sin subunidades, fee por lado, dos libros que no se cruzan, qty entero vs fracción. Cash, costo y mark son tres números distintos.",
+    probe: "Replay de fills, invariante de cash después de ida y vuelta, rechazar un libro que debite al otro.",
+    lives: "Desk paper · libros USD / COP",
+  },
+  {
+    id: "tiempo",
+    name: "Tiempo",
+    code: "02",
+    lie: "SMA sobre un CSV quieto. El reloj del runner es 1970 y nadie se entera.",
+    edge: "Señal en el cierre, fill en la apertura siguiente. Yahoo delayed contra spot 24h. Sesión BVC vs cripto. Paper no es live.",
+    probe: "Comparar mid del edge contra el precio de la señal. Si el fill usa un close de hace meses, el lab miente.",
+    lives: "Desk paper · Binance + BVC delayed",
+  },
+  {
+    id: "distribuido",
+    name: "Distribuido",
+    code: "03",
+    lie: "Un solo proceso, un wrangler, un 200. El vecino no existe en el test.",
+    edge: "El mismo secreto en N bordes. Uno autentica y el otro 401. Heartbeat, CORS de un origen, bind a localhost.",
+    probe: "Login de punta a punta. Tirar un servicio y ver qué queda coherente. No un mock por archivo.",
+    lives: "Workers · generador · edge local",
+  },
+  {
+    id: "concurrencia",
+    name: "Concurrencia",
+    code: "04",
+    lie: "La suite serial. Un fill, un ciclo, cero solapes.",
+    edge: "Dos consumers, un id. Transacción que bloquea cash. Dedup. El race no sale en jest --runInBand.",
+    probe: "Disparar el ciclo en paralelo. El segundo fill tiene que ser dedup, no doble cargo.",
+    lives: "Paper-exec · consumer 15s",
+  },
+  {
+    id: "integraciones",
+    name: "Integraciones",
+    code: "05",
+    lie: "MSW / nock y un JSON de fixtures. Docs en verde, prod en 403.",
+    edge: "Políticas de identidad, rate limit, payload que cambió, feed delayed. El contrato real no es el README.",
+    probe: "Llamada viva con timeout. Si la política niega, no inventar el UUID.",
+    lives: "APIs ajenas · WhatsApp · klines",
+  },
+  {
+    id: "ci",
+    name: "Lo que CI no ve",
+    code: "06",
+    lie: "Build verde. Cero clics. Cero estados vacíos. Copy que nadie leyó.",
+    edge: "Cinta de ticks, horario de bolsa, layout, un humano recorriendo el flujo. El screenshot único no es verificación.",
+    probe: "Ejercer la pantalla como usuario. Vacío, error, otra ruta que comparte estado.",
+    lives: "Generador · desk · landings",
+  },
+];
+---
+
+<div class="skill-board glass-card">
+  {skills.map((s, i) => (
+    <input
+      class="skill-radio"
+      type="radio"
+      name="hard-skill"
+      id={`sk-${s.id}`}
+      checked={i === 0}
+    />
+  ))}
+
+  <div class="skill-board-head">
+    <span class="skill-board-kicker">consola · una vista · sin productos privados</span>
+    <p>
+      Lo fácil de testear es un CRUD y un mock. Acá se elige el borde y se ve qué finge el CI,
+      qué rompe en vivo y cómo se prueba de verdad.
+    </p>
+  </div>
+
+  <div class="skill-body">
+    <div class="skill-rail" role="presentation">
+      {skills.map((s) => (
+        <label class={`skill-tab skill-tab-${s.id}`} for={`sk-${s.id}`}>
+          <span class="skill-tab-code">{s.code}</span>
+          {s.name}
+        </label>
+      ))}
+    </div>
+
+    <div class="skill-stage">
+      {skills.map((s) => (
+        <article class={`skill-panel skill-panel-${s.id}`} data-panel={s.id}>
+          <header class="skill-panel-head">
+            <h3>{s.name}</h3>
+            <span>{s.lives}</span>
+          </header>
+          <div class="skill-cols">
+            <div>
+              <h4>El test finge</h4>
+              <p>{s.lie}</p>
+            </div>
+            <div>
+              <h4>En el borde</h4>
+              <p>{s.edge}</p>
+            </div>
+            <div>
+              <h4>Cómo se prueba</h4>
+              <p>{s.probe}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="skill-board-foot">
+    <span>Piezas que sí se pueden nombrar:</span>
+    <span>Cybersentinel</span>
+    <span aria-hidden="true">·</span>
+    <span>Desk paper Binance / BVC</span>
+    <span aria-hidden="true">·</span>
+    <span>Bellas Cocinas</span>
+  </div>
+</div>
+
+<style>
+  .skill-board {
+    position: relative;
+    padding: 1.25rem 1.3rem 1.05rem;
+    display: grid;
+    gap: 1.05rem;
+  }
+
+  .skill-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .skill-board-head {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .skill-board-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .skill-board-head p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 46rem;
+  }
+
+  .skill-body {
+    display: grid;
+    grid-template-columns: 11.5rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .skill-rail {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .skill-tab {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: transparent;
+  }
+
+  .skill-tab:hover {
+    color: var(--text);
+    background: rgba(0, 230, 138, 0.05);
+  }
+
+  .skill-tab-code {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    opacity: 0.55;
+  }
+
+  .skill-stage {
+    min-height: 16rem;
+    border: 1px solid rgba(0, 230, 138, 0.12);
+    border-radius: 14px;
+    background: rgba(5, 10, 8, 0.5);
+    padding: 1.15rem 1.2rem 1.2rem;
+  }
+
+  .skill-panel {
+    display: none;
+    gap: 1rem;
+  }
+
+  .skill-panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+  }
+
+  .skill-panel-head h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .skill-panel-head span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .skill-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+  }
+
+  .skill-cols h4 {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .skill-cols p {
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .skill-board-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.65rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .skill-board-foot a {
+    color: var(--accent);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .skill-board-foot a:hover {
+    text-decoration: underline;
+  }
+
+  #sk-dinero:checked ~ .skill-body .skill-tab-dinero,
+  #sk-tiempo:checked ~ .skill-body .skill-tab-tiempo,
+  #sk-distribuido:checked ~ .skill-body .skill-tab-distribuido,
+  #sk-concurrencia:checked ~ .skill-body .skill-tab-concurrencia,
+  #sk-integraciones:checked ~ .skill-body .skill-tab-integraciones,
+  #sk-ci:checked ~ .skill-body .skill-tab-ci {
+    color: var(--text);
+    border-color: rgba(0, 230, 138, 0.28);
+    background: rgba(0, 230, 138, 0.08);
+  }
+
+  #sk-dinero:checked ~ .skill-body .skill-panel-dinero,
+  #sk-tiempo:checked ~ .skill-body .skill-panel-tiempo,
+  #sk-distribuido:checked ~ .skill-body .skill-panel-distribuido,
+  #sk-concurrencia:checked ~ .skill-body .skill-panel-concurrencia,
+  #sk-integraciones:checked ~ .skill-body .skill-panel-integraciones,
+  #sk-ci:checked ~ .skill-body .skill-panel-ci {
+    display: grid;
+  }
+
+  #sk-dinero:focus-visible ~ .skill-body .skill-tab-dinero,
+  #sk-tiempo:focus-visible ~ .skill-body .skill-tab-tiempo,
+  #sk-distribuido:focus-visible ~ .skill-body .skill-tab-distribuido,
+  #sk-concurrencia:focus-visible ~ .skill-body .skill-tab-concurrencia,
+  #sk-integraciones:focus-visible ~ .skill-body .skill-tab-integraciones,
+  #sk-ci:focus-visible ~ .skill-body .skill-tab-ci {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .skill-body {
+      grid-template-columns: 1fr;
+    }
+
+    .skill-rail {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .skill-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .skill-rail {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

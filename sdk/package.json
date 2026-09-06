@@ -1,0 +1,42 @@
+{
+  "name": "@neurofamilia/sdk",
+  "version": "1.0.0",
+  "description": "JavaScript/TypeScript SDK for NeuroFamilia RAG API",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "neurofamilia",
+    "ai",
+    "rag",
+    "chat",
+    "cloudflare",
+    "workers"
+  ],
+  "author": "DSLT",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

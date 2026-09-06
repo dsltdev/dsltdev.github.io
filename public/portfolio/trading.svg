@@ -1,0 +1,62 @@
+<svg width="600" height="340" viewBox="0 0 600 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="340" fill="#0a1a10"/>
+  
+  <!-- Dashboard frame -->
+  <rect x="40" y="30" width="520" height="280" rx="12" fill="#111f18" stroke="#1a3025" stroke-width="2"/>
+  
+  <!-- Top bar -->
+  <rect x="40" y="30" width="520" height="40" rx="12" fill="#0c1610"/>
+  <rect x="40" y="58" width="520" height="12" fill="#0c1610"/>
+  <text x="60" y="56" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#00e68a">● DSLT MARKET</text>
+  <text x="468" y="56" font-family="JetBrains Mono, monospace" font-size="8" fill="#fbbf24">PAPER</text>
+  
+  <!-- Chart area -->
+  <rect x="56" y="80" width="340" height="210" rx="8" fill="#050a08"/>
+  
+  <!-- Chart grid lines -->
+  <line x1="56" y1="120" x2="396" y2="120" stroke="#1a3025" stroke-width="0.5"/>
+  <line x1="56" y1="160" x2="396" y2="160" stroke="#1a3025" stroke-width="0.5"/>
+  <line x1="56" y1="200" x2="396" y2="200" stroke="#1a3025" stroke-width="0.5"/>
+  <line x1="56" y1="240" x2="396" y2="240" stroke="#1a3025" stroke-width="0.5"/>
+  
+  <!-- Chart line (candlestick-like) -->
+  <polyline points="70,200 100,180 130,190 160,150 190,160 220,120 250,140 280,100 310,110 340,90 370,105 390,85" 
+    stroke="#00e68a" stroke-width="2" fill="none"/>
+  
+  <!-- Area fill -->
+  <polyline points="70,200 100,180 130,190 160,150 190,160 220,120 250,140 280,100 310,110 340,90 370,105 390,85 390,290 70,290" 
+    fill="url(#chartGradient)" opacity="0.3"/>
+  
+  <defs>
+    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00e68a" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#00e68a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Price labels -->
+  <text x="400" y="90" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a9a8a">52.4k</text>
+  <text x="400" y="140" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a9a8a">51.8k</text>
+  <text x="400" y="190" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a9a8a">51.2k</text>
+  <text x="400" y="240" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a9a8a">50.6k</text>
+  
+  <!-- Side panel -->
+  <rect x="408" y="80" width="140" height="210" rx="8" fill="#0c1610"/>
+  <text x="420" y="100" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#e8f5ee">Posiciones</text>
+  
+  <!-- Position items -->
+  <rect x="416" y="110" width="124" height="40" rx="6" fill="#111f18"/>
+  <text x="424" y="128" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#e8f5ee">BTC/USD</text>
+  <text x="424" y="142" font-family="JetBrains Mono, monospace" font-size="7" fill="#00e68a">+2.4%</text>
+  <text x="520" y="128" font-family="JetBrains Mono, monospace" font-size="8" fill="#7a9a8a" text-anchor="end">$4,200</text>
+  
+  <rect x="416" y="158" width="124" height="40" rx="6" fill="#111f18"/>
+  <text x="424" y="176" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#e8f5ee">ETH/USD</text>
+  <text x="424" y="190" font-family="JetBrains Mono, monospace" font-size="7" fill="#ff4d6a">-0.8%</text>
+  <text x="520" y="176" font-family="JetBrains Mono, monospace" font-size="8" fill="#7a9a8a" text-anchor="end">$2,800</text>
+  
+  <rect x="416" y="206" width="124" height="40" rx="6" fill="#111f18"/>
+  <text x="424" y="224" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#e8f5ee">ECOPETL</text>
+  <text x="424" y="238" font-family="JetBrains Mono, monospace" font-size="7" fill="#fbbf24">COP</text>
+  <text x="520" y="224" font-family="JetBrains Mono, monospace" font-size="8" fill="#7a9a8a" text-anchor="end">paper</text>
+</svg>
