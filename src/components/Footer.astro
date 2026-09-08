@@ -26,9 +26,9 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .footer {
-    padding: 2.5rem 5%;
+    padding: 3rem 5%;
     background: var(--surface);
-    border-top: 1px solid var(--border);
+    border-top: 2px solid var(--border);
     color: var(--text);
     position: relative;
     z-index: 1;
@@ -39,10 +39,10 @@ const currentYear = new Date().getFullYear();
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 300px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.5;
+    width: 400px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--secondary), transparent);
+    opacity: 0.6;
   }
 
   .footer-content {
@@ -58,22 +58,28 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-logo {
-    font-family: var(--font-mono);
-    font-size: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
     font-weight: 700;
-    color: var(--text);
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     display: flex;
     align-items: center;
     gap: 0.25rem;
   }
 
   .footer-logo-icon {
-    color: var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .footer-copy {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
     color: var(--muted);
   }
 
@@ -83,23 +89,24 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-right a {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text-light);
     transition: all 0.3s ease;
     position: relative;
+    padding-bottom: 4px;
   }
 
   .footer-right a::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: 0;
     left: 0;
     width: 0;
-    height: 1px;
-    background: var(--accent);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--secondary));
     transition: width 0.3s var(--ease-out);
   }
 

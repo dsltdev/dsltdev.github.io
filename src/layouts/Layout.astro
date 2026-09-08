@@ -77,52 +77,67 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
 
 <style is:global>
   :root {
-    /* Base: carbón/marrón oscuro, no negro-azulado */
-    --bg: #14100b;
-    --bg-gradient: linear-gradient(160deg, #14100b 0%, #1c150d 45%, #14100b 100%);
-    --surface: #1c1712;
-    --surface2: #221b13;
-    --border: #382c1c;
-    --border-strong: #4a3a24;
+    /* Base: clean white/light background for modern SaaS feel */
+    --bg: #ffffff;
+    --bg-gradient: linear-gradient(180deg, #f8f9ff 0%, #ffffff 50%, #fff8f9 100%);
+    --surface: #ffffff;
+    --surface2: #f7f8fc;
+    --border: #e1e4f0;
+    --border-strong: #c8cedf;
 
-    /* Acento: ámbar/dorado de terminal financiera. Nunca verde-menta genérico. */
-    --accent: #e0a23e;
-    --accent-light: #f3c778;
-    --accent-dim: #a97324;
-    --accent-ink: #1a1206;
-    --accent-glow: rgba(224, 162, 62, 0.15);
-    --accent-glow-strong: rgba(224, 162, 62, 0.32);
+    /* Primary accent: vibrant purple/indigo */
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --accent-dim: #4f46e5;
+    --accent-ink: #ffffff;
+    --accent-glow: rgba(99, 102, 241, 0.2);
+    --accent-glow-strong: rgba(99, 102, 241, 0.4);
 
-    --text: #efe6d6;
-    --muted: #998c76;
-    --muted-dim: #6f6552;
+    /* Secondary accent: energetic pink/coral */
+    --secondary: #ec4899;
+    --secondary-light: #f472b6;
+    --secondary-dim: #db2777;
+    --secondary-glow: rgba(236, 72, 153, 0.2);
 
-    /* Semánticos: SOLO para estado (bug encontrado / corregido), nunca como marca */
-    --success: #7f9a6a;
-    --success-glow: rgba(127, 154, 106, 0.18);
-    --warning: #c98a3a;
-    --danger: #b4543f;
-    --danger-glow: rgba(180, 84, 63, 0.18);
+    /* Tertiary accent: fresh teal/cyan */
+    --tertiary: #14b8a6;
+    --tertiary-light: #2dd4bf;
+    --tertiary-dim: #0d9488;
+    --tertiary-glow: rgba(20, 184, 166, 0.2);
 
-    /* Radios: paneles de terminal, no tarjetas SaaS redondeadas */
-    --radius: 6px;
-    --radius-sm: 3px;
-    --radius-lg: 10px;
+    /* Text colors */
+    --text: #1e293b;
+    --text-light: #475569;
+    --muted: #64748b;
+    --muted-dim: #94a3b8;
+
+    /* Semantic colors */
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.2);
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.2);
+
+    /* Border radius: more rounded for modern feel */
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+    --radius-xl: 32px;
 
     --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
-    --font-display: var(--font-mono);
+    --font-display: var(--font-sans);
 
-    /* Paneles: superficie sólida con acento sutil, no glassmorphism pesado */
-    --glass-bg: rgba(224, 162, 62, 0.045);
-    --glass-bg-hover: rgba(224, 162, 62, 0.08);
-    --glass-border: rgba(224, 162, 62, 0.16);
-    --glass-blur: 10px;
-    --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(224, 162, 62, 0.05);
+    /* Glass cards with subtle gradient */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-hover: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(99, 102, 241, 0.1);
+    --glass-blur: 20px;
+    --glass-shadow: 0 8px 32px rgba(99, 102, 241, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
 
-    /* Animaciones: cortas, mecánicas — nada de rebote "spring" genérico */
-    --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
-    --ease-spring: cubic-bezier(0.2, 0.7, 0.2, 1);
+    /* Smooth animations */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   * {
@@ -155,13 +170,14 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     width: 100%;
     height: 100%;
     background:
-      radial-gradient(ellipse 900px 650px at 10% 0%, rgba(224, 162, 62, 0.09) 0%, transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 85%, rgba(185, 115, 36, 0.06) 0%, transparent 55%);
+      radial-gradient(ellipse 1200px 800px at 20% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse 1000px 700px at 80% 90%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 800px 600px at 50% 50%, rgba(20, 184, 166, 0.08) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Textura de scanlines + grano: pantalla de terminal, no orbes flotantes */
+  /* Subtle gradient mesh texture */
   body::after {
     content: '';
     position: fixed;
@@ -170,17 +186,10 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     width: 100%;
     height: 100%;
     background:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.09) 0px,
-        rgba(0, 0, 0, 0.09) 1px,
-        transparent 1px,
-        transparent 3px
-      ),
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
-    opacity: 0.4;
+    opacity: 1;
   }
 
   ::selection {
@@ -189,13 +198,13 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
   }
 
   a {
-    color: var(--accent-light);
+    color: var(--accent);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.3s var(--ease-out);
   }
 
   a:hover {
-    color: var(--accent);
+    color: var(--accent-dim);
   }
 
   /* Utility Classes */
@@ -205,16 +214,15 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     padding: 0 1.5rem;
   }
 
-  /* Panel de terminal/consola: superficie sólida + hairline superior de acento,
-     no glassmorphism difuso ni sombra flotante genérica. */
+  /* Modern glass card with gradient border */
   .glass-card {
-    background: linear-gradient(180deg, var(--glass-bg-hover) 0%, var(--glass-bg) 100%), var(--surface);
+    background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     box-shadow: var(--glass-shadow);
-    transition: border-color 0.25s var(--ease-out), background 0.25s var(--ease-out);
+    transition: all 0.3s var(--ease-out);
     position: relative;
     overflow: hidden;
   }
@@ -225,18 +233,21 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: var(--border-strong);
-    transition: background 0.25s ease;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--secondary), var(--tertiary));
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
   .glass-card:hover {
-    background: linear-gradient(180deg, var(--glass-bg-hover) 0%, var(--glass-bg) 100%), var(--surface2);
-    border-color: rgba(224, 162, 62, 0.3);
+    background: var(--glass-bg-hover);
+    border-color: var(--accent-glow);
+    box-shadow: 0 12px 48px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
   }
 
   .glass-card:hover::before {
-    background: var(--accent);
+    opacity: 1;
   }
 
   .btn {
@@ -244,59 +255,63 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.875rem 1.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    padding: 1rem 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
     font-weight: 600;
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: transform 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out), border-color 0.15s var(--ease-out), background 0.15s var(--ease-out), color 0.15s var(--ease-out);
+    transition: all 0.3s var(--ease-out);
     text-decoration: none;
     position: relative;
   }
 
   .btn-primary {
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
     color: var(--accent-ink);
-    font-weight: 700;
-    box-shadow: 0 2px 0 0 var(--accent-dim);
+    font-weight: 600;
+    box-shadow: 0 4px 12px var(--accent-glow);
   }
 
   .btn-primary:hover {
-    background: var(--accent-light);
-    transform: translateY(-1px);
-    box-shadow: 0 3px 0 0 var(--accent-dim);
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--accent-glow-strong);
     color: var(--accent-ink);
   }
 
   .btn-primary:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 0 0 var(--accent-dim);
+    transform: translateY(0);
+    box-shadow: 0 2px 8px var(--accent-glow);
   }
 
   .btn-secondary {
-    background: var(--surface2);
+    background: var(--surface);
     color: var(--text);
-    border: 1px solid var(--border-strong);
+    border: 2px solid var(--border);
   }
 
   .btn-secondary:hover {
     background: var(--surface2);
     border-color: var(--accent);
-    color: var(--accent-light);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   .btn-outline {
     background: transparent;
     color: var(--accent);
-    border: 1px solid rgba(224, 162, 62, 0.35);
+    border: 2px solid var(--accent);
   }
 
   .btn-outline:hover {
-    background: rgba(224, 162, 62, 0.1);
+    background: var(--accent);
     border-color: var(--accent);
-    color: var(--accent-light);
+    color: var(--accent-ink);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-glow);
   }
 
   /* Section Styles */
@@ -312,25 +327,30 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
   }
 
   .section-label {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     color: var(--accent);
     margin-bottom: 1.25rem;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+    border-radius: 50px;
+    border: 1px solid var(--glass-border);
   }
 
   .section-label::before,
   .section-label::after {
     content: '';
-    width: 24px;
-    height: 1px;
+    width: 6px;
+    height: 6px;
     background: var(--accent);
-    opacity: 0.4;
+    border-radius: 50%;
+    opacity: 0.8;
   }
 
   .section-title {
@@ -351,21 +371,21 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     line-height: 1.7;
   }
 
-  /* Badge: chip de estado tipo HTTP/status code, esquinas rectas */
+  /* Badge: modern pill-shaped status badge */
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.3rem 0.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    padding: 0.4rem 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border-radius: var(--radius-sm);
-    background: rgba(224, 162, 62, 0.08);
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(236, 72, 153, 0.12));
     color: var(--accent);
-    border: 1px solid rgba(224, 162, 62, 0.25);
+    border: 1px solid var(--glass-border);
   }
 
   /* Animations */
@@ -464,7 +484,7 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
 
     body::before,
     body::after {
-      display: none;
+      opacity: 0.3;
     }
 
     .glass-card,
