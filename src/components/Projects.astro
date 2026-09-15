@@ -114,17 +114,17 @@ const projects = [
     top: 0;
     left: 0;
     right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-secondary), transparent);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
   .project-card:hover {
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-dim);
-    box-shadow: 0 16px 48px var(--accent-glow), 0 8px 32px rgba(0, 0, 0, 0.4);
-    transform: translateY(-4px);
+    background: linear-gradient(135deg, rgba(79, 124, 255, 0.12) 0%, var(--glass-bg-hover) 100%), var(--surface2);
+    border-color: var(--accent);
+    box-shadow: 0 16px 48px var(--accent-glow-strong), 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: translateY(-6px);
   }
 
   .project-card:hover::before {
@@ -182,17 +182,18 @@ const projects = [
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.03em;
-    padding: 0.3rem 0.625rem;
-    background: var(--glass-bg);
+    padding: 0.4rem 0.75rem;
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(168, 85, 247, 0.08) 100%);
     color: var(--accent-light);
-    border: 1px solid var(--border);
+    border: 1px solid var(--accent);
     border-radius: var(--radius-sm);
     transition: all 0.3s ease;
   }
 
   .tag:hover {
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-dim);
+    background: linear-gradient(135deg, var(--glass-bg-hover) 0%, rgba(168, 85, 247, 0.15) 100%);
+    border-color: var(--accent-light);
+    box-shadow: 0 0 16px var(--accent-glow);
   }
 
   .project-links {

@@ -9,10 +9,11 @@
     top: 0;
     left: 0;
     width: 0%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary), var(--accent-tertiary));
     z-index: 10001;
     transition: width 0.1s linear;
+    box-shadow: 0 0 20px var(--accent-glow);
   }
 
   @media (prefers-reduced-motion: reduce) {
