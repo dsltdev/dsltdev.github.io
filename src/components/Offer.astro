@@ -29,10 +29,10 @@ const PAYMENT_LINK = "https://checkout.wompi.co/l/VPOS_c5Twxg";
         <div class="finding-card">
           <div class="finding-head">
             <span class="finding-severity">SEVERIDAD ALTA</span>
-            <span class="finding-title">Webhook de Bancolombia sin validación de firma</span>
+            <span class="finding-title">Webhook de Wompi Payouts nunca validaba una notificación real</span>
           </div>
-          <p class="finding-desc">El endpoint aceptaba cualquier POST como si fuera un pago confirmado real — la firma llegaba fuera del objeto esperado y el código nunca la revisaba. Cualquiera que conociera la URL podía "aprobar" un pago falso.</p>
-          <p class="finding-fix"><span>FIX</span> Validación de firma contra el secreto real de la cuenta, antes de tocar cualquier lógica de negocio.</p>
+          <p class="finding-desc">El endpoint verificaba la firma con el secreto del checkout normal — pero Payouts firma con una llave distinta, y manda el timestamp fuera del objeto de firma. Resultado: cada confirmación real de un pago saliente se rechazaba con 401, y el estado de la transferencia nunca se actualizaba solo.</p>
+          <p class="finding-fix"><span>FIX</span> Verificación separada para el sobre real de Payouts, con su propio secreto y el timestamp leído del nivel correcto.</p>
         </div>
         <p class="offer-finding-note">Hallazgo real, corregido en producción esta semana — no es un ejemplo de marketing.</p>
       </div>
