@@ -39,10 +39,11 @@ const currentYear = new Date().getFullYear();
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 300px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.5;
+    width: 600px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-secondary), var(--accent), transparent);
+    opacity: 0.7;
+    box-shadow: 0 0 40px var(--accent-glow);
   }
 
   .footer-content {

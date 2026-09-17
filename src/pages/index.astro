@@ -143,8 +143,8 @@ import Offer from '../components/Offer.astro';
     top: 0;
     left: 0;
     right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-secondary), transparent);
   }
 
   .form-group {
@@ -182,8 +182,8 @@ import Offer from '../components/Offer.astro';
   .form-group textarea:focus {
     outline: none;
     background: var(--glass-bg-hover);
-    border-color: var(--accent-dim);
-    box-shadow: 0 0 0 3px var(--accent-glow);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow), 0 0 20px var(--accent-glow);
   }
 
   .form-group textarea {
