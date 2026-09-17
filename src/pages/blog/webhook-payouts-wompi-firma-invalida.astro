@@ -1,0 +1,196 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout
+  title="El webhook que rechazaba cada pago real — David López"
+  description="Un caso real: por qué la confirmación de Wompi Payouts nunca validaba, y cómo lo encontré revisando código en producción."
+  type="article"
+>
+  <Navbar />
+  <main class="container article">
+    <p class="section-label" style="text-align:left">Blog · 2026-09-16</p>
+    <h1 class="article-title">El webhook que rechazaba cada pago real</h1>
+    <p class="article-lede">
+      Wompi Payouts (pagos a terceros) tenía su webhook de confirmación conectado
+      hacía semanas. Nunca validó ni una sola notificación real. Esto es lo que
+      encontré revisando el código, y por qué el síntoma no se parecía en nada a la causa.
+    </p>
+
+    <div class="article-body">
+      <h2>El síntoma</h2>
+      <p>
+        Un payout (una transferencia de plata saliente, vía Wompi) se crea, Wompi
+        la procesa, y en algún momento manda un webhook con el resultado —
+        aprobado, rechazado, lo que sea. Ese webhook es lo que actualiza el estado
+        real de la transferencia en la base de datos.
+      </p>
+      <p>
+        El problema: ese estado nunca se actualizaba solo. Cada transferencia se
+        quedaba en <code>pending</code> para siempre, aunque Wompi ya la hubiera
+        procesado del otro lado. La única forma de saber el estado real era ir a
+        revisar manualmente — exactamente el tipo de cosa que nadie hace todos
+        los días, hasta que hace falta y ya es tarde.
+      </p>
+
+      <h2>La causa no era "falta validación" — era "valida con la llave equivocada"</h2>
+      <p>
+        Wompi tiene <strong>dos esquemas de firma distintos</strong> según el tipo
+        de webhook:
+      </p>
+      <ul>
+        <li>
+          El webhook normal de transacciones (checkout) firma con un secreto, y
+          manda el <code>timestamp</code> <em>adentro</em> del objeto <code>signature</code>.
+        </li>
+        <li>
+          El webhook de <strong>Payouts</strong> usa un <em>secreto distinto</em>
+          — no es el mismo que el del checkout — y manda el <code>timestamp</code>
+          como hermano de <code>signature</code>, no anidado.
+        </li>
+      </ul>
+      <p>
+        El código de este sistema verificaba los webhooks de Payouts reusando la
+        función y el secreto del checkout normal. Como la forma del objeto no
+        coincidía y el secreto tampoco, el checksum calculado nunca iba a matchear
+        con el real — ni una sola vez, por diseño. No era un bug intermitente ni
+        una condición de carrera: la verificación estaba matemáticamente destinada
+        a fallar siempre.
+      </p>
+
+      <h2>Por qué esto es más peligroso que un error obvio</h2>
+      <p>
+        Si el webhook hubiera tirado un 500 o un error visible, se hubiera notado
+        rápido. Lo que pasó en cambio fue silencioso: la verificación fallaba, el
+        endpoint respondía <code>401 invalid_signature</code> — que es exactamente
+        el comportamiento <em>correcto</em> ante una firma real inválida — así que
+        no había nada que gritara "esto está roto". Solo un archivo lento y
+        constante de transferencias que nunca se confirmaban solas.
+      </p>
+      <p>
+        Ese es el patrón más caro en integraciones de pago: no el error ruidoso
+        que para todo, sino el que se comporta exactamente como el caso normal de
+        "esto es fraudulento, lo rechazo" cuando en realidad el problema es tuyo,
+        no del atacante.
+      </p>
+
+      <h2>El fix</h2>
+      <p>
+        Una función de verificación separada, específica para el sobre real de
+        Payouts: su propio secreto (<code>WOMPI_PAYOUTS_EVENTS_KEY</code>, no el
+        del checkout), leyendo el <code>timestamp</code> del nivel correcto del
+        objeto. Nada elegante — simplemente dejar de asumir que dos webhooks del
+        mismo proveedor comparten esquema porque comparten proveedor.
+      </p>
+
+      <h2>La lección que se repite</h2>
+      <p>
+        Casi ningún proveedor de pagos documenta esto de forma obvia en un solo
+        lugar: transacciones, payouts, suscripciones y reembolsos suelen tener
+        webhooks con formas de firma ligeramente distintas, documentados en
+        páginas separadas que es fácil no leer si ya "sabés cómo funciona el
+        webhook" de otro endpoint del mismo proveedor. La integración que
+        funciona en el checkout no te dice nada sobre si la de payouts está
+        realmente conectada — solo lo sabés si alguien la prueba de punta a
+        punta, con una transferencia real.
+      </p>
+    </div>
+
+    <div class="article-cta glass-card">
+      <p>¿Tu integración de pagos tiene un webhook que nunca probaste de punta a punta?</p>
+      <a href="/#offer" class="btn btn-primary">Ver la auditoría →</a>
+    </div>
+
+    <a href="/blog" class="back-link">← Volver al blog</a>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .article {
+    padding-top: 140px;
+    padding-bottom: 100px;
+    max-width: 720px;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .article-lede {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .article-body h2 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2.5rem 0 1rem;
+  }
+
+  .article-body p {
+    font-size: 1rem;
+    color: var(--ink-soft, var(--text));
+    line-height: 1.8;
+    margin-bottom: 1.1rem;
+  }
+
+  .article-body ul {
+    margin: 0 0 1.1rem 1.4rem;
+    color: var(--ink-soft, var(--text));
+    line-height: 1.8;
+  }
+
+  .article-body li {
+    margin-bottom: 0.6rem;
+  }
+
+  .article-body code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    color: var(--gold-light, var(--accent));
+  }
+
+  .article-cta {
+    margin: 3.5rem 0 2.5rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .article-cta p {
+    margin: 0 0 1.25rem;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .article { padding-top: 110px; }
+  }
+</style>
