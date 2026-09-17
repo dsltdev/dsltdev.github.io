@@ -8,6 +8,7 @@ import Hero from '../components/Hero.astro';
 import HardSkillsBoard from '../components/HardSkillsBoard.astro';
 import Projects from '../components/Projects.astro';
 import About from '../components/About.astro';
+import Offer from '../components/Offer.astro';
 ---
 
 <Layout title="David López — Fintech e integraciones de pago" description="Wallets, pasarelas de pago y sistemas de trading en Cloudflare Workers. Proyectos reales, bugs reales, en producción.">
@@ -33,13 +34,15 @@ import About from '../components/About.astro';
 
     <About />
 
+    <Offer />
+
     <section id="contact" class="contact-section">
       <div class="container">
         <div class="contact-grid" data-reveal-group>
           <div class="contact-left" data-reveal>
-            <span class="section-label">Contacto</span>
-            <h2 class="section-title">¿Estás integrando pagos?</h2>
-            <p class="section-subtitle">Contame en qué estás — auditoría puntual o construir la pieza completa.</p>
+            <span class="section-label">¿Algo más grande?</span>
+            <h2 class="section-title">Construir la pieza completa</h2>
+            <p class="section-subtitle">Si no es una auditoría puntual sino construir de cero, contame en qué estás.</p>
 
             <div class="contact-methods">
               <a href="mailto:dsltdev@icloud.com" class="contact-method glass-card">

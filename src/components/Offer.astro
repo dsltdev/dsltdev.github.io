@@ -1,0 +1,311 @@
+---
+const PAYMENT_LINK = "https://checkout.wompi.co/l/VPOS_c5Twxg";
+---
+
+<section id="offer" class="offer">
+  <div class="container">
+    <div class="offer-panel glass-card" data-reveal>
+      <div class="offer-top">
+        <span class="section-label" style="margin-bottom:0">Servicio</span>
+        <span class="badge">24H · ENTREGA</span>
+      </div>
+
+      <h2 class="offer-title">El bug que no viste todavía te va a costar plata.</h2>
+      <p class="offer-subtitle">
+        Para founders y devs solos en LATAM que ya tienen pagos en producción
+        (Wompi, Bancolombia, la que sea) y nunca tuvieron un segundo par de ojos
+        revisando la parte donde se mueve el dinero.
+      </p>
+
+      <ul class="offer-checks">
+        <li>Que nadie pueda forjar un webhook y que tu sistema lo trate como pago real</li>
+        <li>Que no le cobres a un cliente 100× de más — o de menos</li>
+        <li>Que un reintento de red no te duplique (o te borre) una transacción</li>
+        <li>Que dos órdenes al mismo tiempo no rompan tu libro de cuentas</li>
+      </ul>
+
+      <div class="offer-finding">
+        <span class="offer-finding-label">Ejemplo real de lo que te llega en el reporte</span>
+        <div class="finding-card">
+          <div class="finding-head">
+            <span class="finding-severity">SEVERIDAD ALTA</span>
+            <span class="finding-title">Webhook de Bancolombia sin validación de firma</span>
+          </div>
+          <p class="finding-desc">El endpoint aceptaba cualquier POST como si fuera un pago confirmado real — la firma llegaba fuera del objeto esperado y el código nunca la revisaba. Cualquiera que conociera la URL podía "aprobar" un pago falso.</p>
+          <p class="finding-fix"><span>FIX</span> Validación de firma contra el secreto real de la cuenta, antes de tocar cualquier lógica de negocio.</p>
+        </div>
+        <p class="offer-finding-note">Hallazgo real, corregido en producción esta semana — no es un ejemplo de marketing.</p>
+      </div>
+
+      <p class="offer-access">
+        No necesito tus llaves privadas ni acceso de escritura. Con ver el código de la integración y, si aplica, los logs o el payload de un webhook de prueba, alcanza.
+      </p>
+
+      <div class="offer-cta-row">
+        <div class="offer-price">
+          <span class="offer-price-currency">$</span>150.000<span class="offer-price-period">COP</span>
+        </div>
+        <a href={PAYMENT_LINK} class="btn btn-primary" target="_blank" rel="noopener">
+          Pagar y empezar →
+        </a>
+      </div>
+      <p class="offer-note">
+        Después de pagar, escribime a <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a> con acceso de lectura a tu repo o staging. Entrego el reporte en 24h hábiles. ¿Dudas antes de pagar? Escribime primero, sin costo.
+      </p>
+
+      <div class="offer-retainer">
+        <div class="retainer-top">
+          <span class="offer-finding-label" style="margin-bottom:0">Después de la auditoría</span>
+          <span class="offer-price-currency" style="font-family:var(--font-mono);font-size:0.85rem;color:var(--muted)">opcional</span>
+        </div>
+        <h3 class="retainer-title">Monitoreo mensual — <span>$180.000 COP/mes</span></h3>
+        <p class="retainer-desc">
+          Reviso tu integración de nuevo cada vez que hacés un deploy que la toca, y tenés prioridad de respuesta si aparece un bug nuevo. Se coordina directo por email después de tu primera auditoría — todavía no es un cobro automático, es entre vos y yo.
+        </p>
+        <a href="mailto:dsltdev@icloud.com?subject=Monitoreo%20mensual" class="retainer-link">Preguntar por el monitoreo mensual →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .offer {
+    position: relative;
+    z-index: 1;
+  }
+
+  .offer-panel {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.75rem;
+  }
+
+  .offer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .offer-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.85rem;
+  }
+
+  .offer-subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 1.75rem;
+  }
+
+  .offer-checks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+  }
+
+  .offer-checks li {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    padding-left: 1.4rem;
+    position: relative;
+  }
+
+  .offer-checks li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: 700;
+  }
+
+  .offer-finding {
+    margin-bottom: 1.5rem;
+  }
+
+  .offer-finding-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .finding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--danger);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.25rem;
+  }
+
+  .finding-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .finding-severity {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--danger);
+    border: 1px solid rgba(180, 84, 63, 0.4);
+    background: var(--danger-glow);
+    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.5rem;
+  }
+
+  .finding-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .finding-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .finding-fix {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .finding-fix span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--success);
+    border: 1px solid rgba(127, 154, 106, 0.4);
+    background: var(--success-glow);
+    border-radius: var(--radius-sm);
+    padding: 0.15rem 0.4rem;
+    margin-right: 0.5rem;
+  }
+
+  .offer-finding-note {
+    font-size: 0.76rem;
+    color: var(--muted-dim);
+    margin-top: 0.6rem;
+    font-style: italic;
+  }
+
+  .offer-access {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .offer-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .offer-price {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .offer-price-currency {
+    color: var(--accent);
+  }
+
+  .offer-price-period {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 0.35rem;
+  }
+
+  .offer-note {
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--muted-dim);
+    line-height: 1.6;
+  }
+
+  .offer-retainer {
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  .retainer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+
+  .retainer-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .retainer-title span {
+    color: var(--accent);
+  }
+
+  .retainer-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 540px;
+    margin-bottom: 0.9rem;
+  }
+
+  .retainer-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .retainer-link:hover {
+    color: var(--accent-light);
+  }
+
+  @media (max-width: 640px) {
+    .offer-panel {
+      padding: 1.75rem;
+    }
+
+    .offer-cta-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+</style>
