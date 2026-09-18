@@ -46,7 +46,7 @@ const imageUrl = image.startsWith('http') ? image : `https://dsltdev.com${image}
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>{title}</title>
-    <script defer data-domain="dsltdev.com" src="https://plausible.io/js/script.js"></script>
+    <script is:inline defer data-domain="dsltdev.com" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
     <slot />

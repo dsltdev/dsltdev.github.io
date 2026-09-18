@@ -39,8 +39,9 @@ const projects = [
   <div class="container">
     <div class="projects-header">
       <div>
-        <p class="section-label">// 002</p>
-        <h2 class="section-title">Proyectos</h2>
+        <p class="section-label">Casos reales</p>
+        <h2 class="section-title">Proyectos en producción</h2>
+        <p class="section-subtitle">Sistemas financieros donde encontré y corregí bugs reales con dinero de por medio.</p>
       </div>
       <a href="https://github.com/dsltdev" class="btn btn-secondary" target="_blank">GitHub →</a>
     </div>
@@ -83,6 +84,18 @@ const projects = [
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 3rem;
+    gap: 2rem;
+  }
+
+  .projects-header > div {
+    max-width: 680px;
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 0.75rem;
   }
 
   .projects-grid {
