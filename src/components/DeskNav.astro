@@ -1,0 +1,70 @@
+---
+interface Props {
+  current: 'overview' | 'math' | 'sessions' | 'sources';
+}
+
+const { current } = Astro.props;
+
+const links = [
+  { href: '/desk', id: 'overview', label: 'Resumen' },
+  { href: '/desk/matematicas', id: 'math', label: 'Matemáticas' },
+  { href: '/desk/sesiones', id: 'sessions', label: 'Sesiones' },
+  { href: '/desk/fuentes', id: 'sources', label: 'Fuentes' },
+] as const;
+---
+
+<nav class="desk-sub" aria-label="Secciones del desk">
+  <p class="desk-sub-kicker">desk paper · Binance + BVC delayed · no es live</p>
+  <div class="desk-sub-links">
+    {links.map((l) => (
+      <a href={l.href} class:list={['desk-sub-link', { active: current === l.id }]} aria-current={current === l.id ? 'page' : undefined}>
+        {l.label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .desk-sub {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.25rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .desk-sub-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .desk-sub-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .desk-sub-link {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+  }
+
+  .desk-sub-link:hover,
+  .desk-sub-link.active {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+</style>
