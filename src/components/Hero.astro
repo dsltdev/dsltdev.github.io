@@ -8,38 +8,78 @@
     <div class="hero-main">
       <p class="hero-kicker">
         <span class="hero-kicker-dot"></span>
-        fintech · pagos · trading — Medellín, Colombia
+        Auditoría de sistemas de pago — Medellín, Colombia
       </p>
 
       <h1 class="hero-name">David López</h1>
 
-      <p class="hero-prompt" aria-live="polite">
-        <span class="hero-prompt-sigil">&gt;</span>
-        <span class="hero-prompt-text" id="heroTyped"></span><span class="hero-prompt-cursor">_</span>
+      <p class="hero-headline">
+        El bug que no viste en tu integración de pagos te va a costar plata.
       </p>
 
       <p class="hero-tagline">
-        Wallets, pasarelas de pago y sistemas de trading, en producción con dinero real.
+        Auditoría de 24 horas para founders y devs en LATAM con pagos en producción. 
+        Reviso webhooks, firmas, idempotencia, dobles cobros y race conditions antes de que te cuesten un cliente.
       </p>
 
       <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">
-          <span>Ver proyectos</span>
+        <a href="#offer" class="btn btn-primary">
+          <span>Auditoría 24h — $150k COP</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a href="#offer" class="btn btn-secondary">Auditoría</a>
+        <a href="#projects" class="btn btn-secondary">Ver casos reales</a>
+      </div>
+
+      <div class="hero-proof">
+        <div class="proof-item">
+          <span class="proof-icon">✓</span>
+          <div>
+            <p class="proof-title">Caso real esta semana</p>
+            <p class="proof-text">Webhook de Wompi Payouts rechazaba notificaciones reales con 401</p>
+          </div>
+        </div>
+        <a href="/blog/webhook-payouts-wompi-firma-invalida" class="proof-link">
+          Leer el caso completo →
+        </a>
       </div>
     </div>
 
-    <aside class="hero-audit" aria-label="Panel decorativo de log de auditoría">
-      <div class="hero-audit-titlebar">
-        <span class="hero-audit-dot"></span>
-        <span class="hero-audit-title">tail -f audit.log</span>
-        <span class="hero-audit-badge">LIVE</span>
+    <aside class="hero-risks">
+      <div class="risk-card">
+        <h3 class="risk-title">Riesgos que reviso</h3>
+        <ul class="risk-list">
+          <li>
+            <span class="risk-icon">⚠</span>
+            <div>
+              <strong>Firma de webhook</strong>
+              <p>Que nadie pueda forjar un webhook y tu sistema lo trate como pago real</p>
+            </div>
+          </li>
+          <li>
+            <span class="risk-icon">⚠</span>
+            <div>
+              <strong>Idempotencia</strong>
+              <p>Que un reintento de red no duplique (o borre) una transacción</p>
+            </div>
+          </li>
+          <li>
+            <span class="risk-icon">⚠</span>
+            <div>
+              <strong>Race conditions</strong>
+              <p>Que dos órdenes simultáneas no rompan tu libro de cuentas</p>
+            </div>
+          </li>
+          <li>
+            <span class="risk-icon">⚠</span>
+            <div>
+              <strong>Montos y decimales</strong>
+              <p>Que no le cobres a un cliente 100× de más — o de menos</p>
+            </div>
+          </li>
+        </ul>
       </div>
-      <div class="hero-audit-body" id="auditLog"></div>
     </aside>
   </div>
 
@@ -89,8 +129,8 @@
     margin: 0 auto;
     padding: 2.5rem 5% 3rem;
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
     align-items: start;
     width: 100%;
     position: relative;
@@ -100,7 +140,7 @@
   .hero-main {
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 1.5rem;
     padding-top: 1.5rem;
   }
 
@@ -138,43 +178,88 @@
     color: var(--accent);
   }
 
-  .hero-prompt {
-    font-family: var(--font-mono);
-    font-size: 1.05rem;
-    color: var(--accent-light);
-    display: flex;
-    align-items: baseline;
-    gap: 0.55rem;
-    min-height: 1.6em;
-  }
-
-  .hero-prompt-sigil {
-    color: var(--accent);
-    opacity: 0.7;
-  }
-
-  .hero-prompt-cursor {
-    color: var(--accent);
-    animation: hero-blink 1s step-end infinite;
+  .hero-headline {
+    font-family: var(--font-sans);
+    font-size: clamp(1.35rem, 3vw, 1.65rem);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    max-width: 540px;
   }
 
   .hero-tagline {
     font-family: var(--font-sans);
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     color: var(--muted);
-    max-width: 480px;
+    max-width: 540px;
     line-height: 1.7;
-    margin-top: 0.25rem;
   }
 
   .hero-cta {
     display: flex;
     gap: 0.85rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 
-  /* Panel de auditoría */
-  .hero-audit {
+  .hero-proof {
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .proof-item {
+    display: flex;
+    gap: 0.85rem;
+    align-items: start;
+  }
+
+  .proof-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--success-glow);
+    border: 1px solid rgba(127, 154, 106, 0.4);
+    border-radius: var(--radius-sm);
+    color: var(--success);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .proof-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .proof-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .proof-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    transition: color 0.2s ease;
+  }
+
+  .proof-link:hover {
+    color: var(--accent-light);
+  }
+
+  /* Panel de riesgos */
+  .hero-risks {
     background: var(--surface);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
@@ -182,75 +267,60 @@
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
   }
 
-  .hero-audit-titlebar {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 0.9rem;
-    background: var(--surface2);
+  .risk-card {
+    padding: 2rem;
+  }
+
+  .risk-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border);
   }
 
-  .hero-audit-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 6px var(--accent-glow-strong);
-    animation: hero-pulse 1.4s ease-in-out infinite;
+  .risk-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
-  .hero-audit-title {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--muted);
+  .risk-list li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: start;
   }
 
-  .hero-audit-badge {
-    margin-left: auto;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    border: 1px solid rgba(224, 162, 62, 0.35);
+  .risk-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--danger-glow);
+    border: 1px solid rgba(180, 84, 63, 0.4);
     border-radius: var(--radius-sm);
-    padding: 0.1rem 0.4rem;
+    color: var(--danger);
+    font-size: 0.85rem;
   }
 
-  .hero-audit-body {
-    padding: 0.9rem 0.9rem 1.1rem;
+  .risk-list strong {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    line-height: 1.9;
-    min-height: 14rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .risk-list p {
+    font-size: 0.85rem;
     color: var(--muted);
-  }
-
-  .hero-audit-body :global(.log-row) {
-    display: grid;
-    grid-template-columns: 4.6rem 2.6rem 1fr;
-    gap: 0.55rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .hero-audit-body :global(.log-time) { color: var(--muted-dim); }
-  .hero-audit-body :global(.log-status-200) { color: var(--success); font-weight: 600; }
-  .hero-audit-body :global(.log-status-401) { color: var(--warning); font-weight: 600; }
-  .hero-audit-body :global(.log-status-fix) { color: var(--accent); font-weight: 700; }
-  .hero-audit-body :global(.log-path) { color: var(--text); }
-  .hero-audit-body :global(.log-note) { color: var(--muted-dim); }
-
-  @keyframes hero-pulse {
-    0%, 100% { opacity: 0.55; }
-    50% { opacity: 1; }
-  }
-
-  @keyframes hero-blink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
+    line-height: 1.5;
   }
 
   /* Ticker de integraciones */
@@ -285,8 +355,6 @@
 
   @media (prefers-reduced-motion: reduce) {
     .hero-ticker-track { animation: none; }
-    .hero-audit-dot { animation: none; }
-    .hero-prompt-cursor { animation: none; }
   }
 
   @media (max-width: 1024px) {
@@ -297,94 +365,16 @@
     .hero-main {
       padding-top: 0;
     }
+
+    .hero-risks {
+      max-width: 600px;
+    }
   }
 
   @media (max-width: 640px) {
     .hero-cta {
       flex-direction: column;
     }
-
-    .hero-audit-body :global(.log-row) {
-      grid-template-columns: 3.8rem 2.2rem 1fr;
-      font-size: 0.68rem;
-    }
   }
 </style>
 
-<script>
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Efecto de escritura sobre la línea de identidad
-  const typedEl = document.getElementById('heroTyped');
-  const typedText = 'auditor de sistemas donde el dinero se mueve de verdad';
-
-  if (typedEl) {
-    if (prefersReducedMotion) {
-      typedEl.textContent = typedText;
-    } else {
-      let i = 0;
-      const typeNext = () => {
-        if (i <= typedText.length) {
-          typedEl.textContent = typedText.slice(0, i);
-          i++;
-          setTimeout(typeNext, 28);
-        }
-      };
-      typeNext();
-    }
-  }
-
-  // Panel de auditoría: timestamps reales (Date del navegador), rutas y montos ilustrativos
-  const auditLog = document.getElementById('auditLog');
-
-  if (auditLog) {
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const baseTime = new Date();
-    const stamp = (offsetSec: number) => {
-      const d = new Date(baseTime.getTime() + offsetSec * 1000);
-      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    };
-
-    type Row = { offset: number; status: '200' | '401' | 'fix'; method: string; path: string; note?: string };
-
-    const rows: Row[] = [
-      { offset: 0, status: '200', method: 'GET', path: '/wallet/balance' },
-      { offset: 3, status: '200', method: 'GET', path: '/wompi/transacciones' },
-      { offset: 6, status: '401', method: 'POST', path: '/bancolombia/webhook', note: 'firma inválida' },
-      { offset: 8, status: '200', method: 'POST', path: '/bancolombia/webhook', note: 'reintento OK' },
-      { offset: 12, status: 'fix', method: '', path: 'dedup de fills', note: 'race condition corregido' },
-      { offset: 16, status: '200', method: 'GET', path: '/trading/señales' },
-      { offset: 20, status: '200', method: 'POST', path: '/auth/jwt', note: '7 servicios' },
-    ];
-
-    const statusLabel = (s: Row['status']) => (s === 'fix' ? 'FIX' : s);
-
-    const buildRow = (r: Row) => {
-      const div = document.createElement('div');
-      div.className = 'log-row';
-      div.innerHTML = `<span class="log-time">${stamp(r.offset)}</span><span class="log-status-${r.status}">${statusLabel(r.status)}</span><span class="log-path">${r.method ? r.method + ' ' : ''}${r.path}${r.note ? `<span class="log-note"> — ${r.note}</span>` : ''}</span>`;
-      return div;
-    };
-
-    if (prefersReducedMotion) {
-      rows.forEach((r) => auditLog.appendChild(buildRow(r)));
-    } else {
-      let idx = 0;
-      const appendNext = () => {
-        if (idx < rows.length) {
-          auditLog.appendChild(buildRow(rows[idx]));
-          idx++;
-          setTimeout(appendNext, 420);
-        } else {
-          // Loop suave: reinicia el panel para mantener sensación de "live"
-          setTimeout(() => {
-            auditLog.innerHTML = '';
-            idx = 0;
-            appendNext();
-          }, 4000);
-        }
-      };
-      setTimeout(appendNext, 900);
-    }
-  }
-</script>

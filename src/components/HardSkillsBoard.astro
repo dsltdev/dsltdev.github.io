@@ -1,58 +1,58 @@
 ---
 const skills = [
   {
-    id: "dinero",
-    name: "Dinero",
+    id: "firma",
+    name: "Firma de webhook",
     code: "01",
-    lie: "Un POST 200 y un mock de pasarela. expect(ok). El peso de más no entra en el assert.",
-    edge: "COP sin subunidades, fee por lado, dos libros que no se cruzan, qty entero vs fracción. Cash, costo y mark son tres números distintos.",
-    probe: "Replay de fills, invariante de cash después de ida y vuelta, rechazar un libro que debite al otro.",
-    lives: "Desk paper · libros USD / COP",
+    lie: "Un POST 200 y un mock de pasarela. expect(ok). Nadie verifica la firma en el test.",
+    edge: "Wompi firma con un secreto, pero Payouts usa otro. Bancolombia manda el timestamp fuera del payload firmado. Un atacante puede forjar webhooks válidos.",
+    probe: "Enviar webhook con firma incorrecta. Debe rechazarse con 401. Verificar que cada producto (checkout, payouts) use su secreto correcto.",
+    lives: "Wompi Payouts · Bancolombia",
   },
   {
-    id: "tiempo",
-    name: "Tiempo",
+    id: "idempotencia",
+    name: "Idempotencia",
     code: "02",
-    lie: "SMA sobre un CSV quieto. El reloj del runner es 1970 y nadie se entera.",
-    edge: "Señal en el cierre, fill en la apertura siguiente. Yahoo delayed contra spot 24h. Sesión BVC vs cripto. Paper no es live.",
-    probe: "Comparar mid del edge contra el precio de la señal. Si el fill usa un close de hace meses, el lab miente.",
-    lives: "Desk paper · Binance + BVC delayed",
+    lie: "Un ID único en la DB. El test nunca reintenta la misma transacción.",
+    edge: "Reintento de red duplica el cargo. Cliente ve doble cobro. O peor: un reintento de reversión borra dos transacciones.",
+    probe: "Enviar el mismo webhook dos veces con el mismo ID. Solo debe procesarse una vez. Verificar que el balance final sea correcto.",
+    lives: "Cybersentinel · wallet",
   },
   {
-    id: "distribuido",
-    name: "Distribuido",
+    id: "race",
+    name: "Race conditions",
     code: "03",
-    lie: "Un solo proceso, un wrangler, un 200. El vecino no existe en el test.",
-    edge: "El mismo secreto en N bordes. Uno autentica y el otro 401. Heartbeat, CORS de un origen, bind a localhost.",
-    probe: "Login de punta a punta. Tirar un servicio y ver qué queda coherente. No un mock por archivo.",
-    lives: "Workers · generador · edge local",
+    lie: "La suite serial. Un fill, un ciclo, cero solapes. Los tests nunca ejecutan dos requests simultáneos.",
+    edge: "Dos órdenes al mismo tiempo leen el mismo balance, ambas pasan la validación, ambas debitan. El libro de cuentas queda negativo.",
+    probe: "Disparar dos transacciones concurrentes que compiten por el mismo recurso. Solo una debe procesar, la otra debe fallar con lock o insufficient funds.",
+    lives: "Paper-exec · consumer",
   },
   {
-    id: "concurrencia",
-    name: "Concurrencia",
+    id: "montos",
+    name: "Montos y decimales",
     code: "04",
-    lie: "La suite serial. Un fill, un ciclo, cero solapes.",
-    edge: "Dos consumers, un id. Transacción que bloquea cash. Dedup. El race no sale en jest --runInBand.",
-    probe: "Disparar el ciclo en paralelo. El segundo fill tiene que ser dedup, no doble cargo.",
-    lives: "Paper-exec · consumer 15s",
+    lie: "parseInt(amount) y listo. El test usa 100, 200. Nadie prueba con decimales, COP sin centavos, o fees fraccionarios.",
+    edge: "COP no tiene subunidades pero el API recibe centavos. Fee de 2.9% genera fracciones. Conversión USD/COP pierde precisión. Cliente ve $100.000 cobrado como $10.000.000.",
+    probe: "Transacción de $1 COP, fee de 2.9%. Verificar redondeo. Conversión USD↔COP. Verificar que los decimales no se pierdan ni multipliquen.",
+    lives: "Wallet · desk paper",
   },
   {
     id: "integraciones",
-    name: "Integraciones",
+    name: "Contratos API reales",
     code: "05",
-    lie: "MSW / nock y un JSON de fixtures. Docs en verde, prod en 403.",
-    edge: "Políticas de identidad, rate limit, payload que cambió, feed delayed. El contrato real no es el README.",
-    probe: "Llamada viva con timeout. Si la política niega, no inventar el UUID.",
-    lives: "APIs ajenas · WhatsApp · klines",
+    lie: "MSW / nock y un JSON de fixtures. Docs en verde, prod en 403. El mock nunca se actualiza cuando la API cambia.",
+    edge: "Políticas de identidad, rate limit, payload que cambió sin aviso. El contrato real no es el README. La API de staging se comporta distinto a prod.",
+    probe: "Llamada viva con timeout. Si la política niega, no inventar el UUID. Verificar errores reales: 401, 429, 500.",
+    lives: "APIs ajenas · WhatsApp · Truora",
   },
   {
-    id: "ci",
-    name: "Lo que CI no ve",
+    id: "conciliacion",
+    name: "Conciliación",
     code: "06",
-    lie: "Build verde. Cero clics. Cero estados vacíos. Copy que nadie leyó.",
-    edge: "Cinta de ticks, horario de bolsa, layout, un humano recorriendo el flujo. El screenshot único no es verificación.",
-    probe: "Ejercer la pantalla como usuario. Vacío, error, otra ruta que comparte estado.",
-    lives: "Generador · desk · landings",
+    lie: "Balance = sum(transactions). El test nunca verifica que el balance del proveedor coincida con el interno.",
+    edge: "Webhook perdido, orden duplicada en el provider pero no en tu DB, discrepancia silenciosa que crece con el tiempo.",
+    probe: "Comparar balance interno contra reporte del proveedor (Wompi, Bancolombia). Debe coincidir. Si no, tener proceso de reconciliación manual.",
+    lives: "Cybersentinel · wallets",
   },
 ];
 ---
@@ -69,10 +69,10 @@ const skills = [
   ))}
 
   <div class="skill-board-head">
-    <span class="skill-board-kicker">consola · una vista · sin productos privados</span>
+    <span class="skill-board-kicker">Riesgos en sistemas de pago</span>
     <p>
-      Lo fácil de testear es un CRUD y un mock. Acá se elige el borde y se ve qué finge el CI,
-      qué rompe en vivo y cómo se prueba de verdad.
+      Las integraciones de pago fallan en formas específicas. Estas son las categorías de riesgo que reviso
+      en cada auditoría, con ejemplos de cómo se prueban correctamente.
     </p>
   </div>
 
@@ -95,15 +95,15 @@ const skills = [
           </header>
           <div class="skill-cols">
             <div>
-              <h4>El test finge</h4>
+              <h4>Qué falla en los tests</h4>
               <p>{s.lie}</p>
             </div>
             <div>
-              <h4>En el borde</h4>
+              <h4>Qué pasa en producción</h4>
               <p>{s.edge}</p>
             </div>
             <div>
-              <h4>Cómo se prueba</h4>
+              <h4>Cómo lo reviso</h4>
               <p>{s.probe}</p>
             </div>
           </div>
