@@ -80,7 +80,7 @@ export const dualLedger = {
     copCash: 40_000_000,
     feeUsd: 2.5,
     feeCop: 12000,
-    qtyBtc: 0.15,
+    qtyBtc: 0.05,
   },
 };
 
