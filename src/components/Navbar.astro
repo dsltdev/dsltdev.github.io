@@ -3,7 +3,7 @@
 
 <nav class="navbar">
   <div class="nav-container">
-    <a href="#hero" class="nav-logo">
+    <a href="/" class="nav-logo">
       <span class="nav-logo-bracket">[</span>DL<span class="nav-logo-bracket">]</span><span class="nav-logo-cursor">_</span>
     </a>
 
@@ -24,16 +24,18 @@
 
     <div class="nav-menu" id="nav-menu">
       <div class="nav-links">
-        <a href="#home" class="nav-link">Inicio</a>
-        <a href="#projects" class="nav-link">Proyectos</a>
-        <a href="#hardskills" class="nav-link">Habilidades</a>
-        <a href="#offer" class="nav-link">Auditoría</a>
+        <a href="/#home" class="nav-link">Inicio</a>
+        <a href="/#projects" class="nav-link">Proyectos</a>
+        <a href="/desk" class="nav-link">Desk</a>
+        <a href="/4d" class="nav-link">4D</a>
+        <a href="/#hardskills" class="nav-link">Habilidades</a>
+        <a href="/#offer" class="nav-link">Auditoría</a>
         <a href="/blog" class="nav-link">Blog</a>
-        <a href="#about" class="nav-link">Sobre mí</a>
-        <a href="#contact" class="nav-link">Contacto</a>
+        <a href="/#about" class="nav-link">Sobre mí</a>
+        <a href="/#contact" class="nav-link">Contacto</a>
       </div>
 
-      <a href="#offer" class="nav-cta btn btn-primary">Auditoría →</a>
+      <a href="/#offer" class="nav-cta btn btn-primary">Auditoría →</a>
     </div>
   </div>
 </nav>
@@ -46,10 +48,14 @@
     right: 0;
     z-index: 1000;
     padding: 0.85rem 5%;
-    background: rgba(20, 16, 11, 0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(36, 28, 18, 0.92) 0%, rgba(20, 16, 11, 0.86) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-strong);
+    box-shadow:
+      0 1px 0 rgba(243, 199, 120, 0.12),
+      0 18px 40px rgba(0, 0, 0, 0.35);
+    transform: translateZ(40px);
   }
 
   .nav-container {
@@ -117,7 +123,9 @@
 
   .nav-links {
     display: flex;
-    gap: 2.25rem;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.75rem;
+    justify-content: flex-end;
   }
 
   .nav-link {
