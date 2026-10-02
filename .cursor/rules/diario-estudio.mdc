@@ -1,0 +1,29 @@
+---
+description: Diario de estudio: HTML, CSS y JS sin dependencias ni compilación
+globs: diario-estudio/**
+alwaysApply: false
+---
+
+# Diario de estudio
+
+Solo tres archivos: `index.html`, `styles.css` y `app.js`. Tiene que seguir funcionando al abrir `index.html` con doble clic (`file://`), sin servidor, sin instalación y sin ningún paso de compilación.
+
+- Sin frameworks, sin librerías, sin CDN y sin `type="module"` ni `import` (los módulos fallan en `file://`).
+- No añadas aquí `package.json`, bundlers ni nada de Astro: esta carpeta es independiente del sitio Astro del repo.
+- Todos los textos de la interfaz en español, y también los nombres de variables y funciones.
+- Código sencillo para alguien que está empezando: `const` y `let`, funciones cortas con nombre claro, sin abstracciones de más.
+- Antes de añadir una funcionalidad nueva, comprueba que te la han pedido. La web crece poco a poco.
+
+Pinta el DOM con `textContent`, nunca con `innerHTML` más texto escrito por la persona:
+
+```javascript
+// MAL: el tema lo escribe el usuario, aquí se podría colar HTML
+elemento.innerHTML = "<p>" + sesion.tema + "</p>";
+
+// BIEN
+const tema = document.createElement("p");
+tema.textContent = sesion.tema;
+elemento.appendChild(tema);
+```
+
+Los datos viven en `localStorage` con `JSON.stringify`. Al leerlos, envuélvelo en `try/catch` y devuelve una lista vacía si están corruptos, para que la web no se quede en blanco.
