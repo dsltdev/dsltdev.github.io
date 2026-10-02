@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diario de estudio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <main class="contenedor">
+      <h1 class="titulo">Diario de estudio</h1>
+
+      <section class="tarjeta tarjeta-racha">
+        <p class="racha-numero" id="racha-numero">0</p>
+        <p class="racha-texto" id="racha-texto">días seguidos estudiando</p>
+      </section>
+
+      <section class="tarjeta">
+        <h2 class="subtitulo">Nueva sesión</h2>
+
+        <form class="formulario" id="formulario" novalidate>
+          <div class="campo">
+            <label class="etiqueta" for="fecha">Fecha</label>
+            <input class="entrada" type="date" id="fecha" />
+          </div>
+
+          <div class="campo">
+            <label class="etiqueta" for="tema">Tema</label>
+            <input
+              class="entrada"
+              type="text"
+              id="tema"
+              placeholder="Por ejemplo: funciones en JavaScript"
+            />
+          </div>
+
+          <div class="campo">
+            <label class="etiqueta" for="minutos">Minutos</label>
+            <input class="entrada" type="number" id="minutos" min="1" step="1" placeholder="30" />
+          </div>
+
+          <p class="error" id="error" role="alert"></p>
+
+          <button class="boton" type="submit">Guardar sesión</button>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <h2 class="subtitulo">Mis sesiones</h2>
+        <p class="vacio" id="vacio">Todavía no has registrado ninguna sesión.</p>
+        <ul class="lista" id="lista"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
