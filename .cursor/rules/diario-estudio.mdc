@@ -6,7 +6,9 @@ alwaysApply: false
 
 # Diario de estudio
 
-Solo tres archivos: `index.html`, `styles.css` y `app.js`. Tiene que seguir funcionando al abrir `index.html` con doble clic (`file://`), sin servidor, sin instalación y sin ningún paso de compilación.
+Lee `diario-estudio/AGENTS.md` antes de empezar: ahí está el estado del proyecto, lo que todavía no existe y las decisiones ya tomadas.
+
+La web son tres archivos y ninguno más: `index.html`, `styles.css` y `app.js`. Tiene que seguir funcionando al abrir `index.html` con doble clic (`file://`), sin servidor, sin instalación y sin ningún paso de compilación.
 
 - Sin frameworks, sin librerías, sin CDN y sin `type="module"` ni `import` (los módulos fallan en `file://`).
 - No añadas aquí `package.json`, bundlers ni nada de Astro: esta carpeta es independiente del sitio Astro del repo.
