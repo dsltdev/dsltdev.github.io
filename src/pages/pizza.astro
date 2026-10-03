@@ -1,0 +1,1209 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PizzaArt from '../components/PizzaArt.astro';
+import {
+  pizzas,
+  sizes,
+  crusts,
+  toppings,
+  zones,
+  coupons,
+  payments,
+  formatCOP,
+  PICKUP_ADDRESS,
+} from '../data/pizzeria';
+---
+
+<Layout
+  title="Pizzería — arma y paga tu pizza | David López"
+  description="App de pedidos: carta, personalización por tamaño y masa, carrito con impuesto al consumo, domicilio por zona y checkout simulado. Todo estático, sin backend."
+>
+  <Navbar />
+
+  <main class="pz-main">
+    <div class="container">
+      <p class="section-label" style="margin-bottom:0.75rem">// pizzería</p>
+      <h1 class="pz-h1">Arma tu pizza y paga</h1>
+      <p class="pz-lede">
+        Carta, personalización, carrito e impuesto al consumo del 8% sobre el consumo —
+        igual que factura un restaurante en Colombia. El pago es una simulación: nada sale
+        de tu navegador y el carrito se guarda en <code>localStorage</code>.
+      </p>
+
+      <div class="pz-layout">
+        <div class="pz-col">
+          <section class="pz-section" aria-labelledby="pz-step-menu">
+            <h2 class="pz-step" id="pz-step-menu"><span>1</span> Elige tu pizza</h2>
+
+            <div class="pz-menu" data-reveal-group>
+              {
+                pizzas.map((pizza) => (
+                  <article class="pz-card glass-card" data-reveal>
+                    <div class="pz-card-art">
+                      <PizzaArt id={pizza.id} palette={pizza.palette} />
+                    </div>
+
+                    <div class="pz-card-body">
+                      <header class="pz-card-head">
+                        <h3>{pizza.name}</h3>
+                        {pizza.badge && <span class="badge">{pizza.badge}</span>}
+                      </header>
+
+                      <p class="pz-card-tagline">{pizza.tagline}</p>
+
+                      <ul class="pz-ingredients">
+                        {pizza.ingredients.map((item) => (
+                          <li>{item}</li>
+                        ))}
+                      </ul>
+
+                      <div class="pz-card-foot">
+                        <p class="pz-price">
+                          <small>desde</small>
+                          {formatCOP(pizza.basePrice)}
+                        </p>
+                        <button
+                          type="button"
+                          class="btn btn-primary pz-configure"
+                          data-pizza={pizza.id}
+                        >
+                          Personalizar
+                        </button>
+                      </div>
+
+                      <p class="pz-diet">
+                        {pizza.veggie && <span class="pz-tag pz-tag-veg">vegetariana</span>}
+                        {pizza.spicy && <span class="pz-tag pz-tag-hot">picante</span>}
+                      </p>
+                    </div>
+                  </article>
+                ))
+              }
+            </div>
+          </section>
+
+          <section class="pz-section" aria-labelledby="pz-step-checkout">
+            <h2 class="pz-step" id="pz-step-checkout"><span>2</span> Entrega y pago</h2>
+
+            <form class="pz-card glass-card pz-form" id="pz-checkout" novalidate>
+              <fieldset class="pz-fieldset">
+                <legend>¿Cómo lo recibes?</legend>
+                <div class="pz-choices pz-choices-2">
+                  <label class="pz-choice">
+                    <input type="radio" name="mode" value="domicilio" checked />
+                    <span class="pz-choice-body">
+                      <strong>Domicilio</strong>
+                      <small>Lo llevamos a tu puerta</small>
+                    </span>
+                  </label>
+                  <label class="pz-choice">
+                    <input type="radio" name="mode" value="recoger" />
+                    <span class="pz-choice-body">
+                      <strong>Recoger en tienda</strong>
+                      <small>{PICKUP_ADDRESS}</small>
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="pz-grid-2">
+                <label class="pz-field">
+                  Nombre de quien recibe
+                  <input type="text" id="pz-name" name="name" autocomplete="name" placeholder="Ana Restrepo" />
+                  <span class="pz-field-error" data-error-for="name"></span>
+                </label>
+
+                <label class="pz-field">
+                  Celular
+                  <input
+                    type="tel"
+                    id="pz-phone"
+                    name="phone"
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                    placeholder="3001234567"
+                  />
+                  <span class="pz-field-error" data-error-for="phone"></span>
+                </label>
+              </div>
+
+              <div class="pz-grid-2" id="pz-delivery-fields">
+                <label class="pz-field">
+                  Dirección
+                  <input
+                    type="text"
+                    id="pz-address"
+                    name="address"
+                    autocomplete="street-address"
+                    placeholder="Cra. 73 # 38-20, apto 501"
+                  />
+                  <span class="pz-field-error" data-error-for="address"></span>
+                </label>
+
+                <label class="pz-field">
+                  Zona
+                  <select id="pz-zone" name="zone">
+                    {
+                      zones.map((zone) => (
+                        <option value={zone.id}>
+                          {zone.name} · {formatCOP(zone.fee)} · {zone.etaMin}-{zone.etaMax} min
+                        </option>
+                      ))
+                    }
+                  </select>
+                  <span class="pz-field-hint">El domicilio cambia según la zona.</span>
+                </label>
+              </div>
+
+              <label class="pz-field">
+                Indicaciones para la cocina o el domiciliario
+                <textarea id="pz-notes" name="notes" rows="2" placeholder="Sin cebolla en la criolla. Timbre dañado, llamar al llegar."></textarea>
+              </label>
+
+              <fieldset class="pz-fieldset">
+                <legend>Medio de pago</legend>
+                <div class="pz-choices pz-choices-3">
+                  {
+                    payments.map((payment, i) => (
+                      <label class="pz-choice">
+                        <input type="radio" name="payment" value={payment.id} checked={i === 0} />
+                        <span class="pz-choice-body">
+                          <strong>{payment.name}</strong>
+                          <small>{payment.detail}</small>
+                        </span>
+                      </label>
+                    ))
+                  }
+                </div>
+              </fieldset>
+
+              <div class="pz-coupon">
+                <div class="pz-field">
+                  <label for="pz-coupon">Cupón</label>
+                  <div class="pz-coupon-row">
+                    <input type="text" id="pz-coupon" placeholder="HORNO10" autocomplete="off" spellcheck="false" />
+                    <button type="button" class="btn btn-secondary" id="pz-coupon-apply">Aplicar</button>
+                  </div>
+                </div>
+                <p class="pz-coupon-msg" id="pz-coupon-msg" role="status"></p>
+                <ul class="pz-coupon-list">
+                  {
+                    coupons.map((coupon) => (
+                      <li>
+                        <code>{coupon.code}</code> {coupon.label} · mínimo {formatCOP(coupon.minSubtotal)}
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </form>
+          </section>
+        </div>
+
+        <aside class="pz-cart-col">
+          <section class="pz-card glass-card pz-cart" aria-labelledby="pz-cart-title">
+            <header class="pz-cart-head">
+              <h2 id="pz-cart-title">Tu pedido</h2>
+              <span class="pz-pill" id="pz-count">0 pizzas</span>
+            </header>
+
+            <p class="pz-cart-empty" id="pz-empty">
+              Todavía no hay nada en el horno. Personaliza una pizza para empezar.
+            </p>
+
+            <ul class="pz-lines" id="pz-lines"></ul>
+
+            <dl class="pz-totals" id="pz-totals" hidden>
+              <div><dt>Subtotal</dt><dd id="pz-subtotal">—</dd></div>
+              <div id="pz-discount-row" hidden>
+                <dt>Descuento <span id="pz-discount-code"></span></dt>
+                <dd id="pz-discount">—</dd>
+              </div>
+              <div><dt>Domicilio</dt><dd id="pz-delivery">—</dd></div>
+              <div><dt>Impuesto al consumo 8%</dt><dd id="pz-inc">—</dd></div>
+              <div class="pz-totals-final"><dt>Total</dt><dd id="pz-total">—</dd></div>
+            </dl>
+
+            <p class="pz-cart-error" id="pz-error" role="alert"></p>
+
+            <button type="button" class="btn btn-primary pz-confirm" id="pz-confirm" disabled>
+              Confirmar pedido
+            </button>
+
+            <p class="pz-note" id="pz-eta-note"></p>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="pz-dialog" id="pz-config" aria-labelledby="pz-cfg-name">
+    <form method="dialog" class="pz-dialog-close-form">
+      <button class="pz-dialog-close" aria-label="Cerrar">×</button>
+    </form>
+
+    <div class="pz-cfg-head">
+      <div class="pz-cfg-art" id="pz-cfg-art"></div>
+      <div>
+        <h2 id="pz-cfg-name">Pizza</h2>
+        <p class="pz-cfg-tagline" id="pz-cfg-tagline"></p>
+      </div>
+    </div>
+
+    <form id="pz-cfg-form" class="pz-form">
+      <fieldset class="pz-fieldset">
+        <legend>Tamaño</legend>
+        <div class="pz-choices pz-choices-3">
+          {
+            sizes.map((size, i) => (
+              <label class="pz-choice">
+                <input type="radio" name="size" value={size.id} checked={i === 0} />
+                <span class="pz-choice-body">
+                  <strong>{size.name}</strong>
+                  <small>{size.detail} · {size.slices} porciones</small>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="pz-fieldset">
+        <legend>Masa</legend>
+        <div class="pz-choices pz-choices-2">
+          {
+            crusts.map((crust, i) => (
+              <label class="pz-choice">
+                <input type="radio" name="crust" value={crust.id} checked={i === 0} />
+                <span class="pz-choice-body">
+                  <strong>{crust.name}</strong>
+                  <small>
+                    {crust.detail}
+                    {crust.extra > 0 && ` · +${formatCOP(crust.extra)}`}
+                  </small>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="pz-fieldset">
+        <legend>Adiciones</legend>
+        <div class="pz-toppings">
+          {
+            toppings.map((topping) => (
+              <label class="pz-topping">
+                <input type="checkbox" name="topping" value={topping.id} />
+                <span class="pz-topping-dot" style={`--dot:${topping.color}`}></span>
+                <span class="pz-topping-name">{topping.name}</span>
+                <span class="pz-topping-price">+{formatCOP(topping.price)}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <footer class="pz-cfg-foot">
+        <div class="pz-qty" role="group" aria-label="Cantidad">
+          <button type="button" class="pz-qty-btn" data-qty-step="-1" aria-label="Quitar una">−</button>
+          <output class="pz-qty-val" id="pz-cfg-qty">1</output>
+          <button type="button" class="pz-qty-btn" data-qty-step="1" aria-label="Agregar una">+</button>
+        </div>
+
+        <p class="pz-cfg-price" id="pz-cfg-price">—</p>
+
+        <button type="submit" class="btn btn-primary">Agregar al pedido</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="pz-dialog pz-ticket-dialog" id="pz-ticket" aria-labelledby="pz-ticket-title">
+    <h2 id="pz-ticket-title">Pedido confirmado</h2>
+    <p class="pz-ticket-id" id="pz-ticket-id"></p>
+    <p class="pz-ticket-eta" id="pz-ticket-eta"></p>
+
+    <ul class="pz-ticket-lines" id="pz-ticket-lines"></ul>
+
+    <dl class="pz-totals" id="pz-ticket-totals"></dl>
+
+    <p class="pz-ticket-pay" id="pz-ticket-pay"></p>
+
+    <form method="dialog">
+      <button class="btn btn-primary" style="width:100%">Hacer otro pedido</button>
+    </form>
+  </dialog>
+
+  <Footer />
+</Layout>
+
+<script>
+  import { mountPizzaApp } from '../scripts/pizza-app';
+
+  mountPizzaApp();
+</script>
+
+<style is:global>
+  .pz-main {
+    position: relative;
+    z-index: 1;
+    padding: 7.5rem 0 4rem;
+  }
+
+  /* Varios contenedores de la app declaran display, que gana contra el
+     display:none del user-agent para [hidden]. */
+  .pz-main [hidden],
+  .pz-dialog [hidden] {
+    display: none !important;
+  }
+
+  .pz-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .pz-lede {
+    color: var(--muted);
+    max-width: 44rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .pz-lede code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--accent-light);
+  }
+
+  .pz-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .pz-col {
+    display: grid;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+
+  .pz-step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .pz-step span {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    color: var(--accent-light);
+  }
+
+  /* ---------- Carta ---------- */
+
+  .pz-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+
+  .pz-card {
+    padding: 1.25rem 1.3rem;
+  }
+
+  .pz-menu .pz-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pz-card-art {
+    width: 8.5rem;
+    margin: 0 auto;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .pz-menu .pz-card:hover .pz-card-art {
+    transform: rotate(-8deg) scale(1.04);
+  }
+
+  .pz-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+
+  .pz-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .pz-card-head h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .pz-card-tagline {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .pz-ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pz-ingredients li {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 0.12rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--muted-dim);
+  }
+
+  .pz-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .pz-price {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .pz-price small {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-dim);
+  }
+
+  .pz-card-foot .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .pz-diet {
+    display: flex;
+    gap: 0.35rem;
+    min-height: 1rem;
+  }
+
+  .pz-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .pz-tag-veg {
+    color: var(--success);
+    border: 1px solid var(--success-glow);
+    background: var(--success-glow);
+  }
+
+  .pz-tag-hot {
+    color: var(--danger);
+    border: 1px solid var(--danger-glow);
+    background: var(--danger-glow);
+  }
+
+  /* ---------- Formularios ---------- */
+
+  .pz-form {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .pz-fieldset {
+    border: none;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .pz-fieldset legend,
+  .pz-field {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pz-field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .pz-field input[type='text'],
+  .pz-field input[type='tel'],
+  .pz-field select,
+  .pz-field textarea {
+    padding: 0.6rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    letter-spacing: normal;
+    text-transform: none;
+    width: 100%;
+  }
+
+  .pz-field textarea {
+    resize: vertical;
+  }
+
+  .pz-field input:focus-visible,
+  .pz-field select:focus-visible,
+  .pz-field textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .pz-field-error,
+  .pz-field-hint {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    min-height: 0.9rem;
+  }
+
+  .pz-field-error {
+    color: var(--danger);
+  }
+
+  .pz-field-hint {
+    color: var(--muted-dim);
+  }
+
+  .pz-field.is-invalid input,
+  .pz-field.is-invalid select {
+    border-color: var(--danger);
+  }
+
+  .pz-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .pz-choices {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .pz-choices-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pz-choices-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .pz-choice {
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+
+  .pz-choice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pz-choice-body {
+    display: grid;
+    gap: 0.15rem;
+    height: 100%;
+    padding: 0.65rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s var(--ease-out), background 0.15s var(--ease-out);
+  }
+
+  .pz-choice-body strong {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .pz-choice-body small {
+    font-size: 0.68rem;
+    color: var(--muted-dim);
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.4;
+  }
+
+  .pz-choice:hover .pz-choice-body {
+    border-color: var(--border-strong);
+  }
+
+  .pz-choice input:checked + .pz-choice-body {
+    border-color: var(--accent);
+    background: rgba(224, 162, 62, 0.1);
+  }
+
+  .pz-choice input:checked + .pz-choice-body strong {
+    color: var(--accent-light);
+  }
+
+  .pz-choice input:focus-visible + .pz-choice-body {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .pz-toppings {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 0.4rem;
+  }
+
+  .pz-topping {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease-out), background 0.15s var(--ease-out);
+  }
+
+  .pz-topping:hover {
+    border-color: var(--border-strong);
+  }
+
+  .pz-topping input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pz-topping-dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+  }
+
+  .pz-topping-name {
+    flex: 1;
+    font-size: 0.78rem;
+    color: var(--text);
+  }
+
+  .pz-topping-price {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted-dim);
+  }
+
+  .pz-topping:has(input:checked) {
+    border-color: var(--accent);
+    background: rgba(224, 162, 62, 0.1);
+  }
+
+  .pz-topping:has(input:checked) .pz-topping-price {
+    color: var(--accent);
+  }
+
+  .pz-topping:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  /* ---------- Cupón ---------- */
+
+  .pz-coupon {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .pz-coupon-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .pz-coupon-row .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
+  .pz-coupon-row input {
+    text-transform: uppercase;
+  }
+
+  .pz-coupon-msg {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    min-height: 1rem;
+  }
+
+  .pz-coupon-msg.is-ok { color: var(--success); }
+  .pz-coupon-msg.is-bad { color: var(--danger); }
+
+  .pz-coupon-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.2rem;
+    font-size: 0.72rem;
+    color: var(--muted-dim);
+  }
+
+  .pz-coupon-list code {
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+
+  /* ---------- Carrito ---------- */
+
+  .pz-cart-col {
+    position: sticky;
+    top: 5.5rem;
+    min-width: 0;
+  }
+
+  .pz-cart {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .pz-cart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pz-cart-head h2 {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .pz-pill {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .pz-cart-empty {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .pz-lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .pz-line {
+    display: grid;
+    gap: 0.35rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pz-lines .pz-line:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .pz-line-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .pz-line-name {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .pz-line-total {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--accent-light);
+    white-space: nowrap;
+  }
+
+  .pz-line-spec {
+    font-size: 0.72rem;
+    color: var(--muted-dim);
+    line-height: 1.5;
+  }
+
+  .pz-line-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pz-qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .pz-qty-btn {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: none;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s var(--ease-out);
+  }
+
+  .pz-qty-btn:hover {
+    background: rgba(224, 162, 62, 0.14);
+  }
+
+  .pz-qty-val {
+    min-width: 2rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .pz-line-remove {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted-dim);
+    cursor: pointer;
+    padding: 0.2rem;
+    transition: color 0.15s var(--ease-out);
+  }
+
+  .pz-line-remove:hover {
+    color: var(--danger);
+  }
+
+  .pz-totals {
+    display: grid;
+    gap: 0.35rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  .pz-totals > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .pz-totals dt {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .pz-totals dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .pz-totals-final {
+    margin-top: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pz-totals-final dt {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .pz-totals-final dd {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .pz-cart-error {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--danger);
+  }
+
+  .pz-cart-error:empty {
+    display: none;
+  }
+
+  .pz-confirm {
+    width: 100%;
+  }
+
+  .pz-confirm:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .pz-note {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted-dim);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ---------- Diálogos ---------- */
+
+  .pz-dialog {
+    width: min(42rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    color: var(--text);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  }
+
+  .pz-dialog::backdrop {
+    background: rgba(10, 8, 5, 0.72);
+    backdrop-filter: blur(3px);
+  }
+
+  .pz-dialog-close-form {
+    float: right;
+  }
+
+  .pz-dialog-close {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.15s var(--ease-out), border-color 0.15s var(--ease-out);
+  }
+
+  .pz-dialog-close:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .pz-cfg-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .pz-cfg-art {
+    width: 5rem;
+    flex-shrink: 0;
+  }
+
+  .pz-cfg-head h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .pz-cfg-tagline {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .pz-cfg-foot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pz-cfg-price {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    margin-right: auto;
+  }
+
+  .pz-ticket-dialog {
+    width: min(28rem, calc(100vw - 2rem));
+    text-align: left;
+  }
+
+  .pz-ticket-dialog h2 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+  }
+
+  .pz-ticket-id {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .pz-ticket-eta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .pz-ticket-lines {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px dashed var(--border-strong);
+    border-bottom: 1px dashed var(--border-strong);
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .pz-ticket-lines li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .pz-ticket-lines span:first-child {
+    color: var(--muted);
+  }
+
+  .pz-ticket-lines span:last-child {
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .pz-ticket-pay {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--success);
+    margin: 1rem 0;
+    padding: 0.6rem 0.75rem;
+    background: var(--success-glow);
+    border-left: 2px solid var(--success);
+  }
+
+  @media (max-width: 1040px) {
+    .pz-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .pz-cart-col {
+      position: static;
+      order: -1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .pz-main {
+      padding-top: 6rem;
+    }
+
+    .pz-grid-2,
+    .pz-choices-2,
+    .pz-choices-3 {
+      grid-template-columns: 1fr;
+    }
+
+    .pz-cfg-foot .btn {
+      width: 100%;
+    }
+  }
+</style>
