@@ -106,10 +106,39 @@
   const logEl = document.getElementById('loaderLog');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Quien llega con hash (ej. el CTA del blog a /#offer) ya pidió una sección
+  // concreta: el boot la tapa y el lock de scroll puede dejarlo arriba del todo.
+  const hash = window.location.hash.slice(1);
+
+  // Restaurar quitando el inline style, no poniendo 'auto': el body tiene
+  // overflow-x: hidden en el CSS global y un 'auto' inline lo pisaría.
+  const unlockScroll = () => document.body.style.removeProperty('overflow');
+
+  const alignToHash = () => {
+    const target = hash && document.getElementById(decodeURIComponent(hash));
+    if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+  };
+
   if (loader) {
-    if (prefersReducedMotion || !logEl) {
+    if (hash) {
       loader.classList.add('hidden');
-      document.body.style.overflow = 'auto';
+      unlockScroll();
+      alignToHash();
+
+      // El swap de las fuentes mueve el layout después del salto del navegador,
+      // así que se reencuadra al terminar de cargar — salvo que el visitante ya
+      // esté scrolleando por su cuenta.
+      let scrolledByUser = false;
+      const markUserScroll = () => { scrolledByUser = true; };
+      (['wheel', 'touchstart', 'keydown'] as const).forEach((evt) =>
+        window.addEventListener(evt, markUserScroll, { once: true, passive: true })
+      );
+      window.addEventListener('load', () => {
+        if (!scrolledByUser) alignToHash();
+      }, { once: true });
+    } else if (prefersReducedMotion || !logEl) {
+      loader.classList.add('hidden');
+      unlockScroll();
     } else {
       document.body.style.overflow = 'hidden';
 
@@ -154,7 +183,7 @@
       const totalDelay = acc + 500;
       setTimeout(() => {
         loader?.classList.add('hidden');
-        document.body.style.overflow = 'auto';
+        unlockScroll();
       }, totalDelay);
     }
   }
