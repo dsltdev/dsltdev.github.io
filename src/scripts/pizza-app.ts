@@ -398,6 +398,16 @@ export function mountPizzaApp() {
     }
   });
 
+  // Editar el campo después de aplicar dejaría el código a la vista peleado
+  // con el descuento ya cobrado, así que el cupón se cae al primer cambio.
+  couponInput.addEventListener('input', () => {
+    if (!coupon || couponInput.value.trim().toUpperCase() === coupon.code) return;
+    coupon = null;
+    couponMsg.textContent = '';
+    couponMsg.classList.remove('is-ok', 'is-bad');
+    renderCart();
+  });
+
   /* ---------- Checkout ---------- */
 
   checkout.addEventListener('change', () => {
