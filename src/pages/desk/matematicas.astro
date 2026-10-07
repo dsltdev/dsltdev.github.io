@@ -1,0 +1,202 @@
+---
+import DeskFrame from '../../components/DeskFrame.astro';
+import { kelly, dualLedger, hmacCase } from '../../data/desk';
+
+const { p, b } = kelly.defaults;
+const q = 1 - p;
+const f0 = p - q / b;
+---
+
+<DeskFrame
+  title="Matemáticas del desk — David López"
+  description="Criterio de Kelly, dual-ledger USD/COP y HMAC que no puede coincidir. Extraído del portafolio, no de un notebook."
+  current="math"
+>
+  <div class="desk-grid-2" data-reveal-group>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Criterio de Kelly</h2>
+      <p class="desk-muted">{kelly.source}</p>
+      <p class="desk-formula">{kelly.formula}</p>
+      <ul class="desk-list">
+        {kelly.meaning.map((m) => <li>{m}</li>)}
+      </ul>
+
+      <form class="desk-form" id="kelly-form" style="margin-top:1.1rem">
+        <label>
+          p · probabilidad de ganar
+          <input type="range" id="kelly-p" min="0.05" max="0.95" step="0.01" value={p} />
+          <span id="kelly-p-out">{p.toFixed(2)}</span>
+        </label>
+        <label>
+          b · odds netas (ganancia / riesgo)
+          <input type="range" id="kelly-b" min="0.2" max="5" step="0.05" value={b} />
+          <span id="kelly-b-out">{b.toFixed(2)}</span>
+        </label>
+      </form>
+
+      <p class:list={['desk-kpi', f0 > 0 ? 'up' : 'down']} id="kelly-f">
+        <span id="kelly-f-val">{(f0 * 100).toFixed(1)}%</span>
+        <small>f* · fracción (si ≤ 0, no hay apuesta Kelly)</small>
+      </p>
+      <p class="desk-muted" id="kelly-q">q = {q.toFixed(2)}</p>
+      <p class="desk-note">Valores por defecto 0.55 / 1.2 son ilustrativos. El SaaS no publica p ni b en este repo.</p>
+    </article>
+
+    <article class="desk-card glass-card" data-reveal>
+      <h2>HMAC destinado a fallar</h2>
+      <p class="desk-muted">Fuente: <code>{hmacCase.source}</code></p>
+      <table class="desk-table">
+        <thead>
+          <tr><th>Canal</th><th>Sobre</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Checkout</td><td>{hmacCase.checkout}</td></tr>
+          <tr><td>Payouts</td><td>{hmacCase.payouts}</td></tr>
+        </tbody>
+      </table>
+      <p class="desk-gap" style="margin-top:1rem">{hmacCase.result}</p>
+      <div class="hmac-viz" aria-hidden="true">
+        <div class="hmac-box">payload + secreto A → digest α</div>
+        <div class="hmac-neq">≠</div>
+        <div class="hmac-box">sobre B + secreto B → digest β</div>
+      </div>
+      <p class="desk-note">No es una condición de carrera: el conjunto de firmas válidas y el calculado son disjuntos.</p>
+    </article>
+  </div>
+
+  <article class="desk-card glass-card" style="margin-top:1rem" data-reveal>
+    <h2>Dual-ledger USD / COP</h2>
+    <p class="desk-muted">Reglas de HardSkillsBoard. Simulador de un fill paper (no cruza los libros).</p>
+    <ul class="desk-list">
+      {dualLedger.rules.map((r) => <li>{r}</li>)}
+    </ul>
+
+    <div class="ledger-grid" id="ledger">
+      <div>
+        <h3>Libro USD</h3>
+        <p class="desk-kpi" id="usd-cash">${dualLedger.example.usdCash.toLocaleString('en-US')}</p>
+        <p class="desk-muted">cash · fee lado USD ${dualLedger.example.feeUsd}</p>
+      </div>
+      <div>
+        <h3>Libro COP</h3>
+        <p class="desk-kpi" id="cop-cash">{dualLedger.example.copCash.toLocaleString('es-CO')}</p>
+        <p class="desk-muted">enteros · fee lado COP {dualLedger.example.feeCop.toLocaleString('es-CO')}</p>
+      </div>
+      <div>
+        <h3>BTC qty</h3>
+        <p class="desk-kpi" id="btc-qty">{dualLedger.example.qtyBtc}</p>
+        <p class="desk-muted">fracción vs COP entero</p>
+      </div>
+    </div>
+
+    <form class="desk-form" id="fill-form" style="margin-top:1rem;max-width:28rem">
+      <label>
+        Precio BTC (USD)
+        <input type="number" id="px" value="42000" min="1" step="1" />
+      </label>
+      <label>
+        Cantidad BTC
+        <input type="number" id="qty" value={dualLedger.example.qtyBtc} min="0.001" step="0.001" />
+      </label>
+      <button type="submit" class="btn btn-primary" style="width:fit-content">Aplicar fill compra (solo USD)</button>
+    </form>
+    <p class="desk-note" id="fill-msg">COP no se toca: un libro no debita al otro.</p>
+  </article>
+</DeskFrame>
+
+<style>
+  .hmac-viz {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .hmac-box {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .hmac-neq {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    color: var(--danger);
+  }
+
+  .ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .ledger-grid h3 {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  @media (max-width: 700px) {
+    .ledger-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const pEl = document.getElementById('kelly-p') as HTMLInputElement | null;
+  const bEl = document.getElementById('kelly-b') as HTMLInputElement | null;
+  const pOut = document.getElementById('kelly-p-out');
+  const bOut = document.getElementById('kelly-b-out');
+  const fEl = document.getElementById('kelly-f');
+  const qEl = document.getElementById('kelly-q');
+
+  const renderKelly = () => {
+    if (!pEl || !bEl || !fEl || !pOut || !bOut || !qEl) return;
+    const p = Number(pEl.value);
+    const b = Number(bEl.value);
+    const q = 1 - p;
+    const f = p - q / b;
+    pOut.textContent = p.toFixed(2);
+    bOut.textContent = b.toFixed(2);
+    qEl.textContent = `q = ${q.toFixed(2)}`;
+    fEl.classList.remove('up', 'down');
+    fEl.classList.add(f > 0 ? 'up' : 'down');
+    const val = document.getElementById('kelly-f-val');
+    if (val) val.textContent = `${(f * 100).toFixed(1)}%`;
+  };
+
+  pEl?.addEventListener('input', renderKelly);
+  bEl?.addEventListener('input', renderKelly);
+
+  const usd0 = 10000;
+  const feeUsd = 2.5;
+  let usd = usd0;
+  let qtyHeld = 0.05;
+  const usdEl = document.getElementById('usd-cash');
+  const qtyEl = document.getElementById('btc-qty');
+  const msg = document.getElementById('fill-msg');
+  const form = document.getElementById('fill-form') as HTMLFormElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const px = Number((document.getElementById('px') as HTMLInputElement).value);
+    const qty = Number((document.getElementById('qty') as HTMLInputElement).value);
+    const cost = px * qty + feeUsd;
+    if (cost > usd) {
+      if (msg) msg.textContent = `Rechazado: cash USD ${usd.toFixed(2)} < costo ${cost.toFixed(2)} (px·qty + fee). COP intacto.`;
+      return;
+    }
+    usd -= cost;
+    qtyHeld += qty;
+    if (usdEl) usdEl.textContent = `$${usd.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+    if (qtyEl) qtyEl.textContent = qtyHeld.toFixed(3);
+    if (msg) msg.textContent = `Fill OK. Debitó solo USD. Costo ${cost.toFixed(2)} = mark notional ${ (px * qty).toFixed(2) } + fee ${feeUsd}. COP no se cruzó.`;
+  });
+</script>

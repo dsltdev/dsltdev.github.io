@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import TesseractCanvas from '../components/TesseractCanvas.astro';
+---
+
+<Layout
+  title="Tesseracto 4D — DSLT"
+  description="Un hipercubo real: rotación en la cuarta dimensión, proyectada a 3D y luego a la pantalla."
+>
+  <Navbar />
+  <main class="fourd">
+    <div class="container">
+      <p class="section-label" style="text-align:left;margin-bottom:0.75rem">// 4D</p>
+      <h1 class="fourd-h1">Sí, se puede ver algo en 4D</h1>
+      <p class="fourd-lede">
+        El tesseracto (hipercubo) vive en cuatro ejes: X, Y, Z y W. No cabe en el monitor,
+        así que lo proyectamos: primero 4D→3D con perspectiva en W, después 3D→2D.
+        Lo que “se ve” de la cuarta dimensión es el intercambio entre el cubo interior y el exterior
+        cuando rota en los planos XW, YW o ZW.
+      </p>
+      <TesseractCanvas />
+      <section class="fourd-legend glass-card">
+        <h2>Cómo leerlo</h2>
+        <ul>
+          <li><strong>Aristas claras</strong> — cubos 3D (W fijo).</li>
+          <li><strong>Aristas ámbar</strong> — conexiones a lo largo de W, la cuarta dimensión.</li>
+          <li><strong>Rotar en W</strong> — animación automática en XW/YW/ZW.</li>
+          <li><strong>Shift + arrastre</strong> — vos controlás el eje W a mano.</li>
+        </ul>
+        <p>
+          DSLT sigue siendo el mismo: fintech, pagos y trading. Esto es la sala de máquinas visual —
+          geometría, no un GIF decorativo.
+        </p>
+        <a class="btn btn-primary" href="/">Volver al inicio</a>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .fourd {
+    position: relative;
+    z-index: 1;
+    padding: 7.5rem 0 4rem;
+    perspective: 1400px;
+  }
+
+  .fourd-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.9rem;
+  }
+
+  .fourd-lede {
+    color: var(--muted);
+    max-width: 44rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .fourd-legend {
+    margin-top: 2rem;
+    padding: 1.5rem 1.6rem;
+    max-width: 44rem;
+  }
+
+  .fourd-legend h2 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+
+  .fourd-legend ul {
+    margin: 0 0 1rem 1.1rem;
+    color: var(--muted);
+  }
+
+  .fourd-legend li {
+    margin-bottom: 0.4rem;
+  }
+
+  .fourd-legend p {
+    color: var(--muted);
+    margin-bottom: 1.1rem;
+  }
+</style>

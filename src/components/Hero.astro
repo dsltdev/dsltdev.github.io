@@ -1,8 +1,10 @@
 ---
+import TesseractCanvas from './TesseractCanvas.astro';
 ---
 
 <section id="home" class="hero">
   <div class="hero-grid-bg" aria-hidden="true"></div>
+  <div class="hero-vanish" aria-hidden="true"></div>
 
   <div class="hero-content">
     <div class="hero-main">
@@ -20,27 +22,21 @@
 
       <p class="hero-tagline">
         Wallets, pasarelas de pago y sistemas de trading, en producción con dinero real.
+        A la derecha: un tesseracto de verdad — rotación en W, proyección 4D→3D→2D.
       </p>
 
       <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">
+        <a href="/4d" class="btn btn-primary">Entrar al 4D</a>
+        <a href="/desk" class="btn btn-outline">Desk paper</a>
+        <a href="#projects" class="btn btn-secondary">
           <span>Ver proyectos</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
         </a>
-        <a href="#offer" class="btn btn-secondary">Auditoría</a>
       </div>
     </div>
 
-    <aside class="hero-audit" aria-label="Panel decorativo de log de auditoría">
-      <div class="hero-audit-titlebar">
-        <span class="hero-audit-dot"></span>
-        <span class="hero-audit-title">tail -f audit.log</span>
-        <span class="hero-audit-badge">LIVE</span>
-      </div>
-      <div class="hero-audit-body" id="auditLog"></div>
-    </aside>
+    <div class="hero-4d">
+      <TesseractCanvas compact={true} heading="Hipercubo DSLT · eje W animado" />
+    </div>
   </div>
 
   <div class="hero-ticker" aria-hidden="true">
@@ -49,14 +45,14 @@
       <span>BANCOLOMBIA</span><span class="sep">/</span>
       <span>TRUORA</span><span class="sep">/</span>
       <span>CLOUDFLARE WORKERS</span><span class="sep">/</span>
+      <span>TESSERACTO 4D</span><span class="sep">/</span>
       <span>TYPESCRIPT</span><span class="sep">/</span>
-      <span>PYTHON</span><span class="sep">/</span>
       <span>WOMPI</span><span class="sep">/</span>
       <span>BANCOLOMBIA</span><span class="sep">/</span>
       <span>TRUORA</span><span class="sep">/</span>
       <span>CLOUDFLARE WORKERS</span><span class="sep">/</span>
+      <span>TESSERACTO 4D</span><span class="sep">/</span>
       <span>TYPESCRIPT</span><span class="sep">/</span>
-      <span>PYTHON</span><span class="sep">/</span>
     </div>
   </div>
 </section>
@@ -70,18 +66,33 @@
     padding-top: 90px;
     position: relative;
     overflow: hidden;
+    perspective: 1400px;
   }
 
   .hero-grid-bg {
     position: absolute;
-    inset: 0;
+    inset: -10% -5% 20%;
     pointer-events: none;
     background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: linear-gradient(to bottom, black, transparent 85%);
-    opacity: 0.35;
+      linear-gradient(rgba(224, 162, 62, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224, 162, 62, 0.12) 1px, transparent 1px);
+    background-size: 72px 72px;
+    transform: rotateX(62deg) scale(1.35);
+    transform-origin: center bottom;
+    mask-image: linear-gradient(to bottom, transparent, black 30%, transparent 85%);
+    opacity: 0.55;
+  }
+
+  .hero-vanish {
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    width: 4px;
+    height: 28%;
+    background: linear-gradient(to bottom, rgba(243, 199, 120, 0.6), transparent);
+    transform: translateX(-50%);
+    pointer-events: none;
+    filter: blur(0.4px);
   }
 
   .hero-content {
@@ -89,19 +100,21 @@
     margin: 0 auto;
     padding: 2.5rem 5% 3rem;
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 3rem;
-    align-items: start;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
     width: 100%;
     position: relative;
     z-index: 1;
+    transform-style: preserve-3d;
   }
 
   .hero-main {
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
-    padding-top: 1.5rem;
+    padding-top: 0.5rem;
+    transform: translateZ(28px) rotateY(6deg);
   }
 
   .hero-kicker {
@@ -131,6 +144,7 @@
     line-height: 1;
     letter-spacing: -0.02em;
     color: var(--text);
+    text-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 40px rgba(224, 162, 62, 0.12);
   }
 
   .hero-name::after {
@@ -169,83 +183,13 @@
 
   .hero-cta {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.85rem;
     margin-top: 1rem;
   }
 
-  /* Panel de auditoría */
-  .hero-audit {
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  }
-
-  .hero-audit-titlebar {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 0.9rem;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .hero-audit-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 6px var(--accent-glow-strong);
-    animation: hero-pulse 1.4s ease-in-out infinite;
-  }
-
-  .hero-audit-title {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-  }
-
-  .hero-audit-badge {
-    margin-left: auto;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    border: 1px solid rgba(224, 162, 62, 0.35);
-    border-radius: var(--radius-sm);
-    padding: 0.1rem 0.4rem;
-  }
-
-  .hero-audit-body {
-    padding: 0.9rem 0.9rem 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    line-height: 1.9;
-    min-height: 14rem;
-    color: var(--muted);
-  }
-
-  .hero-audit-body :global(.log-row) {
-    display: grid;
-    grid-template-columns: 4.6rem 2.6rem 1fr;
-    gap: 0.55rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .hero-audit-body :global(.log-time) { color: var(--muted-dim); }
-  .hero-audit-body :global(.log-status-200) { color: var(--success); font-weight: 600; }
-  .hero-audit-body :global(.log-status-401) { color: var(--warning); font-weight: 600; }
-  .hero-audit-body :global(.log-status-fix) { color: var(--accent); font-weight: 700; }
-  .hero-audit-body :global(.log-path) { color: var(--text); }
-  .hero-audit-body :global(.log-note) { color: var(--muted-dim); }
-
-  @keyframes hero-pulse {
-    0%, 100% { opacity: 0.55; }
-    50% { opacity: 1; }
+  .hero-4d {
+    transform: translateZ(48px) rotateY(-8deg);
   }
 
   @keyframes hero-blink {
@@ -253,14 +197,15 @@
     50%, 100% { opacity: 0; }
   }
 
-  /* Ticker de integraciones */
   .hero-ticker {
     position: relative;
     z-index: 1;
-    border-top: 1px solid var(--border);
-    background: var(--surface);
+    border-top: 1px solid var(--border-strong);
+    background: linear-gradient(180deg, #1c1711 0%, #120e0a 100%);
     overflow: hidden;
     padding: 0.85rem 0;
+    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.25);
+    transform: translateZ(12px);
   }
 
   .hero-ticker-track {
@@ -285,8 +230,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .hero-ticker-track { animation: none; }
-    .hero-audit-dot { animation: none; }
     .hero-prompt-cursor { animation: none; }
+    .hero-main, .hero-4d { transform: none; }
   }
 
   @media (max-width: 1024px) {
@@ -294,8 +239,9 @@
       grid-template-columns: 1fr;
     }
 
-    .hero-main {
-      padding-top: 0;
+    .hero-main,
+    .hero-4d {
+      transform: none;
     }
   }
 
@@ -303,18 +249,11 @@
     .hero-cta {
       flex-direction: column;
     }
-
-    .hero-audit-body :global(.log-row) {
-      grid-template-columns: 3.8rem 2.2rem 1fr;
-      font-size: 0.68rem;
-    }
   }
 </style>
 
 <script>
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Efecto de escritura sobre la línea de identidad
   const typedEl = document.getElementById('heroTyped');
   const typedText = 'auditor de sistemas donde el dinero se mueve de verdad';
 
@@ -331,60 +270,6 @@
         }
       };
       typeNext();
-    }
-  }
-
-  // Panel de auditoría: timestamps reales (Date del navegador), rutas y montos ilustrativos
-  const auditLog = document.getElementById('auditLog');
-
-  if (auditLog) {
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const baseTime = new Date();
-    const stamp = (offsetSec: number) => {
-      const d = new Date(baseTime.getTime() + offsetSec * 1000);
-      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    };
-
-    type Row = { offset: number; status: '200' | '401' | 'fix'; method: string; path: string; note?: string };
-
-    const rows: Row[] = [
-      { offset: 0, status: '200', method: 'GET', path: '/wallet/balance' },
-      { offset: 3, status: '200', method: 'GET', path: '/wompi/transacciones' },
-      { offset: 6, status: '401', method: 'POST', path: '/bancolombia/webhook', note: 'firma inválida' },
-      { offset: 8, status: '200', method: 'POST', path: '/bancolombia/webhook', note: 'reintento OK' },
-      { offset: 12, status: 'fix', method: '', path: 'dedup de fills', note: 'race condition corregido' },
-      { offset: 16, status: '200', method: 'GET', path: '/trading/señales' },
-      { offset: 20, status: '200', method: 'POST', path: '/auth/jwt', note: '7 servicios' },
-    ];
-
-    const statusLabel = (s: Row['status']) => (s === 'fix' ? 'FIX' : s);
-
-    const buildRow = (r: Row) => {
-      const div = document.createElement('div');
-      div.className = 'log-row';
-      div.innerHTML = `<span class="log-time">${stamp(r.offset)}</span><span class="log-status-${r.status}">${statusLabel(r.status)}</span><span class="log-path">${r.method ? r.method + ' ' : ''}${r.path}${r.note ? `<span class="log-note"> — ${r.note}</span>` : ''}</span>`;
-      return div;
-    };
-
-    if (prefersReducedMotion) {
-      rows.forEach((r) => auditLog.appendChild(buildRow(r)));
-    } else {
-      let idx = 0;
-      const appendNext = () => {
-        if (idx < rows.length) {
-          auditLog.appendChild(buildRow(rows[idx]));
-          idx++;
-          setTimeout(appendNext, 420);
-        } else {
-          // Loop suave: reinicia el panel para mantener sensación de "live"
-          setTimeout(() => {
-            auditLog.innerHTML = '';
-            idx = 0;
-            appendNext();
-          }, 4000);
-        }
-      };
-      setTimeout(appendNext, 900);
     }
   }
 </script>

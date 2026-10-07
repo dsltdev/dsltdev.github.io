@@ -1,0 +1,144 @@
+---
+import DeskFrame from '../../components/DeskFrame.astro';
+import { sessions } from '../../data/desk';
+
+const smaPeriod = 5;
+const series = [100, 101, 100.5, 102, 103, 102.2, 104, 103.5, 105, 106, 105.2, 107];
+const sma = series.map((_, i) => {
+  if (i < smaPeriod - 1) return null;
+  const slice = series.slice(i - smaPeriod + 1, i + 1);
+  return slice.reduce((a, b) => a + b, 0) / smaPeriod;
+});
+
+const w = 640;
+const h = 200;
+const pad = { l: 28, r: 8, t: 12, b: 20 };
+const min = Math.min(...series) - 1;
+const max = Math.max(...series) + 1;
+const x = (i: number) => pad.l + (i / (series.length - 1)) * (w - pad.l - pad.r);
+const y = (v: number) => pad.t + (1 - (v - min) / (max - min)) * (h - pad.t - pad.b);
+const priceLine = series.map((v, i) => `${x(i)},${y(v)}`).join(' ');
+const smaLine = sma
+  .map((v, i) => (v == null ? null : `${x(i)},${y(v)}`))
+  .filter(Boolean)
+  .join(' ');
+---
+
+<DeskFrame
+  title="Sesiones y causalidad — David López"
+  description="BVC vs cripto 24h, SMA que miente, señal en el cierre y fill en la apertura siguiente."
+  current="sessions"
+>
+  <div class="desk-grid" data-reveal-group>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>{sessions.bvc.name}</h2>
+      <p class="desk-kpi" id="bvc-clock">--:--:--</p>
+      <p class="desk-muted" id="bvc-state">Zona {sessions.bvc.tz}</p>
+      <p class="desk-note">Rueda ilustrativa {sessions.bvc.open}–{sessions.bvc.close} (sin festivos).</p>
+    </article>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>{sessions.crypto.name}</h2>
+      <p class="desk-kpi up" id="crypto-clock">--:--:--</p>
+      <p class="desk-muted">Abierto 24h · {sessions.crypto.tz}</p>
+      <p class="desk-note">{sessions.crypto.note}</p>
+    </article>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Causalidad señal → fill</h2>
+      <p class="desk-muted"><strong>Señal:</strong> {sessions.causality.signal}</p>
+      <p class="desk-muted"><strong>Fill:</strong> {sessions.causality.fill}</p>
+      <p class="desk-gap" style="margin-top:0.75rem">Física en este repo: no hay. El único “tiempo” documentado es este desfase. Un close de hace meses en el fill hace que el lab mienta.</p>
+    </article>
+  </div>
+
+  <article class="desk-card glass-card" style="margin-top:1rem" data-reveal>
+    <h2>SMA sobre CSV quieto</h2>
+    <p class="desk-muted">
+      HardSkillsBoard: “SMA sobre un CSV quieto. El reloj del runner es 1970.”
+      La media usa la barra <em>actual</em>; si operás esa SMA como si ya existiera en el open, hay look-ahead.
+    </p>
+    <svg class="desk-chart" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Precio sintético y SMA 5">
+      <polyline points={priceLine} fill="none" stroke="#efe6d6" stroke-width="1.75"></polyline>
+      <polyline points={smaLine} fill="none" stroke="#e0a23e" stroke-width="2" stroke-dasharray="5 4"></polyline>
+      {series.map((v, i) => (
+        <circle cx={x(i)} cy={y(v)} r="3" fill="#efe6d6"></circle>
+      ))}
+    </svg>
+    <p class="desk-note">Línea clara = close sintético. Punteada ámbar = SMA({smaPeriod}) del close ya conocido. No hay dataset real.</p>
+
+    <table class="desk-table" style="margin-top:1rem">
+      <thead>
+        <tr>
+          <th>Barra</th>
+          <th>Close</th>
+          <th>SMA 5</th>
+          <th>Señal (cierre)</th>
+          <th>Fill (open siguiente)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {series.map((c, i) => {
+          const s = sma[i];
+          const signal = s != null && c > s ? 'largo' : s != null ? 'fuera' : '—';
+          const nextOpen = series[i + 1];
+          return (
+            <tr>
+              <td>{i + 1}</td>
+              <td>{c.toFixed(1)}</td>
+              <td>{s == null ? '—' : s.toFixed(2)}</td>
+              <td>{signal}</td>
+              <td>{nextOpen == null ? 'sin barra' : nextOpen.toFixed(1)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </article>
+</DeskFrame>
+
+<script>
+  const fmt = (d: Date, tz: string) => {
+    const parts = new Intl.DateTimeFormat('es-CO', {
+      timeZone: tz,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(d);
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '00';
+    return `${get('hour')}:${get('minute')}:${get('second')}`;
+  };
+
+  const bogotaMinutes = (d: Date) => {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Bogota',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(d);
+    const h = Number(parts.find((p) => p.type === 'hour')?.value ?? 0);
+    const m = Number(parts.find((p) => p.type === 'minute')?.value ?? 0);
+    return h * 60 + m;
+  };
+
+  const bvcEl = document.getElementById('bvc-clock');
+  const cryptoEl = document.getElementById('crypto-clock');
+  const stateEl = document.getElementById('bvc-state');
+
+  const tick = () => {
+    const now = new Date();
+    if (bvcEl) bvcEl.textContent = fmt(now, 'America/Bogota');
+    if (cryptoEl) cryptoEl.textContent = fmt(now, 'UTC');
+    const mins = bogotaMinutes(now);
+    const open = 9 * 60 + 30;
+    const close = 16 * 60;
+    const openNow = mins >= open && mins < close;
+    if (stateEl) stateEl.textContent = openNow ? 'Rueda regular (ilustrativa) ABIERTA' : 'Cerrada · cripto sigue 24h';
+    if (bvcEl) {
+      bvcEl.classList.toggle('up', openNow);
+      bvcEl.classList.toggle('warn', !openNow);
+    }
+  };
+
+  tick();
+  setInterval(tick, 1000);
+</script>

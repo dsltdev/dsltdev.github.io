@@ -1,0 +1,191 @@
+---
+interface Props {
+  compact?: boolean;
+  heading?: string;
+}
+
+const { compact = false, heading = 'Tesseracto · proyección 4D→3D→2D' } = Astro.props;
+const canvasId = compact ? 'tesseract-hero' : 'tesseract-full';
+---
+
+<figure class:list={['tess', { compact }]}>
+  <div class="tess-stage">
+    <div class="tess-light" aria-hidden="true"></div>
+    <canvas
+      id={canvasId}
+      class="tess-canvas"
+      data-compact={compact ? '1' : '0'}
+      role="img"
+      aria-label="Hipercubo rotando en la cuarta dimensión, proyectado a 3D y luego a la pantalla"
+    ></canvas>
+    <div class="tess-floor" aria-hidden="true"></div>
+  </div>
+  <figcaption class="tess-caption">
+    <span class="tess-kicker">{heading}</span>
+    <p>
+      16 vértices, 32 aristas. Las aristas ámbar cruzan el eje W — al rotar en 4D el cubo interior y el exterior se intercambian.
+    </p>
+    <div class="tess-controls">
+      <label class="tess-toggle">
+        <input type="checkbox" class="tess-auto" checked />
+        Rotar en W
+      </label>
+      <button type="button" class="tess-reset">Reset</button>
+      <span class="tess-hint">Arrastrá para rotar en 3D · Shift + arrastre = 4D</span>
+    </div>
+  </figcaption>
+</figure>
+
+<style>
+  .tess {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transform-style: preserve-3d;
+  }
+
+  .tess-stage {
+    position: relative;
+    aspect-ratio: 1 / 0.92;
+    min-height: 280px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background:
+      radial-gradient(ellipse at 30% 18%, rgba(243, 199, 120, 0.18), transparent 42%),
+      radial-gradient(ellipse at 80% 90%, rgba(20, 12, 4, 0.9), transparent 50%),
+      linear-gradient(165deg, #2a2116 0%, #120e0a 55%, #1a140e 100%);
+    box-shadow:
+      0 0 0 1px rgba(243, 199, 120, 0.08),
+      18px 28px 0 -6px #0a0805,
+      28px 48px 70px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 230, 180, 0.12);
+    overflow: hidden;
+    transform: rotateX(8deg) rotateY(-12deg) translateZ(24px);
+    transform-style: preserve-3d;
+  }
+
+  .compact .tess-stage {
+    min-height: 320px;
+    transform: rotateX(6deg) rotateY(-10deg) translateZ(16px);
+  }
+
+  .tess-light {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 28% 12%, rgba(255, 220, 150, 0.28), transparent 36%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .tess-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .tess-canvas:active {
+    cursor: grabbing;
+  }
+
+  .tess-floor {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    bottom: -18%;
+    height: 42%;
+    background:
+      repeating-linear-gradient(90deg, rgba(224, 162, 62, 0.18) 0 1px, transparent 1px 42px),
+      repeating-linear-gradient(0deg, rgba(224, 162, 62, 0.12) 0 1px, transparent 1px 42px);
+    transform: rotateX(72deg) translateZ(-40px);
+    mask-image: linear-gradient(to top, rgba(0,0,0,0.55), transparent 80%);
+    pointer-events: none;
+  }
+
+  .tess-caption {
+    font-family: var(--font-mono);
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+
+  .tess-kicker {
+    display: block;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .tess-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 0.65rem;
+  }
+
+  .tess-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .tess-reset {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 0;
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.7rem;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--accent-dim);
+  }
+
+  .tess-hint {
+    color: var(--muted-dim);
+    font-size: 0.68rem;
+  }
+
+  @media (max-width: 700px) {
+    .tess-stage,
+    .compact .tess-stage {
+      transform: rotateX(4deg) rotateY(-4deg);
+      min-height: 240px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tess-stage {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import { mountTesseract } from '../scripts/tesseract';
+
+  document.querySelectorAll('.tess-canvas').forEach((node) => {
+    const canvas = node as HTMLCanvasElement;
+    if (canvas.dataset.bound === '1') return;
+    canvas.dataset.bound = '1';
+    const compact = canvas.dataset.compact === '1';
+    const handle = mountTesseract({ canvas, compact, auto4d: true });
+    const root = canvas.closest('.tess');
+    const auto = root?.querySelector('.tess-auto') as HTMLInputElement | null;
+    const reset = root?.querySelector('.tess-reset');
+    auto?.addEventListener('change', () => handle.setAuto4d(auto.checked));
+    reset?.addEventListener('click', () => handle.reset());
+  });
+</script>

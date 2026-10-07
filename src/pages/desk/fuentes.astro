@@ -1,0 +1,48 @@
+---
+import DeskFrame from '../../components/DeskFrame.astro';
+import { sources, gaps } from '../../data/desk';
+---
+
+<DeskFrame
+  title="Fuentes del inventario — David López"
+  description="Archivos del checkout y huecos de la VM: trader, mercados, matemáticas, física."
+  current="sources"
+>
+  <article class="desk-card glass-card" data-reveal>
+    <h2>Archivos con señal</h2>
+    <table class="desk-table">
+      <thead>
+        <tr>
+          <th>Tema</th>
+          <th>Ruta</th>
+          <th>Contenido</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sources.map((s) => (
+          <tr>
+            <td><span class="desk-pill">{s.theme}</span></td>
+            <td><code>{s.path}</code></td>
+            <td class="desk-muted">{s.note}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="desk-note">Markdown del barrido: <code>internal/trader-markets-research.md</code>.</p>
+  </article>
+
+  <article class="desk-card glass-card" style="margin-top:1rem" data-reveal>
+    <h2>Física</h2>
+    <p class="desk-gap">
+      Cero notas de física. El hit “física” en <code>worker/src/ingest.ts</code> es seguridad infantil.
+      En sesiones se usa el desfase cierre→apertura como único modelo de tiempo que el repo describe.
+    </p>
+  </article>
+
+  <article class="desk-card glass-card" style="margin-top:1rem" data-reveal>
+    <h2>No encontrado en la VM</h2>
+    <ul class="desk-list">
+      {gaps.map((g) => <li>{g}</li>)}
+    </ul>
+  </article>
+</DeskFrame>

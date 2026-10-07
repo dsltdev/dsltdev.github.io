@@ -1,0 +1,104 @@
+---
+import DeskFrame from '../../components/DeskFrame.astro';
+import { gaps, paperPositions, paperCurve, products } from '../../data/desk';
+
+const w = 640;
+const h = 180;
+const pad = { l: 8, r: 8, t: 12, b: 12 };
+const min = Math.min(...paperCurve);
+const max = Math.max(...paperCurve);
+const xs = paperCurve.map((_, i) => pad.l + (i / (paperCurve.length - 1)) * (w - pad.l - pad.r));
+const ys = paperCurve.map((v) => pad.t + (1 - (v - min) / (max - min)) * (h - pad.t - pad.b));
+const line = xs.map((x, i) => `${x},${ys[i]}`).join(' ');
+const area = `${line} ${xs[xs.length - 1]},${h - pad.b} ${xs[0]},${h - pad.b}`;
+---
+
+<DeskFrame
+  title="Desk paper — David López"
+  description="Dashboard paper del inventario de este repo: Kelly, BVC vs cripto, dual-ledger. Sin feed de broker."
+  current="overview"
+>
+  <div class="desk-grid" data-reveal-group>
+    <div class="desk-card glass-card" data-reveal>
+      <h2>Modo</h2>
+      <p class="desk-kpi warn">PAPER</p>
+      <p class="desk-muted">HardSkillsBoard: paper no es live. Yahoo delayed ≠ spot 24h.</p>
+    </div>
+    <div class="desk-card glass-card" data-reveal>
+      <h2>Venues nombrados</h2>
+      <p class="desk-kpi">2</p>
+      <p class="desk-muted">Binance paper + BVC delayed. Sin API keys en este checkout.</p>
+    </div>
+    <div class="desk-card glass-card" data-reveal>
+      <h2>NinjaTrader</h2>
+      <p class="desk-kpi down">0 archivos</p>
+      <p class="desk-muted">Ni en el repo ni en rutas típicas de la VM.</p>
+    </div>
+  </div>
+
+  <div class="desk-grid-2" style="margin-top:1rem" data-reveal-group>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Curva ilustrativa · DSLT MARKET</h2>
+      <svg class="desk-chart" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Curva paper reescalada del SVG de portafolio">
+        <polyline points={area} fill="rgba(224,162,62,0.12)" stroke="none"></polyline>
+        <polyline points={line} fill="none" stroke="#e0a23e" stroke-width="2"></polyline>
+      </svg>
+      <p class="desk-note">
+        Reescalado del polyline en <code>public/portfolio/trading.svg</code> (labels 50.6k–52.4k). No es un backtest.
+      </p>
+    </article>
+
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Posiciones del mock</h2>
+      <table class="desk-table">
+        <thead>
+          <tr>
+            <th>Símbolo</th>
+            <th>Venue</th>
+            <th>PnL</th>
+            <th>Mark</th>
+          </tr>
+        </thead>
+        <tbody>
+          {paperPositions.map((p) => (
+            <tr>
+              <td>{p.symbol}</td>
+              <td><span class="desk-pill">{p.venue}</span></td>
+              <td class={p.pnlPct > 0 ? 'up' : p.pnlPct < 0 ? 'down' : ''}>
+                {p.pnlPct === 0 ? '—' : `${p.pnlPct > 0 ? '+' : ''}${p.pnlPct}%`}
+              </td>
+              <td>{p.mark == null ? 'paper' : `${p.ccy === 'USD' ? '$' : ''}${p.mark.toLocaleString('es-CO')}`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="desk-note">BTC/ETH números del SVG. ECOPETL solo etiqueta COP/paper.</p>
+    </article>
+  </div>
+
+  <div class="desk-grid-2" style="margin-top:1rem" data-reveal-group>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Productos nombrados (fuera de este repo)</h2>
+      <ul class="desk-list">
+        {products.map((p) => (
+          <li>
+            <a href={p.href} target="_blank" rel="noopener">{p.name}</a>
+            — {p.blurb}
+          </li>
+        ))}
+      </ul>
+    </article>
+    <article class="desk-card glass-card" data-reveal>
+      <h2>Huecos de esta máquina</h2>
+      <ul class="desk-list">
+        {gaps.map((g) => <li>{g}</li>)}
+      </ul>
+      <p class="desk-note">Inventario completo: <a href="/desk/fuentes">/desk/fuentes</a> y <code>internal/trader-markets-research.md</code>.</p>
+    </article>
+  </div>
+</DeskFrame>
+
+<style>
+  .up { color: var(--success); }
+  .down { color: var(--danger); }
+</style>
