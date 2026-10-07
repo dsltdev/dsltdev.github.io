@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+}
+
+const { title, description, updated } = Astro.props;
+---
+
+<Layout title={`${title} — Pagos Idle`} description={description} siteName="Pagos Idle" image="/og-juego.png" depth={false}>
+  <main class="legal">
+    <a href="/" class="legal-back">← Volver al juego</a>
+    <h1>{title}</h1>
+    <p class="legal-updated">Última actualización: {updated}</p>
+    <div class="legal-body">
+      <slot />
+    </div>
+    <footer class="legal-footer">
+      <a href="/privacy">Privacidad</a>
+      <a href="/terms">Términos</a>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .legal {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+  .legal-back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .legal-back:hover { color: var(--accent); }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+  .legal-updated {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .legal-body :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 2rem 0 0.5rem;
+  }
+  .legal-body :global(p),
+  .legal-body :global(li) {
+    color: var(--text);
+    opacity: 0.85;
+    line-height: 1.75;
+    margin: 0.6rem 0;
+  }
+  .legal-body :global(ul) { padding-left: 1.4rem; }
+  .legal-body :global(a) { color: var(--accent-light); text-decoration: underline; }
+  .legal-footer {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+  .legal-footer a { color: var(--muted); }
+</style>

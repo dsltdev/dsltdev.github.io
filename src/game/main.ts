@@ -1,5 +1,5 @@
 // Cableado del juego: estado, bucle, panel de compras y monetización.
-import { mountBanner, showRewardedAd, track } from './ads';
+import { hasRewardedAds, initAds, mountBanner, showRewardedAd, track } from './ads';
 import { GENERATORS, LICENSE_BONUS, MONETIZATION, SAVE_KEY, UPGRADES, type GeneratorDef } from './config';
 import {
   addBoost,
@@ -213,15 +213,21 @@ function updatePrestige() {
 const adDialog = $<HTMLDialogElement>('ad-dialog');
 const watchAd = $<HTMLButtonElement>('watch-ad');
 
+// Sin red publicitaria configurada no mostramos un botón que no puede cumplir lo que promete.
+if (!hasRewardedAds()) $('boost-card').hidden = true;
+
 watchAd.addEventListener('click', async () => {
   watchAd.disabled = true;
   track('rewarded_ad_start');
-  const ok = await showRewardedAd(adDialog);
+  const result = await showRewardedAd(adDialog);
   watchAd.disabled = false;
-  if (ok) {
+  if (result === 'viewed') {
     addBoost(state);
     toast(`⚡ Boost x${MONETIZATION.rewardedBoost.multiplier} activo: ${fmtTime(state.boostLeft)}`);
     track('rewarded_ad_complete');
+  } else if (result === 'unavailable') {
+    toast('No hay anuncios disponibles ahora. Prueba de nuevo en un minuto.');
+    track('rewarded_ad_unavailable');
   }
 });
 
@@ -366,6 +372,7 @@ function frame(now: number) {
 
 // ---------- Arranque ----------
 
+initAds();
 welcomeBack();
 renderProducts();
 maybeMountBanner();

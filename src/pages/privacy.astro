@@ -1,125 +1,47 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
+import LegalPage from '../components/LegalPage.astro';
 ---
 
-<Layout title="Política de Privacidad — David López" description="Qué datos recoge este sitio personal y cómo se usan.">
-  <Navbar />
+<LegalPage
+  title="Política de Privacidad"
+  description="Qué datos usa Pagos Idle: partida guardada en tu navegador, analítica sin cookies y anuncios de Google."
+  updated="7 de octubre de 2026"
+>
+  <h2>1. Resumen</h2>
+  <p>Pagos Idle no tiene registro ni cuentas. Tu partida se guarda en tu propio navegador y no la recibimos. Para mantener el juego gratis usamos analítica sin cookies y, cuando están activados, anuncios de Google.</p>
 
-  <main>
-    <section class="legal-page">
-      <div class="container">
-        <div class="legal-content" data-reveal-group>
-          <a href="/" class="back-link" data-reveal>← Volver al inicio</a>
-          <h1 class="legal-title" data-reveal>Política de Privacidad</h1>
-          <p class="legal-updated" data-reveal>Última actualización: 5 de septiembre de 2026</p>
+  <h2>2. Qué se guarda en tu dispositivo</h2>
+  <ul>
+    <li><strong>Tu partida</strong> (saldo, negocios, mejoras, licencias y códigos canjeados) se guarda en el almacenamiento local (<code>localStorage</code>) de tu navegador. Si borras los datos del sitio o cambias de dispositivo, la perderás. No se envía a ningún servidor nuestro.</li>
+  </ul>
 
-          <div class="legal-body" data-reveal>
-            <h2>1. Qué datos recoge este sitio</h2>
-            <p>Este sitio no tiene registro de usuarios ni cuentas. Los únicos datos personales que se recogen son:</p>
-            <ul>
-              <li><strong>Formulario de contacto:</strong> nombre, correo y el mensaje que escribas, enviados directamente a través de <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a> (no pasan por ningún servidor propio).</li>
-              <li><strong>Analítica de visitas:</strong> mediante <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, una herramienta de analítica sin cookies, que no rastrea individualmente a los visitantes ni comparte datos con terceros de publicidad.</li>
-            </ul>
+  <h2>3. Analítica</h2>
+  <p>Medimos visitas y acciones generales del juego (por ejemplo, cuántas personas ven un anuncio o abren el pago) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, una herramienta que <strong>no usa cookies</strong> ni crea perfiles individuales de los visitantes.</p>
 
-            <h2>2. Cómo se usa esa información</h2>
-            <p>El formulario de contacto se usa únicamente para responder a tu mensaje. La analítica agregada se usa para entender qué páginas se visitan más, sin identificar a personas individuales.</p>
+  <h2>4. Anuncios</h2>
+  <p>Cuando los anuncios están activos, el sitio usa los servicios de Google (AdSense y las API de publicidad de Google). Google y sus socios pueden usar cookies e identificadores del dispositivo para mostrar y medir anuncios, incluidos anuncios personalizados según tus visitas a este y otros sitios.</p>
+  <ul>
+    <li>Cómo usa Google la información de los sitios que usan sus servicios: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</li>
+    <li>Puedes desactivar la personalización de anuncios en <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a> o en <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a>.</li>
+    <li>Los anuncios con recompensa son opcionales: solo se muestran si pulsas "Ver anuncio".</li>
+  </ul>
 
-            <h2>3. Con quién se comparte</h2>
-            <p>No se vende ni se comparte información personal con terceros de publicidad. Los datos del formulario de contacto los procesa Formspree según su propia política de privacidad.</p>
+  <h2>5. Compras</h2>
+  <p>Si hay productos a la venta, el pago se procesa en la página de pago de <strong>Wompi</strong>. Nosotros no vemos ni guardamos datos de tu tarjeta o cuenta. Para entregarte el código de tu compra usamos el contacto que dejes al pagar, únicamente para ese fin.</p>
 
-            <h2>4. Hosting</h2>
-            <p>El sitio se sirve mediante GitHub Pages y Cloudflare (DNS y CDN), ambos con sus propias políticas de privacidad.</p>
+  <h2>6. Servicios de terceros</h2>
+  <ul>
+    <li><strong>Hosting y red:</strong> GitHub Pages y Cloudflare sirven el sitio y pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
+    <li><strong>Tipografías:</strong> se cargan desde Google Fonts, por lo que Google recibe tu dirección IP al abrir la página.</li>
+    <li>Algunas páginas auxiliares del sitio pueden incluir un formulario de contacto procesado por Formspree.</li>
+  </ul>
 
-            <h2>5. Tus derechos</h2>
-            <p>Si enviaste un mensaje por el formulario de contacto y quieres que se elimine, escribe a <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
+  <h2>7. Menores</h2>
+  <p>Pagos Idle no está dirigido a menores de 13 años y no recoge datos de ellos de forma intencionada.</p>
 
-            <h2>6. Cambios en esta política</h2>
-            <p>Puede actualizarse si cambia algo real del sitio (por ejemplo, si se agrega un nuevo servicio de terceros).</p>
+  <h2>8. Tus derechos</h2>
+  <p>Puedes borrar tu partida en cualquier momento desde el juego (Tienda → Borrar partida) o limpiando los datos del sitio en tu navegador. Para consultas o para pedir que eliminemos el contacto que dejaste en una compra, escribe a <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
 
-            <h2>7. Contacto</h2>
-            <p><a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <Footer />
-</Layout>
-
-<style>
-  .legal-page {
-    padding: 140px 0 4rem;
-  }
-
-  .legal-content {
-    max-width: 700px;
-  }
-
-  .back-link {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--muted);
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 2rem;
-    transition: color 0.2s;
-  }
-
-  .back-link:hover {
-    color: var(--accent);
-  }
-
-  .legal-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .legal-updated {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 2.5rem;
-  }
-
-  .legal-body h2 {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 2rem 0 0.75rem;
-  }
-
-  .legal-body p {
-    color: rgba(232, 245, 238, 0.8);
-    line-height: 1.8;
-    margin: 0.75rem 0;
-  }
-
-  .legal-body ul {
-    padding-left: 1.5em;
-    margin: 0.75rem 0;
-  }
-
-  .legal-body li {
-    color: rgba(232, 245, 238, 0.8);
-    line-height: 1.7;
-    margin: 0.4rem 0;
-  }
-
-  .legal-body a {
-    color: var(--accent-light);
-    text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    .legal-page {
-      padding: 120px 0 3rem;
-    }
-  }
-</style>
+  <h2>9. Cambios</h2>
+  <p>Actualizaremos esta política si cambia algo real del sitio (por ejemplo, un nuevo servicio de terceros) y cambiaremos la fecha de arriba.</p>
+</LegalPage>
