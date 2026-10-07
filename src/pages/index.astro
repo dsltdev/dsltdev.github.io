@@ -9,9 +9,10 @@ import HardSkillsBoard from '../components/HardSkillsBoard.astro';
 import Projects from '../components/Projects.astro';
 import About from '../components/About.astro';
 import Offer from '../components/Offer.astro';
+import Proof from '../components/Proof.astro';
 ---
 
-<Layout title="David López — Fintech e integraciones de pago" description="Wallets, pasarelas de pago y sistemas de trading en Cloudflare Workers. Proyectos reales, bugs reales, en producción.">
+<Layout title="David López — Ingeniero de software, fintech y pagos" description="Ingeniero de software en Medellín. Wallets, pasarelas de pago y sistemas de trading en producción, auditoría de integraciones y sitios web a la medida.">
   <Loader />
   <ScrollProgress />
   <Navbar />
@@ -19,7 +20,13 @@ import Offer from '../components/Offer.astro';
   <main>
     <Hero />
 
+    <Proof />
+
+    <Offer />
+
     <Projects />
+
+    <About />
 
     <section id="hardskills">
       <div class="container">
@@ -31,10 +38,6 @@ import Offer from '../components/Offer.astro';
         <HardSkillsBoard />
       </div>
     </section>
-
-    <About />
-
-    <Offer />
 
     <section id="contact" class="contact-section">
       <div class="container">

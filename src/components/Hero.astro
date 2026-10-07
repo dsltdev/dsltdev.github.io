@@ -8,10 +8,10 @@
     <div class="hero-main">
       <p class="hero-kicker">
         <span class="hero-kicker-dot"></span>
-        fintech · pagos · trading — Medellín, Colombia
+        David López · ingeniero de software, fintech y pagos — Medellín
       </p>
 
-      <h1 class="hero-name">David López</h1>
+      <h1 class="hero-name">Few can build systems that actually deliver</h1>
 
       <p class="hero-prompt" aria-live="polite">
         <span class="hero-prompt-sigil">&gt;</span>
@@ -19,27 +19,30 @@
       </p>
 
       <p class="hero-tagline">
-        Wallets, pasarelas de pago y sistemas de trading, en producción con dinero real.
+        Wallets, pasarelas de pago y sistemas de trading en producción con dinero real, y sitios web a la medida del negocio. Aquí no te pido que me creas: abajo puedes comprobarlo.
       </p>
 
       <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">
-          <span>Ver proyectos</span>
+        <a href="https://revisor-pagos.vercel.app" class="btn btn-primary" target="_blank" rel="noopener">
+          <span>Revisa tu integración gratis</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a href="#offer" class="btn btn-secondary">Auditoría</a>
+        <a href="#offer" class="btn btn-secondary">Ver auditoría y precios</a>
       </div>
     </div>
 
-    <aside class="hero-audit" aria-label="Panel decorativo de log de auditoría">
+    <aside class="hero-audit" aria-label="Estado de mis sistemas, medido ahora desde tu navegador">
       <div class="hero-audit-titlebar">
         <span class="hero-audit-dot"></span>
-        <span class="hero-audit-title">tail -f audit.log</span>
-        <span class="hero-audit-badge">LIVE</span>
+        <span class="hero-audit-title">estado de los sistemas</span>
+        <span class="hero-audit-badge">MEDIDO AHORA</span>
       </div>
-      <div class="hero-audit-body" id="auditLog"></div>
+      <div class="hero-audit-body">
+        <ul class="status-list" id="statusList"></ul>
+        <p class="status-note" id="statusNote">Midiendo desde tu navegador…</p>
+      </div>
     </aside>
   </div>
 
@@ -126,11 +129,12 @@
 
   .hero-name {
     font-family: var(--font-display);
-    font-size: clamp(2.75rem, 6vw, 4.75rem);
+    font-size: clamp(2.1rem, 4.6vw, 3.7rem);
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.08;
     letter-spacing: -0.02em;
     color: var(--text);
+    text-wrap: balance;
   }
 
   .hero-name::after {
@@ -213,7 +217,7 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     color: var(--accent);
-    border: 1px solid rgba(224, 162, 62, 0.35);
+    border: 1px solid var(--accent-glow-strong);
     border-radius: var(--radius-sm);
     padding: 0.1rem 0.4rem;
   }
@@ -223,25 +227,46 @@
     font-family: var(--font-mono);
     font-size: 0.72rem;
     line-height: 1.9;
-    min-height: 14rem;
+    min-height: 11rem;
     color: var(--muted);
   }
 
-  .hero-audit-body :global(.log-row) {
+  .status-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: 4.6rem 2.6rem 1fr;
-    gap: 0.55rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    gap: 0.35rem;
   }
 
-  .hero-audit-body :global(.log-time) { color: var(--muted-dim); }
-  .hero-audit-body :global(.log-status-200) { color: var(--success); font-weight: 600; }
-  .hero-audit-body :global(.log-status-401) { color: var(--warning); font-weight: 600; }
-  .hero-audit-body :global(.log-status-fix) { color: var(--accent); font-weight: 700; }
-  .hero-audit-body :global(.log-path) { color: var(--text); }
-  .hero-audit-body :global(.log-note) { color: var(--muted-dim); }
+  .hero-audit-body :global(.status-row) {
+    display: grid;
+    grid-template-columns: 0.7rem 1fr auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.2rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .hero-audit-body :global(.status-row:last-child) { border-bottom: 0; }
+  .hero-audit-body :global(.status-name) { color: var(--text); text-decoration: none; }
+  .hero-audit-body :global(a.status-name:hover) { color: var(--accent-light); text-decoration: underline; }
+  .hero-audit-body :global(.status-what) { display: block; color: var(--muted-dim); font-size: 0.66rem; line-height: 1.3; }
+  .hero-audit-body :global(.status-val) { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .hero-audit-body :global(.status-dot) { width: 7px; height: 7px; border-radius: 50%; background: var(--muted-dim); }
+  .hero-audit-body :global(.status-row[data-state="ok"] .status-dot) { background: var(--success); box-shadow: 0 0 8px var(--success-glow); }
+  .hero-audit-body :global(.status-row[data-state="ok"] .status-val) { color: var(--success); }
+  .hero-audit-body :global(.status-row[data-state="warn"] .status-dot) { background: var(--warning); }
+  .hero-audit-body :global(.status-row[data-state="warn"] .status-val) { color: var(--warning); }
+  .hero-audit-body :global(.status-row[data-state="fail"] .status-dot) { background: var(--danger); }
+  .hero-audit-body :global(.status-row[data-state="fail"] .status-val) { color: var(--danger); }
+
+  .status-note {
+    margin: 0.9rem 0 0;
+    font-size: 0.66rem;
+    line-height: 1.5;
+    color: var(--muted-dim);
+  }
 
   @keyframes hero-pulse {
     0%, 100% { opacity: 0.55; }
@@ -304,9 +329,8 @@
       flex-direction: column;
     }
 
-    .hero-audit-body :global(.log-row) {
-      grid-template-columns: 3.8rem 2.2rem 1fr;
-      font-size: 0.68rem;
+    .hero-audit-body :global(.status-row) {
+      font-size: 0.7rem;
     }
   }
 </style>
@@ -316,7 +340,7 @@
 
   // Efecto de escritura sobre la línea de identidad
   const typedEl = document.getElementById('heroTyped');
-  const typedText = 'auditor de sistemas donde el dinero se mueve de verdad';
+  const typedText = 'construyo sistemas donde el dinero se mueve de verdad';
 
   if (typedEl) {
     if (prefersReducedMotion) {
@@ -334,57 +358,59 @@
     }
   }
 
-  // Panel de auditoría: timestamps reales (Date del navegador), rutas y montos ilustrativos
-  const auditLog = document.getElementById('auditLog');
+  // Estado de los sistemas: mediciones reales hechas desde el navegador del visitante.
+  // Solo comprueba que el servicio responda y cuánto tarda; no mide pagos ni ingresos.
+  type Svc = { name: string; what: string; url: string; href: string };
+  type Result = { state: 'ok' | 'warn' | 'fail'; text: string };
 
-  if (auditLog) {
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const baseTime = new Date();
-    const stamp = (offsetSec: number) => {
-      const d = new Date(baseTime.getTime() + offsetSec * 1000);
-      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    };
+  const services: Svc[] = [
+    { name: 'Revisor de Pagos', what: 'herramienta gratis · Vercel', url: 'https://revisor-pagos.vercel.app/', href: 'https://revisor-pagos.vercel.app' },
+    { name: 'Chat de IA', what: 'Cloudflare Worker · créditos prepagados', url: 'https://chat.dsltdev.com/', href: 'https://chat.dsltdev.com' },
+  ];
 
-    type Row = { offset: number; status: '200' | '401' | 'fix'; method: string; path: string; note?: string };
+  const statusList = document.getElementById('statusList');
+  const statusNote = document.getElementById('statusNote');
 
-    const rows: Row[] = [
-      { offset: 0, status: '200', method: 'GET', path: '/wallet/balance' },
-      { offset: 3, status: '200', method: 'GET', path: '/wompi/transacciones' },
-      { offset: 6, status: '401', method: 'POST', path: '/bancolombia/webhook', note: 'firma inválida' },
-      { offset: 8, status: '200', method: 'POST', path: '/bancolombia/webhook', note: 'reintento OK' },
-      { offset: 12, status: 'fix', method: '', path: 'dedup de fills', note: 'race condition corregido' },
-      { offset: 16, status: '200', method: 'GET', path: '/trading/señales' },
-      { offset: 20, status: '200', method: 'POST', path: '/auth/jwt', note: '7 servicios' },
-    ];
+  if (statusList && statusNote) {
+    const rows = services.map((svc) => {
+      const li = document.createElement('li');
+      li.className = 'status-row';
+      li.dataset.state = 'pending';
+      li.innerHTML = `<span class="status-dot"></span><span><a class="status-name" href="${svc.href}" target="_blank" rel="noopener">${svc.name}</a><span class="status-what">${svc.what}</span></span><span class="status-val">…</span>`;
+      statusList.appendChild(li);
+      return { svc, li, val: li.querySelector('.status-val') as HTMLElement };
+    });
 
-    const statusLabel = (s: Row['status']) => (s === 'fix' ? 'FIX' : s);
-
-    const buildRow = (r: Row) => {
-      const div = document.createElement('div');
-      div.className = 'log-row';
-      div.innerHTML = `<span class="log-time">${stamp(r.offset)}</span><span class="log-status-${r.status}">${statusLabel(r.status)}</span><span class="log-path">${r.method ? r.method + ' ' : ''}${r.path}${r.note ? `<span class="log-note"> — ${r.note}</span>` : ''}</span>`;
-      return div;
-    };
-
-    if (prefersReducedMotion) {
-      rows.forEach((r) => auditLog.appendChild(buildRow(r)));
-    } else {
-      let idx = 0;
-      const appendNext = () => {
-        if (idx < rows.length) {
-          auditLog.appendChild(buildRow(rows[idx]));
-          idx++;
-          setTimeout(appendNext, 420);
-        } else {
-          // Loop suave: reinicia el panel para mantener sensación de "live"
-          setTimeout(() => {
-            auditLog.innerHTML = '';
-            idx = 0;
-            appendNext();
-          }, 4000);
+    const probe = async (svc: Svc): Promise<Result> => {
+      const t0 = performance.now();
+      const ms = () => Math.round(performance.now() - t0);
+      try {
+        const res = await fetch(svc.url, { cache: 'no-store', signal: AbortSignal.timeout(8000) });
+        res.body?.cancel();
+        return res.ok ? { state: 'ok', text: `HTTP ${res.status} · ${ms()} ms` } : { state: 'fail', text: `HTTP ${res.status}` };
+      } catch {
+        // Si el servidor no permite leer la respuesta (CORS), al menos se puede saber si contesta.
+        try {
+          await fetch(svc.url, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(8000) });
+          return { state: 'warn', text: `responde · ${ms()} ms` };
+        } catch {
+          return { state: 'fail', text: 'sin respuesta' };
         }
-      };
-      setTimeout(appendNext, 900);
-    }
+      }
+    };
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const measure = async () => {
+      const results = await Promise.all(rows.map((r) => probe(r.svc)));
+      rows.forEach((r, i) => {
+        r.li.dataset.state = results[i].state;
+        r.val.textContent = results[i].text;
+      });
+      const d = new Date();
+      statusNote.textContent = `Medido a las ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} desde tu navegador, cada 60 s. Solo comprueba que respondan; no mide pagos.`;
+    };
+
+    measure();
+    setInterval(() => { if (!document.hidden) measure(); }, 60000);
   }
 </script>

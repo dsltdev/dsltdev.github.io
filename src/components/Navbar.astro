@@ -3,8 +3,8 @@
 
 <nav class="navbar">
   <div class="nav-container">
-    <a href="#hero" class="nav-logo">
-      <span class="nav-logo-bracket">[</span>DL<span class="nav-logo-bracket">]</span><span class="nav-logo-cursor">_</span>
+    <a href="#home" class="nav-logo">
+      <img src="/logo.webp" alt="David López" class="nav-logo-img" width="32" height="32" />
     </a>
 
     <span class="nav-clock" id="nav-clock" aria-hidden="true"></span>
@@ -25,15 +25,15 @@
     <div class="nav-menu" id="nav-menu">
       <div class="nav-links">
         <a href="#home" class="nav-link">Inicio</a>
+        <a href="/#proof" class="nav-link">Pruebas</a>
         <a href="#projects" class="nav-link">Proyectos</a>
-        <a href="#hardskills" class="nav-link">Habilidades</a>
-        <a href="#offer" class="nav-link">Auditoría</a>
-        <a href="/blog" class="nav-link">Blog</a>
         <a href="#about" class="nav-link">Sobre mí</a>
-        <a href="#contact" class="nav-link">Contacto</a>
+        <a href="#hardskills" class="nav-link">Habilidades</a>
+        <a href="#offer" class="nav-link">Servicio</a>
+        <a href="/blog" class="nav-link">Blog</a>
       </div>
 
-      <a href="#offer" class="nav-cta btn btn-primary">Auditoría →</a>
+      <a href="#contact" class="nav-cta btn btn-primary">Contacto →</a>
     </div>
   </div>
 </nav>
@@ -46,7 +46,7 @@
     right: 0;
     z-index: 1000;
     padding: 0.85rem 5%;
-    background: rgba(20, 16, 11, 0.88);
+    background: rgba(11, 14, 20, 0.88);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
@@ -62,27 +62,21 @@
   }
 
   .nav-logo {
-    font-family: var(--font-mono);
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text);
     display: flex;
     align-items: center;
+    line-height: 0;
   }
 
-  .nav-logo-bracket {
-    color: var(--accent);
+  .nav-logo-img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  .nav-logo-cursor {
-    color: var(--accent);
-    margin-left: 2px;
-    animation: nav-blink 1s step-end infinite;
-  }
-
-  .nav-logo:hover {
-    color: var(--accent-light);
+  .nav-logo:hover .nav-logo-img {
+    opacity: 0.85;
+    transform: rotate(-6deg);
   }
 
   .nav-clock {
@@ -96,13 +90,8 @@
     display: none;
   }
 
-  @keyframes nav-blink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .nav-logo-cursor { animation: none; }
+    .nav-logo-img { transition: none; }
   }
 
   @media (min-width: 640px) {
@@ -203,7 +192,7 @@
       align-items: stretch;
       gap: 1.5rem;
       padding: 1.5rem 5% 2rem;
-      background: rgba(20, 16, 11, 0.97);
+      background: rgba(11, 14, 20, 0.97);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
