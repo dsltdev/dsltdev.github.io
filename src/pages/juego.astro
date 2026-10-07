@@ -224,7 +224,17 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.5;
   }
 
-  .pi-panel { padding: 0; }
+  /* El efecto 3D de .glass-card (inclinar al pasar el cursor) estorba en un panel donde se hace
+     click constantemente y en táctil se queda "pegado": aquí el panel es plano. */
+  .pi-panel.glass-card,
+  .pi-panel.glass-card:hover {
+    padding: 0;
+    transform: none;
+    transform-style: flat;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: inset 0 1px 0 rgba(255, 230, 180, 0.12), 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
   .pi-tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
