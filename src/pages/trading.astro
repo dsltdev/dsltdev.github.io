@@ -1,0 +1,390 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ASSETS } from '../trading/market';
+import { LEVERAGES } from '../trading/account';
+---
+
+<Layout
+  title="Mesa de trading — simulador gratis"
+  description="Opera con dinero virtual: compra y vende en corto, usa apalancamiento, stop-loss y take-profit en un mercado simulado. Simulador de trading gratis, sin riesgo."
+  image="/og-juego.png"
+  siteName="Pagos Idle"
+  depth={false}
+>
+  <main class="pt">
+    <header class="pt-top">
+      <span class="pt-side"><a class="pt-link" href="/" aria-label="Volver a Pagos Idle">← Juego</a></span>
+      <h1 class="pt-title"><span>[</span>Mesa de trading<span>]</span></h1>
+      <span class="pt-side pt-side--end">
+        <button id="sound" class="pt-icon" type="button" aria-pressed="true" aria-label="Sonido y vibración: activados" title="Sonido y vibración">🔊</button>
+      </span>
+    </header>
+
+    <p class="pt-note">
+      Simulador con <strong>dinero virtual</strong> y precios ficticios. No hay depósitos ni retiros reales y no es asesoría financiera.
+    </p>
+
+    <div class="pt-hud">
+      <div class="pt-stat">
+        <span class="pt-label">Patrimonio</span>
+        <strong id="equity" class="pt-big">$10.000,00</strong>
+      </div>
+      <div class="pt-stat">
+        <span class="pt-label">P&amp;L abierto</span>
+        <strong id="open-pnl" class="pt-mid">$0,00</strong>
+      </div>
+      <div class="pt-stat">
+        <span class="pt-label">Efectivo</span>
+        <strong id="cash" class="pt-mid pt-mid--plain">$10.000,00</strong>
+      </div>
+      <div class="pt-stat pt-stat--rank">
+        <span class="pt-label">Rango</span>
+        <strong id="rank" class="pt-mid pt-mid--plain">Aprendiz</strong>
+        <span id="rank-next" class="pt-sub"></span>
+      </div>
+    </div>
+
+    <div class="pt-layout">
+      <div class="pt-left">
+        <div id="assets" class="pt-assets" role="tablist" aria-label="Activos">
+          {
+            ASSETS.map((a, i) => (
+              <button type="button" role="tab" class="pt-asset" data-asset={a.id} aria-selected={i === 0 ? 'true' : 'false'}>
+                <span class="pt-asset-t">{a.ticker}</span>
+                <span class="pt-asset-p" data-price={a.id}>—</span>
+                <span class="pt-asset-c" data-chg={a.id}>0,0%</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="pt-chart-wrap">
+          <canvas id="chart" role="img" aria-label="Gráfico de velas"></canvas>
+        </div>
+
+        <div class="pt-bar">
+          <div class="pt-speed" role="group" aria-label="Velocidad del mercado">
+            <button type="button" data-speed="0" aria-pressed="false">Pausa</button>
+            <button type="button" data-speed="1" aria-pressed="true">x1</button>
+            <button type="button" data-speed="3" aria-pressed="false">x3</button>
+            <button type="button" data-speed="10" aria-pressed="false">x10</button>
+          </div>
+          <p id="news" class="pt-news" aria-live="polite">Sin noticias por ahora. Mantén el ojo en el mercado.</p>
+        </div>
+      </div>
+
+      <aside class="pt-right">
+        <div class="pt-card" id="order">
+          <h2>Nueva operación · <span id="order-asset">BTC</span></h2>
+
+          <div class="pt-sides" role="group" aria-label="Dirección">
+            <button type="button" data-side="long" aria-pressed="true" class="pt-side-long">▲ Comprar</button>
+            <button type="button" data-side="short" aria-pressed="false" class="pt-side-short">▼ Vender en corto</button>
+          </div>
+
+          <p class="pt-field-label" id="pct-label">Cuánto de tu efectivo</p>
+          <div class="pt-chips" role="group" aria-labelledby="pct-label">
+            <button type="button" data-pct="10" aria-pressed="false">10%</button>
+            <button type="button" data-pct="25" aria-pressed="true">25%</button>
+            <button type="button" data-pct="50" aria-pressed="false">50%</button>
+            <button type="button" data-pct="100" aria-pressed="false">100%</button>
+          </div>
+
+          <p class="pt-field-label" id="lev-label">Apalancamiento</p>
+          <div class="pt-chips" role="group" aria-labelledby="lev-label">
+            {LEVERAGES.map((l, i) => <button type="button" data-lev={l} aria-pressed={i === 0 ? 'true' : 'false'}>x{l}</button>)}
+          </div>
+
+          <div class="pt-two">
+            <label>
+              <span class="pt-field-label">Stop-loss % (opcional)</span>
+              <input id="sl" type="number" inputmode="decimal" min="0" step="0.1" placeholder="p. ej. 2" />
+            </label>
+            <label>
+              <span class="pt-field-label">Take-profit % (opcional)</span>
+              <input id="tp" type="number" inputmode="decimal" min="0" step="0.1" placeholder="p. ej. 4" />
+            </label>
+          </div>
+
+          <p id="preview" class="pt-preview"></p>
+          <p id="order-error" class="pt-error" role="alert"></p>
+          <button id="open" class="btn btn-primary pt-open" type="button">Abrir posición</button>
+        </div>
+
+        <div id="broke-card" class="pt-card" hidden>
+          <h2>Te quedaste casi sin capital</h2>
+          <p>Pasa. Es un simulador: puedes volver a intentarlo sin perder nada real.</p>
+          <button id="recharge" class="btn btn-primary" type="button" hidden>▶ Ver anuncio y recibir $5.000</button>
+          <button id="new-account-broke" class="btn btn-secondary" type="button">Empezar cuenta nueva ($10.000)</button>
+        </div>
+
+        <div class="pt-card pt-tabs-card">
+          <div class="pt-tabs" role="tablist" aria-label="Tu cuenta">
+            <button role="tab" id="tab-positions" aria-controls="panel-positions" aria-selected="true" data-tab="positions">Posiciones <span id="pos-count" class="pt-pill" hidden></span></button>
+            <button role="tab" id="tab-history" aria-controls="panel-history" aria-selected="false" data-tab="history">Historial</button>
+            <button role="tab" id="tab-stats" aria-controls="panel-stats" aria-selected="false" data-tab="stats">Logros</button>
+          </div>
+
+          <div id="panel-positions" role="tabpanel" aria-labelledby="tab-positions" class="pt-panel">
+            <p id="positions-empty" class="pt-muted">Aún no tienes posiciones. Elige un activo, define cuánto arriesgar y ábrela arriba.</p>
+            <div id="positions" class="pt-list"></div>
+          </div>
+
+          <div id="panel-history" role="tabpanel" aria-labelledby="tab-history" class="pt-panel" hidden>
+            <p id="history-empty" class="pt-muted">Todavía no has cerrado operaciones.</p>
+            <div id="history" class="pt-list"></div>
+          </div>
+
+          <div id="panel-stats" role="tabpanel" aria-labelledby="tab-stats" class="pt-panel" hidden>
+            <p class="pt-row"><span>Operaciones cerradas</span><strong id="st-trades">0</strong></p>
+            <p class="pt-row"><span>Aciertos</span><strong id="st-win">—</strong></p>
+            <p class="pt-row"><span>Mejor operación</span><strong id="st-best">—</strong></p>
+            <p class="pt-row"><span>Peor operación</span><strong id="st-worst">—</strong></p>
+            <p class="pt-row"><span>Mayor patrimonio</span><strong id="st-peak">—</strong></p>
+            <p class="pt-row"><span>Liquidaciones</span><strong id="st-liq">0</strong></p>
+            <h3 class="pt-h3">Logros <span id="ach-count" class="pt-muted"></span></h3>
+            <ul id="achievements" class="pt-ach"></ul>
+            <button id="new-account" class="btn btn-outline" type="button">Empezar cuenta nueva</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="pt-footer">
+      <span>Mesa de trading · simulación educativa</span>
+      <nav aria-label="Información legal">
+        <a href="/privacy">Privacidad</a>
+        <a href="/terms">Términos</a>
+      </nav>
+    </footer>
+  </main>
+
+  <div id="toast" class="pt-toast" role="status" aria-live="polite"></div>
+
+  <dialog id="ad-dialog" class="pt-dialog" aria-labelledby="ad-title">
+    <h2 id="ad-title">Anuncio simulado</h2>
+    <p>Modo de prueba: así se verá la espera antes de la recompensa.</p>
+    <p class="pt-count"><span data-ad-count>5</span></p>
+    <button class="btn btn-outline" data-ad-close>Cerrar sin recompensa</button>
+  </dialog>
+</Layout>
+
+<script>
+  import '../trading/main';
+</script>
+
+<style is:global>
+  /* El atributo hidden debe ganar siempre (clases como .btn o .pill ponen su propio display). */
+  .pt [hidden] { display: none !important; }
+
+  .pt {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+  }
+
+  .pt-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0 0.75rem;
+  }
+  .pt-side { flex: 1; }
+  .pt-side--end { display: flex; justify-content: flex-end; }
+  .pt-link { font-family: var(--font-mono); font-size: 0.8rem; white-space: nowrap; }
+  .pt-title { font-family: var(--font-mono); font-size: clamp(1.05rem, 3vw, 1.5rem); letter-spacing: -0.01em; text-align: center; }
+  .pt-title span { color: var(--accent); opacity: 0.7; margin: 0 0.25rem; }
+  .pt-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.05rem;
+    line-height: 1;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .pt-icon[aria-pressed='false'] { opacity: 0.6; }
+  .pt-icon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .pt-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.75rem;
+    border-left: 2px solid var(--accent);
+    background: var(--surface);
+    line-height: 1.5;
+  }
+  .pt-note strong { color: var(--accent-light); }
+
+  .pt-hud {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 0.5rem 1.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .pt-stat { display: flex; flex-direction: column; min-width: 0; }
+  .pt-label { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  .pt-big { font-family: var(--font-mono); font-size: clamp(1.4rem, 5vw, 2.2rem); line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .pt-mid { font-family: var(--font-mono); font-size: clamp(0.95rem, 3.2vw, 1.3rem); line-height: 1.3; font-variant-numeric: tabular-nums; }
+  .pt-mid--plain { color: var(--text); }
+  .pt-sub { font-size: 0.68rem; color: var(--muted); font-family: var(--font-mono); }
+  .is-up { color: var(--success); }
+  .is-down { color: #d0745c; }
+
+  .pt-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+  .pt-assets { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; margin-bottom: 0.5rem; }
+  .pt-asset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.05rem;
+    padding: 0.45rem 0.55rem;
+    min-width: 0;
+    font-family: var(--font-mono);
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+  }
+  .pt-asset[aria-selected='true'] { border-color: var(--accent); background: var(--surface); box-shadow: inset 0 -2px 0 var(--accent); }
+  .pt-asset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pt-asset-t { font-size: 0.72rem; font-weight: 700; color: var(--accent-light); }
+  .pt-asset-p { font-size: 0.74rem; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .pt-asset-c { font-size: 0.66rem; font-variant-numeric: tabular-nums; }
+
+  .pt-chart-wrap { border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: var(--bg); }
+  #chart { display: block; width: 100%; height: clamp(250px, 42vh, 400px); }
+
+  .pt-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-top: 0.5rem; }
+  .pt-speed { display: flex; gap: 0.3rem; }
+  .pt-speed button, .pt-chips button, .pt-sides button {
+    font-family: var(--font-mono);
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .pt-speed button { padding: 0.35rem 0.7rem; font-size: 0.78rem; }
+  .pt-speed button[aria-pressed='true'], .pt-chips button[aria-pressed='true'] { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .pt-speed button:focus-visible, .pt-chips button:focus-visible, .pt-sides button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pt-news { flex: 1; min-width: 12rem; font-size: 0.8rem; color: var(--muted); line-height: 1.4; transition: color 0.4s; }
+  .pt-news.is-fresh { color: var(--accent-light); }
+
+  .pt-card { padding: 0.9rem; margin-bottom: 0.75rem; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); }
+  .pt-card h2 { font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 0.6rem; color: var(--accent-light); }
+  .pt-card p { font-size: 0.85rem; line-height: 1.5; }
+  .pt-card .btn { width: 100%; margin-top: 0.5rem; padding: 0.7rem 1rem; }
+  .pt-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-bottom: 0.7rem; }
+  .pt-sides button { padding: 0.65rem 0.4rem; font-size: 0.82rem; font-weight: 700; }
+  .pt-sides button[aria-pressed='true'].pt-side-long { color: #10180b; background: var(--success); border-color: var(--success); }
+  .pt-sides button[aria-pressed='true'].pt-side-short { color: #1d0d09; background: #d0745c; border-color: #d0745c; }
+  .pt-field-label { display: block; font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0.6rem 0 0.3rem; }
+  .pt-chips { display: flex; gap: 0.35rem; }
+  .pt-chips button { flex: 1; padding: 0.5rem 0; font-size: 0.8rem; }
+  .pt-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .pt-two input {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+  .pt-two input:focus-visible { outline: 2px solid var(--accent); }
+  .pt-preview { margin-top: 0.7rem; font-family: var(--font-mono); font-size: 0.74rem !important; color: var(--muted); line-height: 1.6 !important; }
+  .pt-preview b { color: var(--text); font-weight: 600; }
+  .pt-error { min-height: 1.2em; margin-top: 0.3rem; color: #d0745c; font-size: 0.78rem !important; }
+  .pt-card[hidden] { display: none; }
+
+  .pt-tabs-card { padding: 0; }
+  .pt-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .pt-tabs button {
+    flex: 1;
+    padding: 0.75rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .pt-tabs button[aria-selected='true'] { color: var(--accent-light); border-bottom-color: var(--accent); }
+  .pt-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .pt-pill { display: inline-block; min-width: 1.2em; padding: 0 0.35em; margin-left: 0.2rem; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-size: 0.7rem; }
+  .pt-panel { padding: 0.75rem; max-height: 440px; overflow-y: auto; }
+  .pt-panel[hidden] { display: none; }
+  .pt-muted { color: var(--muted); font-size: 0.8rem; }
+  .pt-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .pt-h3 { font-family: var(--font-mono); font-size: 0.85rem; margin: 1rem 0 0.5rem; color: var(--accent-light); }
+
+  .pt-pos { padding: 0.6rem 0.7rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 0.6rem; align-items: center; }
+  .pt-pos-head { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; }
+  .pt-tag { display: inline-block; padding: 0 0.4em; margin-left: 0.3rem; border-radius: 3px; font-size: 0.68rem; color: #10180b; background: var(--success); }
+  .pt-tag--short { color: #1d0d09; background: #d0745c; }
+  .pt-pos-pnl { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+  .pt-pos-meta { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); line-height: 1.5; }
+  .pt-pos .btn { grid-column: 1 / -1; width: 100%; padding: 0.45rem; font-size: 0.78rem; margin: 0.2rem 0 0; }
+  .pt-trade { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0.6rem; font-family: var(--font-mono); font-size: 0.74rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .pt-row { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.25rem; margin-bottom: 0.4rem; font-size: 0.82rem; }
+  .pt-row strong { font-family: var(--font-mono); color: var(--accent-light); }
+  .pt-ach { list-style: none; padding: 0; display: grid; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .pt-ach li { display: flex; gap: 0.6rem; align-items: baseline; font-size: 0.8rem; opacity: 0.45; }
+  .pt-ach li.is-done { opacity: 1; }
+  .pt-ach li strong { color: var(--accent-light); font-family: var(--font-mono); font-size: 0.78rem; }
+  .pt-ach li span { color: var(--muted); }
+
+  .pt-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+  .pt-footer nav { display: flex; gap: 1.25rem; }
+  .pt-footer a { color: var(--muted); }
+  .pt-footer a:hover { color: var(--accent-light); }
+
+  .pt-toast {
+    position: fixed; left: 50%; bottom: 1.25rem; transform: translate(-50%, 1rem); z-index: 20;
+    max-width: min(92vw, 420px); padding: 0.7rem 1rem; font-family: var(--font-mono); font-size: 0.82rem;
+    color: var(--accent-ink); background: var(--accent-light); border-radius: var(--radius);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none;
+    transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  .pt-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+  .pt-dialog { margin: auto; padding: 1.5rem; max-width: min(92vw, 380px); text-align: center; color: var(--text); background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius-lg); }
+  .pt-dialog::backdrop { background: rgba(0, 0, 0, 0.75); }
+  .pt-dialog h2 { font-family: var(--font-mono); margin-bottom: 0.5rem; }
+  .pt-dialog p { font-size: 0.85rem; color: var(--muted); }
+  .pt-count { font-family: var(--font-mono); font-size: 3rem; color: var(--accent-light) !important; margin: 0.75rem 0; }
+
+  /* Pantallas medianas y celular */
+  @media (max-width: 900px) {
+    .pt-layout { display: block; }
+    .pt-assets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .pt { padding: 0 0.75rem 2rem; }
+    .pt-hud { grid-template-columns: 1.5fr 1fr 1fr; position: sticky; top: 0; z-index: 8; margin: 0 -0.75rem 0.75rem; border-radius: 0; border-width: 0 0 1px; padding: 0.45rem 0.85rem; gap: 0.1rem 1rem; }
+    .pt-stat--rank { display: none; }
+    .pt-big { font-size: 1.35rem; }
+    .pt-mid { font-size: 0.92rem; }
+    .pt-label { font-size: 0.6rem; letter-spacing: 0.06em; }
+    #chart { height: clamp(220px, 36vh, 300px); }
+    .pt-note { font-size: 0.74rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pt-toast, .pt-news { transition: none; }
+  }
+</style>

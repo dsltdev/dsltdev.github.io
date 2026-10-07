@@ -7,6 +7,7 @@ let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let enabled = readPref();
 let lastClickAt = 0;
+let activated = false;
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -33,6 +34,7 @@ export function setSound(on: boolean) {
 
 /** Crea o reanuda el contexto de audio. Llamar desde un gesto del jugador. */
 export function unlock() {
+  activated = true;
   if (!enabled) return;
   try {
     if (!ctx) {
@@ -66,7 +68,7 @@ function tone(freq: number, start: number, dur: number, vol: number, type: Oscil
   osc.stop(t0 + dur + 0.02);
 }
 
-export type Sfx = 'click' | 'buy' | 'upgrade' | 'achievement' | 'golden' | 'spawn' | 'prestige';
+export type Sfx = 'click' | 'buy' | 'upgrade' | 'achievement' | 'golden' | 'spawn' | 'prestige' | 'win' | 'lose';
 
 export function play(name: Sfx) {
   if (!enabled || !ctx || ctx.state !== 'running') return;
@@ -99,6 +101,14 @@ export function play(name: Sfx) {
       tone(1319, 0, 0.12, 0.05, 'sine');
       tone(1760, 0.1, 0.18, 0.05, 'sine');
       break;
+    case 'win':
+      tone(523, 0, 0.12, 0.08, 'triangle');
+      tone(784, 0.09, 0.2, 0.08, 'triangle');
+      break;
+    case 'lose':
+      tone(330, 0, 0.14, 0.07, 'sawtooth', 247);
+      tone(220, 0.1, 0.22, 0.06, 'sawtooth', 165);
+      break;
     case 'prestige':
       [330, 440, 554, 659, 880].forEach((f, i) => tone(f, i * 0.09, 0.3, 0.08, 'triangle'));
       break;
@@ -107,7 +117,9 @@ export function play(name: Sfx) {
 
 /** Vibración corta en celulares que la soportan (Android). Respeta "reducir movimiento". */
 export function buzz(ms: number) {
-  if (!enabled || reducedMotion) return;
+  // Chrome bloquea (y registra un error) si se vibra antes de que la persona haya tocado la página.
+  const userActive = navigator.userActivation ? navigator.userActivation.hasBeenActive : activated;
+  if (!enabled || reducedMotion || !userActive) return;
   try {
     navigator.vibrate?.(ms);
   } catch {

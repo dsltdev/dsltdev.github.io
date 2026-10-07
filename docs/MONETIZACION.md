@@ -65,6 +65,17 @@ Rellena `donateUrl` con un link de Wompi, Buy Me a Coffee, etc. Aparece "♥ Apo
 - **Compartir**: el enlace ya tiene imagen de vista previa (`public/og-juego.png`) para WhatsApp,
   X y Telegram. Comunidades de juegos incrementales (p. ej. r/incremental_games) suelen probar juegos nuevos.
 
+## Mesa de trading (`/trading`)
+
+Simulador de trading con **dinero virtual y precios ficticios** (sin depósitos ni retiros). Comparte
+la monetización del juego: si estás casi en quiebra y hay anuncios disponibles, puedes ver un anuncio
+con recompensa para recibir $5.000 virtuales (si no hay anuncios solo ofrece "cuenta nueva"). Eventos de
+Plausible: `trade_open`, `trade_close`, `trading_recharge`, `trading_new_account`.
+
+> Mantenerlo como simulador es deliberado: en Colombia operar juegos de azar o intermediar dinero real
+> de terceros está regulado (Coljuegos, Superfinanciera). Antes de manejar dinero real hay que consultar
+> a un abogado.
+
 ## Medir qué funciona
 
 El juego envía eventos a Plausible: `rewarded_ad_start`, `rewarded_ad_complete`,
