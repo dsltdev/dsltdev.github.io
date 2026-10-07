@@ -12,6 +12,22 @@ export const COST_GROWTH = 1.15;
 export const LICENSE_BONUS = 0.05; // +5% de producción por licencia
 export const LICENSE_DIVISOR = 5e6; // licencias = floor(sqrt(runEarned / divisor))
 
+/** "Pago VIP": moneda dorada que aparece de vez en cuando y da un bonus si la tocas a tiempo. */
+export const GOLDEN = {
+  /** Segundos de juego activo entre apariciones (al azar en este rango). */
+  minDelay: 55,
+  maxDelay: 120,
+  /** Segundos que permanece en pantalla. */
+  life: 9,
+  /** Bonus de "lluvia": estos segundos de producción (o estos clicks si es lo mayor). */
+  lumpSeconds: 45,
+  lumpClicks: 30,
+  /** Probabilidad de "frenesí" en vez de lluvia, y su efecto sobre producción y clicks. */
+  frenzyChance: 0.3,
+  frenzyMultiplier: 5,
+  frenzySeconds: 20
+};
+
 export interface GeneratorDef {
   id: string;
   name: string;

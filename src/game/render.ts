@@ -1,9 +1,10 @@
 // Escena 2D en canvas: moneda clickeable, ciudad que crece con tus negocios,
 // monedas que caen según tu producción y textos flotantes.
-import { GENERATORS } from './config';
+import { GENERATORS, GOLDEN } from './config';
 import { cps, ownedOf, type State } from './logic';
 
-interface Floater { x: number; y: number; text: string; age: number; life: number }
+interface Floater { x: number; y: number; text: string; age: number; life: number; big?: boolean }
+interface Golden { x: number; y: number; vx: number; vy: number; age: number; life: number }
 interface Particle { x: number; y: number; vx: number; vy: number; age: number; life: number; size: number; spin: number }
 
 const AMBER = '#e0a23e';
@@ -24,6 +25,9 @@ export class Scene {
   private t = 0;
   private spawnAcc = 0;
   private reduced: boolean;
+  private golden: Golden | null = null;
+  /** Instante (this.t) de la última compra por negocio, para animar el bloque nuevo. */
+  private pops = new Map<string, number>();
 
   constructor(private canvas: HTMLCanvasElement, private getState: () => State) {
     this.ctx = canvas.getContext('2d')!;
@@ -42,8 +46,8 @@ export class Scene {
   }
 
   private coin() {
-    const r = Math.min(this.w * 0.24, this.h * 0.24, 100);
-    return { x: this.w / 2, y: this.h * 0.36, r };
+    const r = Math.min(this.w * 0.26, this.h * 0.3, 105);
+    return { x: this.w / 2, y: this.h * 0.38, r };
   }
 
   /** Centro de la moneda en px del canvas (para clicks por teclado). */
@@ -52,23 +56,60 @@ export class Scene {
     return { x, y };
   }
 
-  /** ¿El punto (en px del canvas) cae sobre la moneda? Con un margen generoso para el dedo. */
-  hitCoin(px: number, py: number): boolean {
+  // ----- Pago VIP -----
+
+  hasGolden() {
+    return this.golden !== null;
+  }
+
+  spawnGolden() {
+    const a = Math.random() * Math.PI * 2;
+    const sp = 18 + Math.random() * 16;
+    this.golden = {
+      x: this.w * (0.15 + Math.random() * 0.7),
+      y: this.h * (0.15 + Math.random() * 0.4),
+      vx: Math.cos(a) * sp,
+      vy: Math.sin(a) * sp,
+      age: 0,
+      life: GOLDEN.life
+    };
+  }
+
+  /** Si el toque cae sobre el Pago VIP lo recoge. Con margen generoso para el dedo. */
+  tryCollectGolden(px: number, py: number): boolean {
+    const g = this.golden;
+    if (!g || Math.hypot(px - g.x, py - g.y) > 42) return false;
+    this.burst(g.x, g.y, 16);
+    this.golden = null;
+    return true;
+  }
+
+  /** Aviso de compra: el bloque nuevo del negocio "aparece" con un pequeño salto. */
+  onBuy(id: string) {
+    this.pops.set(id, this.t);
+  }
+
+  private burst(x: number, y: number, n: number) {
+    if (this.reduced) return;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 60 + Math.random() * 160;
+      this.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 60, age: 0, life: 0.5 + Math.random() * 0.5, size: 2 + Math.random() * 3, spin: 0 });
+    }
+    if (this.particles.length > 200) this.particles.splice(0, this.particles.length - 200);
+  }
+
+  /** Texto flotante grande en el centro de la moneda (bonus, logros). */
+  announce(text: string) {
     const c = this.coin();
-    return Math.hypot(px - c.x, py - c.y) <= c.r * 1.25;
+    this.floaters.push({ x: c.x, y: c.y - c.r * 0.9, text, age: 0, life: 1.6, big: true });
   }
 
   onClick(px: number, py: number, label: string) {
     this.pulse = 1;
     this.floaters.push({ x: px, y: py, text: label, age: 0, life: 0.9 });
     if (this.floaters.length > 40) this.floaters.shift();
-    const n = this.reduced ? 0 : 7;
-    for (let i = 0; i < n; i++) {
-      const a = Math.random() * Math.PI * 2;
-      const sp = 60 + Math.random() * 140;
-      this.particles.push({ x: px, y: py, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 60, age: 0, life: 0.5 + Math.random() * 0.4, size: 2 + Math.random() * 3, spin: 0 });
-    }
-    if (this.particles.length > 160) this.particles.splice(0, this.particles.length - 160);
+    this.burst(px, py, 7);
   }
 
   update(dt: number) {
@@ -83,6 +124,16 @@ export class Scene {
       p.vy += 380 * dt;
     }
     this.particles = this.particles.filter((p) => p.age < p.life);
+
+    const g = this.golden;
+    if (g) {
+      g.age += dt;
+      g.x += g.vx * dt;
+      g.y += g.vy * dt;
+      if (g.x < 30 || g.x > this.w - 30) g.vx *= -1;
+      if (g.y < 30 || g.y > this.h * 0.62) g.vy *= -1;
+      if (g.age >= g.life) this.golden = null;
+    }
 
     // Lluvia de monedas: crece con el log10 de la producción por segundo.
     if (!this.reduced) {
@@ -112,6 +163,7 @@ export class Scene {
     this.drawRain();
     this.drawCity();
     this.drawCoin();
+    this.drawGolden();
     this.drawParticles();
     this.drawFloaters();
   }
@@ -151,7 +203,7 @@ export class Scene {
     const ground = h - 14;
     const colW = w / GENERATORS.length;
     const bw = Math.min(colW - 8, 46);
-    const bh = Math.min(16, (h * 0.3) / MAX_BLOCKS);
+    const bh = Math.min(16, (h * 0.25) / MAX_BLOCKS);
 
     ctx.fillStyle = '#0f0c08';
     ctx.fillRect(0, ground, w, 14);
@@ -162,10 +214,13 @@ export class Scene {
       const n = ownedOf(s, g.id);
       const blocks = Math.min(MAX_BLOCKS, n);
       const x = i * colW + (colW - bw) / 2;
+      const popT = this.pops.get(g.id);
+      const k = popT === undefined ? 1 : Math.min(1, (this.t - popT) / 0.35);
       for (let b = 0; b < blocks; b++) {
-        const y = ground - (b + 1) * bh;
-        ctx.fillStyle = g.color;
-        ctx.globalAlpha = 0.28 + 0.5 * ((b + 1) / MAX_BLOCKS);
+        const newest = b === blocks - 1 && k < 1;
+        const y = ground - (b + 1) * bh - (newest ? (1 - k) * bh * 1.6 : 0);
+        ctx.fillStyle = newest ? '#fff3d6' : g.color;
+        ctx.globalAlpha = newest ? 0.5 + 0.5 * k : 0.28 + 0.5 * ((b + 1) / MAX_BLOCKS);
         ctx.fillRect(x, y + 1, bw, bh - 2);
         ctx.globalAlpha = 1;
         // Ventana que parpadea: se ve vivo sin ser ruidoso.
@@ -193,9 +248,18 @@ export class Scene {
     const r = c.r * scale;
     const y = c.y + bob;
 
+    const frenzy = this.getState().frenzyLeft > 0;
+    if (frenzy) {
+      const wob = this.reduced ? 0 : Math.sin(this.t * 9) * 4;
+      ctx.strokeStyle = 'rgba(255,236,190,0.75)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(c.x, y, r + 12 + wob, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.save();
-    ctx.shadowColor = 'rgba(224,162,62,0.45)';
-    ctx.shadowBlur = 28 + this.pulse * 20;
+    ctx.shadowColor = frenzy ? 'rgba(255,236,190,0.9)' : 'rgba(224,162,62,0.45)';
+    ctx.shadowBlur = (frenzy ? 46 : 28) + this.pulse * 20;
     const g = ctx.createRadialGradient(c.x - r * 0.3, y - r * 0.3, r * 0.1, c.x, y, r);
     g.addColorStop(0, '#fbe6b8');
     g.addColorStop(0.55, AMBER);
@@ -220,6 +284,38 @@ export class Scene {
     ctx.textBaseline = 'alphabetic';
   }
 
+  private drawGolden() {
+    const g = this.golden;
+    if (!g) return;
+    const { ctx } = this;
+    const left = g.life - g.age;
+    // Aparece suave y parpadea en los últimos segundos para avisar que se va.
+    const fadeIn = Math.min(1, g.age / 0.3);
+    const blink = left < 2.5 && !this.reduced ? 0.55 + 0.45 * Math.sin(this.t * 16) : 1;
+    const pulse = this.reduced ? 1 : 1 + Math.sin(this.t * 6) * 0.07;
+    const r = 26 * pulse;
+    ctx.save();
+    ctx.globalAlpha = fadeIn * blink;
+    ctx.shadowColor = 'rgba(255,236,190,0.95)';
+    ctx.shadowBlur = 26;
+    const grad = ctx.createRadialGradient(g.x - r * 0.3, g.y - r * 0.3, r * 0.1, g.x, g.y, r);
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(0.5, '#ffe29a');
+    grad.addColorStop(1, '#e0a23e');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(g.x, g.y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = INK;
+    ctx.font = '700 15px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('VIP', g.x, g.y + 1);
+    ctx.restore();
+    ctx.textBaseline = 'alphabetic';
+  }
+
   private drawParticles() {
     const { ctx } = this;
     ctx.fillStyle = AMBER_LIGHT;
@@ -234,9 +330,9 @@ export class Scene {
 
   private drawFloaters() {
     const { ctx } = this;
-    ctx.font = '700 18px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center';
     for (const f of this.floaters) {
+      ctx.font = f.big ? '700 22px "IBM Plex Mono", monospace' : '700 18px "IBM Plex Mono", monospace';
       const k = f.age / f.life;
       ctx.globalAlpha = 1 - k * k;
       ctx.fillStyle = INK;

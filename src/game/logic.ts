@@ -2,6 +2,7 @@
 import {
   COST_GROWTH,
   GENERATORS,
+  GOLDEN,
   GOLD_HOURS,
   LICENSE_BONUS,
   LICENSE_DIVISOR,
@@ -25,6 +26,11 @@ export interface State {
   resets: number;
   /** Segundos que le quedan al boost por anuncio. */
   boostLeft: number;
+  /** Segundos que le quedan al frenesí de un Pago VIP. */
+  frenzyLeft: number;
+  /** Pagos VIP recogidos (para logros). */
+  golden: number;
+  achievements: string[];
   pro: boolean;
   /** Hashes de códigos ya canjeados en este dispositivo. */
   redeemed: string[];
@@ -42,6 +48,9 @@ export function newState(now = Date.now()): State {
     licenses: 0,
     resets: 0,
     boostLeft: 0,
+    frenzyLeft: 0,
+    golden: 0,
+    achievements: [],
     pro: false,
     redeemed: [],
     savedAt: now
@@ -66,8 +75,14 @@ function genMultiplier(s: State, id: string): number {
 
 /** Multiplicador global: licencias, Pase Pro y boost de anuncio. */
 export function globalMultiplier(s: State): number {
+  return (1 + LICENSE_BONUS * s.licenses) * (s.pro ? 2 : 1) * tempMultiplier(s);
+}
+
+/** Multiplicador de los efectos temporales: boost por anuncio y frenesí. */
+function tempMultiplier(s: State): number {
   const boost = s.boostLeft > 0 ? MONETIZATION.rewardedBoost.multiplier : 1;
-  return (1 + LICENSE_BONUS * s.licenses) * (s.pro ? 2 : 1) * boost;
+  const frenzy = s.frenzyLeft > 0 ? GOLDEN.frenzyMultiplier : 1;
+  return boost * frenzy;
 }
 
 /** Producción por segundo sin el boost temporal (sirve para el offline). */
@@ -85,7 +100,7 @@ export function unitCps(s: State, id: string): number {
 }
 
 export function cps(s: State): number {
-  return baseCps(s) * (s.boostLeft > 0 ? MONETIZATION.rewardedBoost.multiplier : 1);
+  return baseCps(s) * tempMultiplier(s);
 }
 
 export function clickPower(s: State): number {
@@ -96,7 +111,10 @@ export function clickPower(s: State): number {
     if (u?.kind === 'click') mult *= u.value;
     if (u?.kind === 'clickCps') pct += u.value;
   }
-  return (1 * mult + cps(s) * pct) * (1 + LICENSE_BONUS * s.licenses) * (s.pro ? 2 : 1);
+  const frenzy = s.frenzyLeft > 0 ? GOLDEN.frenzyMultiplier : 1;
+  // La parte fija recibe los bonus; la parte "% de la producción" ya los trae dentro de cps().
+  const flat = mult * (1 + LICENSE_BONUS * s.licenses) * (s.pro ? 2 : 1) * frenzy;
+  return flat + cps(s) * pct;
 }
 
 function earn(s: State, amount: number) {
@@ -108,6 +126,7 @@ function earn(s: State, amount: number) {
 export function tick(s: State, dt: number) {
   earn(s, cps(s) * dt);
   if (s.boostLeft > 0) s.boostLeft = Math.max(0, s.boostLeft - dt);
+  if (s.frenzyLeft > 0) s.frenzyLeft = Math.max(0, s.frenzyLeft - dt);
 }
 
 export function click(s: State): number {
@@ -171,7 +190,7 @@ export function pendingLicenses(s: State): number {
 export function prestige(s: State): number {
   const gained = pendingLicenses(s);
   if (gained < 1) return 0;
-  const keep = { licenses: s.licenses + gained, resets: s.resets + 1, lifetimeEarned: s.lifetimeEarned, clicks: s.clicks, pro: s.pro, redeemed: s.redeemed };
+  const keep = { licenses: s.licenses + gained, resets: s.resets + 1, lifetimeEarned: s.lifetimeEarned, clicks: s.clicks, golden: s.golden, achievements: s.achievements, pro: s.pro, redeemed: s.redeemed };
   Object.assign(s, newState(), keep);
   return gained;
 }
@@ -218,6 +237,61 @@ export async function redeem(s: State, code: string): Promise<string | null> {
   return applyProduct(s, product);
 }
 
+// ---------- Pago VIP ----------
+
+/** Aplica un Pago VIP. `rand` se inyecta para poder probarlo. Devuelve el mensaje para el jugador. */
+export function collectGolden(s: State, rand: () => number = Math.random): string {
+  s.golden++;
+  if (rand() < GOLDEN.frenzyChance) {
+    s.frenzyLeft = GOLDEN.frenzySeconds;
+    return `¡Frenesí! Producción y clicks x${GOLDEN.frenzyMultiplier} por ${GOLDEN.frenzySeconds} s`;
+  }
+  const gain = Math.max(cps(s) * GOLDEN.lumpSeconds, clickPower(s) * GOLDEN.lumpClicks);
+  earn(s, gain);
+  return `¡Pago VIP! +${fmt(gain)}`;
+}
+
+/** Segundos hasta la próxima aparición (al azar). */
+export function nextGoldenDelay(rand: () => number = Math.random): number {
+  return GOLDEN.minDelay + rand() * (GOLDEN.maxDelay - GOLDEN.minDelay);
+}
+
+// ---------- Logros ----------
+
+export interface AchievementDef {
+  id: string;
+  name: string;
+  desc: string;
+  done: (s: State) => boolean;
+}
+
+export const ACHIEVEMENTS: AchievementDef[] = [
+  { id: 'first', name: 'Primer pago', desc: 'Procesa tu primer pago.', done: (s) => s.clicks >= 1 },
+  { id: 'webhook', name: 'Hola, webhook', desc: 'Compra tu primer negocio.', done: (s) => Object.values(s.owned).some((n) => n >= 1) },
+  { id: 'clicks100', name: 'Dedo caliente', desc: '100 clicks.', done: (s) => s.clicks >= 100 },
+  { id: 'k', name: 'Primer millar', desc: 'Gana 1.000 en total.', done: (s) => s.lifetimeEarned >= 1e3 },
+  { id: 'upgrades5', name: 'Optimizador', desc: 'Compra 5 mejoras.', done: (s) => s.upgrades.length >= 5 },
+  { id: 'golden', name: 'Ojo de águila', desc: 'Recoge un Pago VIP.', done: (s) => s.golden >= 1 },
+  { id: 'all', name: 'Imperio completo', desc: 'Ten al menos 1 de cada negocio.', done: (s) => GENERATORS.every((g) => ownedOf(s, g.id) >= 1) },
+  { id: 'clicks1000', name: 'Tendinitis', desc: '1.000 clicks.', done: (s) => s.clicks >= 1000 },
+  { id: 'million', name: 'Millonario', desc: 'Gana 1 millón en total.', done: (s) => s.lifetimeEarned >= 1e6 },
+  { id: 'license', name: 'Reinversión', desc: 'Consigue tu primera licencia.', done: (s) => s.licenses >= 1 },
+  { id: 'billion', name: 'Milmillonario', desc: 'Gana mil millones en total.', done: (s) => s.lifetimeEarned >= 1e9 },
+  { id: 'vip5', name: 'Cliente VIP', desc: 'Recoge 5 Pagos VIP.', done: (s) => s.golden >= 5 }
+];
+
+/** Marca como logrados los que se cumplan y devuelve los nuevos (para avisar al jugador). */
+export function checkAchievements(s: State): AchievementDef[] {
+  const fresh: AchievementDef[] = [];
+  for (const a of ACHIEVEMENTS) {
+    if (!s.achievements.includes(a.id) && a.done(s)) {
+      s.achievements.push(a.id);
+      fresh.push(a);
+    }
+  }
+  return fresh;
+}
+
 // ---------- Guardado ----------
 
 export function serialize(s: State): string {
@@ -239,12 +313,15 @@ export function deserialize(raw: string | null): State {
     s.licenses = Math.floor(num(d.licenses));
     s.resets = Math.floor(num(d.resets));
     s.boostLeft = num(d.boostLeft);
+    s.frenzyLeft = num(d.frenzyLeft);
+    s.golden = Math.floor(num(d.golden));
     s.pro = d.pro === true;
     s.savedAt = num(d.savedAt, Date.now());
     if (d.owned && typeof d.owned === 'object') {
       for (const g of GENERATORS) s.owned[g.id] = Math.floor(num((d.owned as Record<string, unknown>)[g.id]));
     }
     if (Array.isArray(d.upgrades)) s.upgrades = d.upgrades.filter((id): id is string => typeof id === 'string' && upgradeById.has(id));
+    if (Array.isArray(d.achievements)) s.achievements = d.achievements.filter((id): id is string => typeof id === 'string' && ACHIEVEMENTS.some((a) => a.id === id));
     if (Array.isArray(d.redeemed)) s.redeemed = d.redeemed.filter((h): h is string => typeof h === 'string');
     return s;
   } catch {
