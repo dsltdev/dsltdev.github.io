@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="pi">
     <header class="pi-top">
-      <span class="pi-side"></span>
+      <span class="pi-side"><a class="pi-link" href="/trading">📈 Mesa de trading</a></span>
       <h1 class="pi-title"><span>[</span>Pagos Idle<span>]</span></h1>
       <span class="pi-side pi-side--end">
         <a id="donate" class="pi-link" href="#" target="_blank" rel="noopener" hidden>♥ Apoyar</a>
@@ -143,6 +143,9 @@ import Layout from '../layouts/Layout.astro';
 </script>
 
 <style is:global>
+  /* El atributo hidden debe ganar siempre (clases como .btn o .pill ponen su propio display). */
+  .pi [hidden] { display: none !important; }
+
   .pi {
     position: relative;
     z-index: 1;
