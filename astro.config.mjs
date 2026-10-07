@@ -5,6 +5,9 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://dsltdev.com',
   output: 'static',
+  redirects: {
+    '/juego': '/'
+  },
   build: {
     inlineStylesheets: 'always'
   },

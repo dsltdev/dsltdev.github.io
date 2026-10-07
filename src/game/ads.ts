@@ -1,17 +1,73 @@
-// Anuncios. Mientras MONETIZATION.adsense* esté vacío, el anuncio con recompensa es
-// una simulación de pocos segundos para poder probar el flujo completo.
+// Anuncios.
+//
+//  - Con MONETIZATION.adsenseClient configurado: anuncios reales de Google. El anuncio con
+//    recompensa usa la API Ad Placement (adBreak, type 'reward'), que requiere una cuenta de
+//    AdSense for Games aprobada para el dominio.
+//  - Sin cliente: no hay anuncios. Solo en desarrollo, o con ?demoads en la URL, se usa un
+//    anuncio simulado para probar el flujo.
 import { MONETIZATION } from './config';
 
-/** Inserta un banner de AdSense. Devuelve false si no hay credenciales configuradas. */
-export function mountBanner(container: HTMLElement): boolean {
-  const { adsenseClient, adsenseBannerSlot } = MONETIZATION;
-  if (!adsenseClient || !adsenseBannerSlot) return false;
+/** viewed = lo vio completo (hay recompensa); dismissed = lo cerró antes; unavailable = no hubo anuncio. */
+export type AdResult = 'viewed' | 'dismissed' | 'unavailable';
+
+type AdBreakOptions = {
+  type: 'reward';
+  name: string;
+  beforeReward?: (showAd: () => void) => void;
+  adViewed?: () => void;
+  adDismissed?: () => void;
+  adBreakDone?: (info: { breakStatus?: string }) => void;
+};
+
+type AdWindow = Window & {
+  adsbygoogle?: unknown[];
+  adBreak?: (o: AdBreakOptions) => void;
+  adConfig?: (o: Record<string, unknown>) => void;
+};
+
+const w = window as AdWindow;
+
+const demoAllowed = () => import.meta.env.DEV || new URLSearchParams(location.search).has('demoads');
+
+export const hasRealAds = () => Boolean(MONETIZATION.adsenseClient);
+
+/** ¿Hay alguna forma de mostrar un anuncio con recompensa en esta sesión? */
+export const hasRewardedAds = () => hasRealAds() || demoAllowed();
+
+let scriptState: 'idle' | 'loading' | 'failed' = 'idle';
+
+/** Carga adsbygoogle.js una sola vez (lo comparten el anuncio con recompensa y el banner). */
+function ensureAdsScript() {
+  if (!hasRealAds() || scriptState !== 'idle') return;
+  scriptState = 'loading';
+
+  w.adsbygoogle = w.adsbygoogle || [];
+  w.adBreak = w.adConfig = (o: unknown) => {
+    w.adsbygoogle!.push(o);
+  };
+  w.adConfig({ preloadAdBreaks: 'on', sound: 'off' });
 
   const script = document.createElement('script');
   script.async = true;
   script.crossOrigin = 'anonymous';
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(adsenseClient)}`;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(MONETIZATION.adsenseClient)}`;
+  if (MONETIZATION.adsenseTestMode) script.dataset.adbreakTest = 'on';
+  script.onerror = () => {
+    scriptState = 'failed'; // bloqueador de anuncios o sin red
+  };
   document.head.appendChild(script);
+}
+
+/** Prepara la red publicitaria en cuanto carga la página para que el anuncio esté precargado. */
+export function initAds() {
+  ensureAdsScript();
+}
+
+/** Inserta un banner de AdSense. Devuelve false si no hay cliente o slot configurados. */
+export function mountBanner(container: HTMLElement): boolean {
+  const { adsenseClient, adsenseBannerSlot } = MONETIZATION;
+  if (!adsenseClient || !adsenseBannerSlot) return false;
+  ensureAdsScript();
 
   const ins = document.createElement('ins');
   ins.className = 'adsbygoogle';
@@ -23,39 +79,63 @@ export function mountBanner(container: HTMLElement): boolean {
   container.appendChild(ins);
 
   try {
-    ((window as unknown as { adsbygoogle?: unknown[] }).adsbygoogle ||= []).push({});
+    w.adsbygoogle!.push({});
   } catch {
     return false;
   }
   return true;
 }
 
-/**
- * Muestra un anuncio con recompensa. Resuelve true si el jugador lo vio completo.
- *
- * Para conectar uno real (AdSense for Games / H5 Games Ads, Poki, CrazyGames...)
- * reemplaza el cuerpo de esta función por la llamada al SDK; el resto del juego
- * solo depende de la promesa.
- */
-export function showRewardedAd(dialog: HTMLDialogElement): Promise<boolean> {
+function showGoogleRewardedAd(): Promise<AdResult> {
+  return new Promise((resolve) => {
+    ensureAdsScript();
+    if (scriptState === 'failed' || !w.adBreak) return resolve('unavailable');
+
+    let settled = false;
+    const done = (r: AdResult) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(noResponse);
+      resolve(r);
+    };
+    // Si Google no responde nada (script bloqueado o lento), no dejamos al jugador esperando.
+    const noResponse = setTimeout(() => done('unavailable'), 6000);
+
+    w.adBreak({
+      type: 'reward',
+      name: 'boost-x2',
+      // El botón "Ver anuncio" ya hizo de aviso al jugador: se muestra directo.
+      beforeReward: (showAd) => {
+        clearTimeout(noResponse);
+        showAd();
+      },
+      adViewed: () => done('viewed'),
+      adDismissed: () => done('dismissed'),
+      // Se llama siempre al final; si nada se resolvió antes, es que no hubo anuncio.
+      adBreakDone: () => done('unavailable')
+    });
+  });
+}
+
+function showDemoAd(dialog: HTMLDialogElement): Promise<AdResult> {
   return new Promise((resolve) => {
     const label = dialog.querySelector<HTMLElement>('[data-ad-count]')!;
     const skip = dialog.querySelector<HTMLButtonElement>('[data-ad-close]')!;
     let left = MONETIZATION.demoAdSeconds;
     let done = false;
 
-    const finish = (ok: boolean) => {
+    const finish = (r: AdResult) => {
       if (done) return;
       done = true;
       clearInterval(timer);
       skip.removeEventListener('click', onSkip);
       dialog.removeEventListener('cancel', onSkip);
       dialog.close();
-      resolve(ok);
+      resolve(r);
     };
     const onSkip = (e?: Event) => {
       e?.preventDefault();
-      finish(false);
+      finish('dismissed');
     };
 
     label.textContent = String(left);
@@ -66,9 +146,16 @@ export function showRewardedAd(dialog: HTMLDialogElement): Promise<boolean> {
     const timer = setInterval(() => {
       left--;
       label.textContent = String(Math.max(0, left));
-      if (left <= 0) finish(true);
+      if (left <= 0) finish('viewed');
     }, 1000);
   });
+}
+
+/** Muestra un anuncio con recompensa con el proveedor que corresponda. */
+export function showRewardedAd(demoDialog: HTMLDialogElement): Promise<AdResult> {
+  if (hasRealAds()) return showGoogleRewardedAd();
+  if (demoAllowed()) return showDemoAd(demoDialog);
+  return Promise.resolve('unavailable');
 }
 
 /** Evento de analítica (Plausible ya está cargado en el Layout). Falla en silencio. */

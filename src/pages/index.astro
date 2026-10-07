@@ -1,200 +1,426 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
-import Loader from '../components/Loader.astro';
-import ScrollProgress from '../components/ScrollProgress.astro';
-import Hero from '../components/Hero.astro';
-import HardSkillsBoard from '../components/HardSkillsBoard.astro';
-import Projects from '../components/Projects.astro';
-import About from '../components/About.astro';
-import Offer from '../components/Offer.astro';
 ---
 
-<Layout title="David López — Fintech e integraciones de pago" description="Wallets, pasarelas de pago y sistemas de trading en Cloudflare Workers. Proyectos reales, bugs reales, en producción.">
-  <Loader />
-  <ScrollProgress />
-  <Navbar />
+<Layout
+  title="Pagos Idle — juego clicker gratis"
+  description="Procesa pagos, compra webhooks, pasarelas y exchanges y construye tu imperio fintech. Juego idle 2D gratis en el navegador, sin descargas."
+  image="/og-juego.png"
+  siteName="Pagos Idle"
+  depth={false}
+>
+  <main class="pi">
+    <header class="pi-top">
+      <span class="pi-side"></span>
+      <h1 class="pi-title"><span>[</span>Pagos Idle<span>]</span></h1>
+      <span class="pi-side pi-side--end"><a id="donate" class="pi-link" href="#" target="_blank" rel="noopener" hidden>♥ Apoyar</a></span>
+    </header>
 
-  <main>
-    <Hero />
-
-    <Projects />
-
-    <section id="hardskills">
-      <div class="container">
-        <div class="section-header">
-          <p class="section-label">Habilidades</p>
-          <h2 class="section-title">Lo difícil de probar</h2>
-          <p class="section-subtitle">Lo fácil de testear es un CRUD y un mock. Esto es lo que se rompe en producción y cómo se prueba de verdad.</p>
-        </div>
-        <HardSkillsBoard />
+    <div class="pi-hud" aria-live="off">
+      <div class="pi-stat">
+        <span class="pi-label">Saldo</span>
+        <strong id="coins" class="pi-big">0</strong>
       </div>
-    </section>
+      <div class="pi-stat">
+        <span class="pi-label">Por segundo</span>
+        <strong id="cps" class="pi-big pi-big--sm">0</strong>
+      </div>
+      <div id="boost" class="pi-boost" hidden>⚡ x2 · <span id="boost-left"></span></div>
+    </div>
 
-    <About />
+    <div class="pi-layout">
+      <div class="pi-stage">
+        <canvas id="scene" tabindex="0" role="button" aria-label="Procesar un pago: pulsa Enter o haz click en la moneda"></canvas>
+        <p class="pi-hint">Haz click en la moneda para procesar pagos. Tus negocios trabajan solos, incluso cuando no estás.</p>
+      </div>
 
-    <Offer />
+      <aside class="pi-panel glass-card">
+        <div class="pi-tabs" role="tablist" aria-label="Menú del juego">
+          <button role="tab" id="tab-gens" aria-controls="panel-gens" aria-selected="true" data-tab="gens">Negocios</button>
+          <button role="tab" id="tab-upgrades" aria-controls="panel-upgrades" aria-selected="false" data-tab="upgrades">Mejoras <span id="upgrade-count" class="pi-pill" hidden></span></button>
+          <button role="tab" id="tab-prestige" aria-controls="panel-prestige" aria-selected="false" data-tab="prestige">Reinvertir</button>
+          <button role="tab" id="tab-shop" aria-controls="panel-shop" aria-selected="false" data-tab="shop">Tienda</button>
+        </div>
 
-    <section id="contact" class="contact-section">
-      <div class="container">
-        <div class="contact-grid" data-reveal-group>
-          <div class="contact-left" data-reveal>
-            <span class="section-label">¿Algo más grande?</span>
-            <h2 class="section-title">Construir la pieza completa</h2>
-            <p class="section-subtitle">Si no es una auditoría puntual sino construir de cero, contame en qué estás.</p>
+        <div id="panel-gens" role="tabpanel" aria-labelledby="tab-gens" class="pi-tabpanel">
+          <div class="pi-amounts" role="group" aria-label="Cantidad a comprar">
+            <button data-amount="1" aria-pressed="true">x1</button>
+            <button data-amount="10" aria-pressed="false">x10</button>
+            <button data-amount="100" aria-pressed="false">x100</button>
+            <button data-amount="max" aria-pressed="false">Máx</button>
+          </div>
+          <div id="gens" class="pi-list"></div>
+        </div>
 
-            <div class="contact-methods">
-              <a href="mailto:dsltdev@icloud.com" class="contact-method glass-card">
-                <span class="method-label">Email</span>
-                <span class="method-value">dsltdev@icloud.com</span>
-              </a>
-              <a href="https://github.com/dsltdev" class="contact-method glass-card" target="_blank" rel="noopener">
-                <span class="method-label">GitHub</span>
-                <span class="method-value">@dsltdev</span>
-              </a>
+        <div id="panel-upgrades" role="tabpanel" aria-labelledby="tab-upgrades" class="pi-tabpanel" hidden>
+          <div id="upgrades" class="pi-list"></div>
+        </div>
+
+        <div id="panel-prestige" role="tabpanel" aria-labelledby="tab-prestige" class="pi-tabpanel" hidden>
+          <div class="pi-card">
+            <h2>Reinvertir en licencias</h2>
+            <p>
+              Reinicia tu imperio a cambio de <strong>licencias</strong>. Cada licencia suma
+              <strong>+5% de producción</strong> permanente, en todas tus partidas.
+            </p>
+            <p class="pi-row"><span>Licencias actuales</span><strong id="licenses">0</strong></p>
+            <p class="pi-row"><span>Ganarías ahora</span><strong id="pending">0</strong></p>
+            <p class="pi-row"><span>Bonus actual</span><strong id="license-bonus">+0%</strong></p>
+            <button id="prestige" class="btn btn-primary" disabled>Reinvertir</button>
+            <p id="prestige-hint" class="pi-muted"></p>
+          </div>
+        </div>
+
+        <div id="panel-shop" role="tabpanel" aria-labelledby="tab-shop" class="pi-tabpanel" hidden>
+          <div class="pi-card" id="boost-card">
+            <h2>Boost gratis</h2>
+            <p>Mira un anuncio corto y multiplica tu producción x2 durante 2 minutos (se acumula hasta 10).</p>
+            <button id="watch-ad" class="btn btn-primary">▶ Ver anuncio</button>
+          </div>
+
+          <div id="products" class="pi-products"></div>
+
+          <form id="redeem-form" class="pi-card" autocomplete="off">
+            <h2>Canjear código</h2>
+            <p class="pi-muted">¿Compraste algo? Pega aquí el código que recibiste.</p>
+            <div class="pi-redeem">
+              <label class="pi-sr" for="redeem-code">Código</label>
+              <input id="redeem-code" name="code" type="text" placeholder="XXXX-XXXX-XXXX" maxlength="40" spellcheck="false" />
+              <button class="btn btn-secondary" type="submit">Canjear</button>
             </div>
-          </div>
+          </form>
 
-          <div class="contact-right" data-reveal>
-            <form class="contact-form glass-card" action="https://formspree.io/f/xwkzbgln" method="POST">
-              <div class="form-group">
-                <label for="name">Nombre</label>
-                <input type="text" id="name" name="name" required placeholder="Tu nombre">
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="tu@email.com">
-              </div>
-              <div class="form-group">
-                <label for="message">¿En qué estás trabajando?</label>
-                <textarea id="message" name="message" rows="5" required placeholder="Contame sobre tu integración..."></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Enviar →</button>
-            </form>
+          <div class="pi-card pi-stats">
+            <h2>Estadísticas</h2>
+            <p class="pi-row"><span>Ganado en total</span><strong id="stat-lifetime">0</strong></p>
+            <p class="pi-row"><span>Clicks</span><strong id="stat-clicks">0</strong></p>
+            <p class="pi-row"><span>Reinversiones</span><strong id="stat-resets">0</strong></p>
+            <button id="reset" class="btn btn-outline">Borrar partida</button>
           </div>
         </div>
-      </div>
-    </section>
+      </aside>
+    </div>
+
+    <div id="banner" class="pi-banner" hidden></div>
+
+    <footer class="pi-footer">
+      <span>Pagos Idle · juego gratis</span>
+      <nav aria-label="Información legal">
+        <a href="/privacy">Privacidad</a>
+        <a href="/terms">Términos</a>
+      </nav>
+    </footer>
   </main>
 
-  <Footer />
+  <div id="toast" class="pi-toast" role="status" aria-live="polite"></div>
+
+  <dialog id="ad-dialog" class="pi-dialog" aria-labelledby="ad-title">
+    <h2 id="ad-title">Anuncio simulado</h2>
+    <p>Modo de prueba: así se verá la espera antes de la recompensa.</p>
+    <p class="pi-count"><span data-ad-count>5</span></p>
+    <button class="btn btn-outline" data-ad-close>Cerrar sin recompensa</button>
+  </dialog>
 </Layout>
 
-<style>
-  #hardskills .section-header {
-    text-align: left;
-    margin-bottom: 3rem;
-  }
+<script>
+  import '../game/main';
+</script>
 
-  .contact-section {
+<style is:global>
+  .pi {
     position: relative;
     z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
   }
 
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 4rem;
-  }
-
-  .contact-methods {
+  .pi-top {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     gap: 1rem;
-    margin-top: 2rem;
+    padding: 0.5rem 0 1rem;
   }
-
-  .contact-method {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    padding: 1.125rem;
-    text-decoration: none;
-  }
-
-  .method-label {
+  .pi-top .pi-side { flex: 1; }
+  .pi-top .pi-side--end { text-align: right; }
+  .pi-link {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
+    font-size: 0.8rem;
   }
-
-  .method-value {
+  .pi-title {
     font-family: var(--font-mono);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text);
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    letter-spacing: -0.01em;
   }
+  .pi-title span { color: var(--accent); opacity: 0.7; margin: 0 0.25rem; }
 
-  .contact-form {
-    padding: 2rem;
+  .pi-hud {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    position: relative;
-    overflow: hidden;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.5rem 2.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
   }
-
-  .contact-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .form-group label {
+  .pi-stat { display: flex; flex-direction: column; }
+  .pi-label {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--muted);
   }
+  .pi-big {
+    font-family: var(--font-mono);
+    font-size: clamp(1.75rem, 6vw, 2.75rem);
+    line-height: 1.1;
+    color: var(--accent-light);
+    font-variant-numeric: tabular-nums;
+  }
+  .pi-big--sm { font-size: clamp(1.1rem, 3.5vw, 1.5rem); color: var(--text); }
+  .pi-boost {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent-ink);
+    background: var(--accent);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+  }
 
-  .form-group input,
-  .form-group textarea {
-    padding: 0.875rem 1rem;
+  .pi-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .pi-layout { grid-template-columns: 1fr; }
+  }
+
+  .pi-stage {
+    position: sticky;
+    top: 0.5rem;
+  }
+  @media (max-width: 860px) {
+    .pi-stage { position: static; }
+    #scene { height: clamp(250px, 36vh, 400px); }
+    .pi-tabpanel { max-height: none; }
+  }
+  @media (max-width: 480px) {
+    .pi-tabs button { padding: 0.8rem 0.5rem; font-size: 0.74rem; }
+  }
+  #scene {
+    display: block;
+    width: 100%;
+    height: clamp(300px, 48vh, 470px);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #scene:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pi-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* El efecto 3D de .glass-card (inclinar al pasar el cursor) estorba en un panel donde se hace
+     click constantemente y en táctil se queda "pegado": aquí el panel es plano. */
+  .pi-panel.glass-card,
+  .pi-panel.glass-card:hover {
+    padding: 0;
+    transform: none;
+    transform-style: flat;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: inset 0 1px 0 rgba(255, 230, 180, 0.12), 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+  .pi-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .pi-tabs button {
+    flex: 1;
+    min-width: max-content;
+    padding: 0.8rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .pi-tabs button:hover { color: var(--text); }
+  .pi-tabs button[aria-selected='true'] { color: var(--accent-light); border-bottom-color: var(--accent); }
+  .pi-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .pi-pill {
+    display: inline-block;
+    min-width: 1.2em;
+    padding: 0 0.35em;
+    margin-left: 0.25rem;
+    border-radius: 99px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.7rem;
+  }
+
+  .pi-tabpanel { padding: 0.75rem; max-height: min(70vh, 640px); overflow-y: auto; }
+  .pi-tabpanel[hidden] { display: none; }
+  .pi-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .pi-amounts { display: flex; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .pi-amounts button {
+    flex: 1;
+    padding: 0.4rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    background: var(--glass-bg);
+    cursor: pointer;
+  }
+  .pi-amounts button[aria-pressed='true'] { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+  .pi-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 0.75rem;
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    text-align: left;
     color: var(--text);
-    transition: all 0.3s ease;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s var(--ease-out), background 0.15s var(--ease-out);
   }
-
-  .form-group input::placeholder,
-  .form-group textarea::placeholder {
-    color: var(--muted-dim);
+  .pi-item:disabled { cursor: not-allowed; opacity: 0.62; }
+  .pi-item:not(:disabled):hover { border-color: var(--accent); background: var(--surface); }
+  .pi-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pi-item-name { font-weight: 600; font-size: 0.95rem; }
+  .pi-item-desc { grid-column: 1; font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .pi-item-count {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
   }
-
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    background: var(--glass-bg-hover);
-    border-color: var(--accent-dim);
-    box-shadow: 0 0 0 3px var(--accent-glow);
+  .pi-item-count b { display: block; font-size: 1.4rem; color: var(--accent-light); line-height: 1; }
+  .pi-item-count small { color: var(--muted); font-size: 0.7rem; }
+  .pi-item-cost {
+    grid-column: 1 / -1;
+    margin-top: 0.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--danger);
   }
+  .pi-item.is-affordable .pi-item-cost { color: var(--success); }
 
-  .form-group textarea {
-    resize: vertical;
-    min-height: 120px;
+  .pi-card {
+    padding: 0.9rem;
+    margin-bottom: 0.75rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
   }
+  .pi-card h2 { font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--accent-light); }
+  .pi-card p { font-size: 0.85rem; line-height: 1.55; margin-bottom: 0.6rem; }
+  .pi-card .btn { padding: 0.65rem 1.25rem; width: 100%; }
+  .pi-muted { color: var(--muted); font-size: 0.78rem; }
+  .pi-row { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.25rem; }
+  .pi-row strong { font-family: var(--font-mono); color: var(--accent-light); }
+  .pi-products { display: grid; gap: 0.75rem; }
+  .pi-products .pi-card { margin: 0; }
+  .pi-price { font-family: var(--font-mono); font-weight: 700; color: var(--accent-light); }
+  .pi-redeem { display: flex; gap: 0.5rem; }
+  .pi-redeem input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.55rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+  .pi-redeem input:focus-visible { outline: 2px solid var(--accent); }
+  .pi-redeem .btn { width: auto; }
+  .pi-stats .btn { margin-top: 0.5rem; }
+  .pi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-  @media (max-width: 900px) {
-    .contact-grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
+  .pi-banner { margin-top: 1rem; min-height: 90px; text-align: center; }
+
+  .pi-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .pi-footer nav { display: flex; gap: 1.25rem; }
+  .pi-footer a { color: var(--muted); }
+  .pi-footer a:hover { color: var(--accent-light); }
+
+  .pi-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translate(-50%, 1rem);
+    z-index: 20;
+    max-width: min(92vw, 420px);
+    padding: 0.7rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--accent-ink);
+    background: var(--accent-light);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  .pi-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+  .pi-dialog {
+    margin: auto;
+    padding: 1.5rem;
+    max-width: min(92vw, 380px);
+    text-align: center;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-lg);
+  }
+  .pi-dialog::backdrop { background: rgba(0, 0, 0, 0.75); }
+  .pi-dialog h2 { font-family: var(--font-mono); margin-bottom: 0.5rem; }
+  .pi-dialog p { font-size: 0.85rem; color: var(--muted); }
+  .pi-count { font-family: var(--font-mono); font-size: 3rem; color: var(--accent-light) !important; margin: 0.75rem 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pi-toast, .pi-item { transition: none; }
   }
 </style>

@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import Hero from '../components/Hero.astro';
+import HardSkillsBoard from '../components/HardSkillsBoard.astro';
+import Projects from '../components/Projects.astro';
+import About from '../components/About.astro';
+import Offer from '../components/Offer.astro';
+---
+
+<Layout title="David López — Fintech e integraciones de pago" description="Wallets, pasarelas de pago y sistemas de trading en Cloudflare Workers. Proyectos reales, bugs reales, en producción." noindex>
+  <Loader />
+  <ScrollProgress />
+  <Navbar />
+
+  <main>
+    <Hero />
+
+    <Projects />
+
+    <section id="hardskills">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">Habilidades</p>
+          <h2 class="section-title">Lo difícil de probar</h2>
+          <p class="section-subtitle">Lo fácil de testear es un CRUD y un mock. Esto es lo que se rompe en producción y cómo se prueba de verdad.</p>
+        </div>
+        <HardSkillsBoard />
+      </div>
+    </section>
+
+    <About />
+
+    <Offer />
+
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <div class="contact-grid" data-reveal-group>
+          <div class="contact-left" data-reveal>
+            <span class="section-label">¿Algo más grande?</span>
+            <h2 class="section-title">Construir la pieza completa</h2>
+            <p class="section-subtitle">Si no es una auditoría puntual sino construir de cero, contame en qué estás.</p>
+
+            <div class="contact-methods">
+              <a href="mailto:dsltdev@icloud.com" class="contact-method glass-card">
+                <span class="method-label">Email</span>
+                <span class="method-value">dsltdev@icloud.com</span>
+              </a>
+              <a href="https://github.com/dsltdev" class="contact-method glass-card" target="_blank" rel="noopener">
+                <span class="method-label">GitHub</span>
+                <span class="method-value">@dsltdev</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-right" data-reveal>
+            <form class="contact-form glass-card" action="https://formspree.io/f/xwkzbgln" method="POST">
+              <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" required placeholder="Tu nombre">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="tu@email.com">
+              </div>
+              <div class="form-group">
+                <label for="message">¿En qué estás trabajando?</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Contame sobre tu integración..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar →</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  #hardskills .section-header {
+    text-align: left;
+    margin-bottom: 3rem;
+  }
+
+  .contact-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+  }
+
+  .contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .contact-method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 1.125rem;
+    text-decoration: none;
+  }
+
+  .method-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .method-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .contact-form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    background: var(--glass-bg);
+    color: var(--text);
+    transition: all 0.3s ease;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--muted-dim);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    background: var(--glass-bg-hover);
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

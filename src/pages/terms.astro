@@ -1,118 +1,34 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
+import LegalPage from '../components/LegalPage.astro';
 ---
 
-<Layout title="Términos de uso — David López" description="Términos de uso de este sitio personal.">
-  <Navbar />
+<LegalPage
+  title="Términos de uso"
+  description="Condiciones de uso de Pagos Idle: juego gratuito, artículos digitales y anuncios."
+  updated="7 de octubre de 2026"
+>
+  <h2>1. Qué es Pagos Idle</h2>
+  <p>Pagos Idle es un juego gratuito de entretenimiento que se juega en el navegador. Todo el dinero, los negocios y las licencias del juego son <strong>virtuales</strong>: no tienen valor real, no se pueden retirar ni cambiar por dinero.</p>
 
-  <main>
-    <section class="legal-page">
-      <div class="container">
-        <div class="legal-content" data-reveal-group>
-          <a href="/" class="back-link" data-reveal>← Volver al inicio</a>
-          <h1 class="legal-title" data-reveal>Términos de uso</h1>
-          <p class="legal-updated" data-reveal>Última actualización: 5 de septiembre de 2026</p>
+  <h2>2. Uso del juego</h2>
+  <p>Puedes jugar libremente. No está permitido intentar vulnerar el sitio, alterar el juego para obtener ventajas con herramientas que afecten a otras personas, ni usar el contenido con fines comerciales sin permiso.</p>
 
-          <div class="legal-body" data-reveal>
-            <h2>1. Qué es este sitio</h2>
-            <p>Este es el sitio personal de David López (dsltdev.com): un portafolio con información sobre proyectos, habilidades técnicas y un formulario de contacto. No es una aplicación con registro de usuarios ni procesa pagos.</p>
+  <h2>3. Tu partida</h2>
+  <p>La partida se guarda solo en tu navegador. No podemos recuperarla si borras los datos del sitio o cambias de dispositivo. Podemos modificar el equilibrio del juego (costos, producción, recompensas) para mejorarlo.</p>
 
-            <h2>2. Contenido</h2>
-            <p>El contenido describe proyectos reales — algunos en producción activa, otros en pausa o en fase de prototipo, como se indica en cada caso. Se actualiza según avanza el trabajo real, sin garantía de que refleje el estado más reciente en todo momento.</p>
+  <h2>4. Anuncios y compras</h2>
+  <ul>
+    <li>El juego puede mostrar anuncios, incluidos anuncios con recompensa que decides ver.</li>
+    <li>Los artículos digitales a la venta (como el Pase Pro) se entregan mediante un código que canjeas en el juego y valen para la partida del dispositivo donde lo canjeas.</li>
+    <li>Si tienes un problema con una compra, escríbenos y lo resolvemos.</li>
+  </ul>
 
-            <h2>3. Formulario de contacto</h2>
-            <p>El formulario de la sección de contacto se procesa a través de <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a>, un servicio de terceros. Ver la <a href="/privacy">Política de Privacidad</a> para más detalle sobre qué se envía y cómo se usa.</p>
+  <h2>5. Sin garantías</h2>
+  <p>El juego se ofrece "tal cual", sin garantía de disponibilidad continua ni de ausencia de errores. En la medida permitida por la ley, no respondemos por pérdidas derivadas de su uso.</p>
 
-            <h2>4. Enlaces a proyectos de terceros</h2>
-            <p>Este sitio enlaza a productos y repositorios propios alojados en otros dominios (ej. wallet.dsltdev.com, saas.dsltdev.com, GitHub). Cada uno tiene sus propios términos y política de privacidad.</p>
+  <h2>6. Privacidad</h2>
+  <p>Cómo tratamos los datos está en la <a href="/privacy">Política de Privacidad</a>.</p>
 
-            <h2>5. Sin garantías</h2>
-            <p>El sitio se ofrece "tal cual", sin garantía de disponibilidad ininterrumpida. Puede modificarse o discontinuarse en cualquier momento.</p>
-
-            <h2>6. Contacto</h2>
-            <p>Para cualquier consulta sobre estos términos: <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <Footer />
-</Layout>
-
-<style>
-  .legal-page {
-    padding: 140px 0 4rem;
-  }
-
-  .legal-content {
-    max-width: 700px;
-  }
-
-  .back-link {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--muted);
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 2rem;
-    transition: color 0.2s;
-  }
-
-  .back-link:hover {
-    color: var(--accent);
-  }
-
-  .legal-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .legal-updated {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 2.5rem;
-  }
-
-  .legal-body h2 {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 2rem 0 0.75rem;
-  }
-
-  .legal-body p {
-    color: rgba(232, 245, 238, 0.8);
-    line-height: 1.8;
-    margin: 0.75rem 0;
-  }
-
-  .legal-body ul {
-    padding-left: 1.5em;
-    margin: 0.75rem 0;
-  }
-
-  .legal-body li {
-    color: rgba(232, 245, 238, 0.8);
-    line-height: 1.7;
-    margin: 0.4rem 0;
-  }
-
-  .legal-body a {
-    color: var(--accent-light);
-    text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    .legal-page {
-      padding: 120px 0 3rem;
-    }
-  }
-</style>
+  <h2>7. Contacto</h2>
+  <p>Para cualquier consulta: <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
+</LegalPage>

@@ -89,15 +89,21 @@ export interface ProductDef {
 }
 
 export const MONETIZATION = {
-  /** Publisher de AdSense, p. ej. 'ca-pub-1234567890123456'. Vacío = sin banner. */
+  /**
+   * Publisher de AdSense, p. ej. 'ca-pub-1234567890123456'. Vacío = sin anuncios reales.
+   * Activa a la vez: el anuncio con recompensa (API Ad Placement de Google), el banner
+   * (si hay slot) y el archivo /ads.txt.
+   */
   adsenseClient: '',
-  /** Ad slot del banner (número que da AdSense). */
+  /** Ad slot del banner (opcional; número que da AdSense). Vacío = sin banner. */
   adsenseBannerSlot: '',
+  /** true = Google sirve anuncios de prueba simulados. Úsalo al integrar; apágalo al publicar. */
+  adsenseTestMode: false,
   /** Link de donación (Wompi, Buy Me a Coffee, etc.). Vacío = botón oculto. */
   donateUrl: '',
   /** Boost que se obtiene al ver un anuncio con recompensa. */
   rewardedBoost: { multiplier: 2, seconds: 120, maxSeconds: 600 },
-  /** Segundos que dura el anuncio de prueba hasta que conectes uno real. */
+  /** Segundos del anuncio simulado (solo en desarrollo o con ?demoads en la URL). */
   demoAdSeconds: 5,
   products: [
     { id: 'pro', name: 'Pase Pro', desc: 'Producción x2 para siempre.', price: '$9.900 COP', url: '' },
