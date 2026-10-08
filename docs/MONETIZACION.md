@@ -76,6 +76,47 @@ Plausible: `trade_open`, `trade_close`, `trading_recharge`, `trading_new_account
 > de terceros está regulado (Coljuegos, Superfinanciera). Antes de manejar dinero real hay que consultar
 > a un abogado.
 
+## Terminal (`/terminal`)
+
+Misma mesa de trading, pero por línea de comandos y con lluvia de código estilo Matrix (`help`, `buy`,
+`sell`, `chart`, `news`…). Comparte la cuenta de `/trading` (`pagos-trader:v1`); solo las preferencias
+de lluvia y sonido son propias (`pagos-terminal:prefs`).
+
+## Casino de fichas virtuales (`/casino`)
+
+Tragamonedas, blackjack y ruleta europea con **fichas sin ningún valor real**: no se compran, no se
+canjean, no se transfieren y no hay premios. Billetera propia (`pagos-casino:v1`), separada del juego
+principal y del trading.
+
+**Cómo se monetiza (y cómo no):**
+
+- **Sin AdSense** por ahora (`MONETIZATION.casinoAds = false`). No se verificó que la política de
+  publicadores acepte páginas de casino, y un rechazo podría afectar a todo el sitio. Cuando se
+  confirme, basta cambiar ese valor a `true` para ofrecer el anuncio con recompensa en la pantalla de
+  "sin fichas" (+5.000 fichas). Con `?demoads` se prueba el flujo con un anuncio simulado.
+- **Nunca se venden fichas.** Lo que sí se puede vender es cosmético (temas, marcos) y el pase.
+- Los enlaces de pago de Wompi para Pase Pro y Maletín de oro siguen pendientes.
+
+**Reglas de diseño (no cambiarlas sin pensarlo):**
+
+| Juego | Retorno al jugador | Cómo se verificó |
+| --- | --- | --- |
+| Tragamonedas (5 líneas) | 95,30 % | enumeración exacta de las 8.000 combinaciones |
+| Blackjack (6 mazos, S17, BJ 3:2) | ≈ 99,5 % con estrategia básica | simulación de 6 millones de manos |
+| Ruleta europea | 97,30 % (36/37) | exacto |
+
+- Aviso +18 al entrar (no se cierra con Esc), enlace a `/juego-responsable`, pausas voluntarias de
+  15 min / 1 h / 24 h que sobreviven a recargar, recordatorio cada 30 min, sin autojuego.
+- Un premio menor que la apuesta **no se celebra** (se avisa que es menos de lo apostado).
+- Aleatoriedad con `crypto.getRandomValues` y rechazo de sesgo (`src/casino/rng.ts`).
+- Eventos de Plausible: `casino_open`, `casino_spin`, `casino_hand`, `casino_roulette`,
+  `casino_break`, `rewarded_ad_start` (`where: casino`).
+
+> **Antes de lanzarlo en serio:** consulta a un abogado en Colombia. Un casino con fichas sin valor
+> suele considerarse entretenimiento, pero Coljuegos regula los juegos de suerte y azar y la línea
+> depende de los detalles (premios, compras, canjes). Mientras nada de valor entre ni salga, el riesgo
+> es bajo; si algún día se vende algo que mejore las probabilidades o se canjean fichas, cambia por completo.
+
 ## Medir qué funciona
 
 El juego envía eventos a Plausible: `rewarded_ad_start`, `rewarded_ad_complete`,

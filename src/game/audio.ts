@@ -68,7 +68,7 @@ function tone(freq: number, start: number, dur: number, vol: number, type: Oscil
   osc.stop(t0 + dur + 0.02);
 }
 
-export type Sfx = 'click' | 'buy' | 'upgrade' | 'achievement' | 'golden' | 'spawn' | 'prestige' | 'win' | 'lose';
+export type Sfx = 'click' | 'buy' | 'upgrade' | 'achievement' | 'golden' | 'spawn' | 'prestige' | 'win' | 'lose' | 'tick' | 'chip';
 
 export function play(name: Sfx) {
   if (!enabled || !ctx || ctx.state !== 'running') return;
@@ -108,6 +108,13 @@ export function play(name: Sfx) {
     case 'lose':
       tone(330, 0, 0.14, 0.07, 'sawtooth', 247);
       tone(220, 0.1, 0.22, 0.06, 'sawtooth', 165);
+      break;
+    case 'tick':
+      tone(180, 0, 0.05, 0.06, 'square', 120);
+      break;
+    case 'chip':
+      tone(1100, 0, 0.04, 0.05, 'triangle', 800);
+      tone(1500, 0.03, 0.05, 0.04, 'triangle', 1100);
       break;
     case 'prestige':
       [330, 440, 554, 659, 880].forEach((f, i) => tone(f, i * 0.09, 0.3, 0.08, 'triangle'));

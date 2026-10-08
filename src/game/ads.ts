@@ -31,8 +31,11 @@ const demoAllowed = () => import.meta.env.DEV || new URLSearchParams(location.se
 
 export const hasRealAds = () => Boolean(MONETIZATION.adsenseClient);
 
-/** ¿Hay alguna forma de mostrar un anuncio con recompensa en esta sesión? */
-export const hasRewardedAds = () => hasRealAds() || demoAllowed();
+/**
+ * ¿Hay alguna forma de mostrar un anuncio con recompensa en esta sesión?
+ * `allowReal = false` excluye la red publicitaria real (solo queda el modo de prueba).
+ */
+export const hasRewardedAds = (allowReal = true) => (allowReal && hasRealAds()) || demoAllowed();
 
 let scriptState: 'idle' | 'loading' | 'failed' = 'idle';
 
@@ -152,8 +155,8 @@ function showDemoAd(dialog: HTMLDialogElement): Promise<AdResult> {
 }
 
 /** Muestra un anuncio con recompensa con el proveedor que corresponda. */
-export function showRewardedAd(demoDialog: HTMLDialogElement): Promise<AdResult> {
-  if (hasRealAds()) return showGoogleRewardedAd();
+export function showRewardedAd(demoDialog: HTMLDialogElement, allowReal = true): Promise<AdResult> {
+  if (allowReal && hasRealAds()) return showGoogleRewardedAd();
   if (demoAllowed()) return showDemoAd(demoDialog);
   return Promise.resolve('unavailable');
 }
