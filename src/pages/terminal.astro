@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Terminal de trading — simulador gratis"
+  description="Opera por comandos en una terminal estilo Matrix: compra, vende en corto, usa apalancamiento y stop-loss con dinero virtual. Simulador gratis."
+  image="/og-juego.png"
+  siteName="Pagos Idle"
+  depth={false}
+>
+  <div class="tm-root">
+    <canvas id="rain" aria-hidden="true"></canvas>
+
+    <main class="tm">
+      <header class="tm-top">
+        <a class="tm-link" href="/trading">← Mesa</a>
+        <h1 class="tm-title">TERMINAL<span>://</span>MESA</h1>
+        <span class="tm-tools">
+          <button id="rain-toggle" class="tm-icon" type="button" aria-pressed="true" aria-label="Lluvia de código: activada" title="Lluvia de código">▓</button>
+          <button id="sound" class="tm-icon" type="button" aria-pressed="true" aria-label="Sonido: activado" title="Sonido">♪</button>
+        </span>
+      </header>
+
+      <p class="tm-note">SIMULACIÓN · dinero virtual · precios ficticios · no es asesoría financiera</p>
+
+      <div id="status" class="tm-box tm-status" aria-live="off"></div>
+      <div id="monitor" class="tm-box tm-monitor" aria-hidden="true"></div>
+
+      <div id="out" class="tm-box tm-out" role="log" aria-live="polite" aria-label="Salida de la terminal" tabindex="0"></div>
+
+      <div class="tm-chips" role="group" aria-label="Comandos rápidos">
+        <button type="button" data-cmd="ayuda">ayuda</button>
+        <button type="button" data-cmd="mercado">mercado</button>
+        <button type="button" data-cmd="posiciones">posiciones</button>
+        <button type="button" data-cmd="cuenta">cuenta</button>
+        <button type="button" data-cmd="cerrar todo">cerrar todo</button>
+        <button type="button" data-fill="comprar BTC 25% x1 ">comprar…</button>
+        <button type="button" data-fill="vender BTC 25% x1 ">vender…</button>
+      </div>
+
+      <form id="form" class="tm-box tm-form" autocomplete="off">
+        <label for="cmd" class="tm-sr">Comando</label>
+        <span class="tm-prompt" aria-hidden="true">trader@mesa:~$</span>
+        <input id="cmd" name="cmd" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" placeholder="escribe ayuda" />
+      </form>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  import '../trading/terminal';
+</script>
+
+<style is:global>
+  .tm-root {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #020a04;
+    color: #7cf59a;
+    font-family: var(--font-mono);
+    overflow: hidden;
+  }
+  .tm-root [hidden] { display: none !important; }
+  #rain { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.4; pointer-events: none; }
+
+  .tm {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    width: 100%;
+    max-width: 1040px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0.6rem 0.8rem;
+  }
+  .tm-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .tm-link { color: #3fdc6e; font-size: 0.8rem; white-space: nowrap; }
+  .tm-link:hover { color: #00ff41; }
+  .tm-title { font-size: clamp(0.95rem, 3.5vw, 1.25rem); letter-spacing: 0.08em; color: #00ff41; text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
+  .tm-title span { opacity: 0.55; }
+  .tm-tools { display: flex; gap: 0.4rem; }
+  .tm-icon {
+    width: 2rem; height: 2rem; font-family: inherit; font-size: 0.95rem; line-height: 1;
+    color: #00ff41; background: rgba(2, 10, 4, 0.8); border: 1px solid #0b4d1d; border-radius: 3px; cursor: pointer;
+  }
+  .tm-icon[aria-pressed='false'] { opacity: 0.45; }
+  .tm-icon:focus-visible, .tm-chips button:focus-visible, .tm-out:focus-visible { outline: 2px solid #00ff41; outline-offset: 2px; }
+  .tm-note { font-size: 0.68rem; color: #2fa653; letter-spacing: 0.04em; }
+
+  .tm-box { background: rgba(2, 10, 4, 0.78); border: 1px solid #0b4d1d; border-radius: 3px; }
+  .tm-status { padding: 0.4rem 0.6rem; font-size: 0.78rem; line-height: 1.5; white-space: pre-wrap; color: #9dffb4; }
+  .tm-status b { color: #00ff41; font-weight: 600; }
+  .tm-monitor { padding: 0.4rem 0.6rem; font-size: 0.75rem; line-height: 1.55; white-space: pre; overflow-x: auto; }
+  .tm-mrow { display: block; color: #7cf59a; }
+  .tm-mrow.is-up { color: #00ff41; }
+  .tm-mrow.is-down { color: #ff6b6b; }
+
+  .tm-out { flex: 1; min-height: 0; overflow: auto; padding: 0.5rem 0.6rem; font-size: 0.78rem; line-height: 1.5; text-shadow: 0 0 5px rgba(0, 255, 65, 0.25); }
+  .tm-line { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.5em; }
+  .tm-nowrap { white-space: pre; overflow-wrap: normal; }
+  .tm-in { color: #d8ffe0; }
+  .tm-out-l { color: #7cf59a; }
+  .tm-ok { color: #00ff41; }
+  .tm-err { color: #ff6b6b; text-shadow: none; }
+  .tm-warn { color: #ffd166; text-shadow: none; }
+  .tm-dim { color: #2fa653; }
+  .tm-head { color: #00ff41; font-weight: 700; }
+
+  .tm-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tm-chips button {
+    padding: 0.35rem 0.6rem; font-family: inherit; font-size: 0.74rem; color: #7cf59a;
+    background: rgba(2, 10, 4, 0.8); border: 1px solid #0b4d1d; border-radius: 3px; cursor: pointer;
+  }
+  .tm-chips button:hover { border-color: #00ff41; color: #00ff41; }
+
+  .tm-form { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.6rem; }
+  .tm-form:focus-within { border-color: #00ff41; box-shadow: 0 0 12px rgba(0, 255, 65, 0.25); }
+  .tm-prompt { color: #00ff41; font-size: 0.8rem; white-space: nowrap; }
+  #cmd {
+    flex: 1; min-width: 0; font-family: inherit; font-size: 16px; color: #d8ffe0; caret-color: #00ff41;
+    background: transparent; border: none; outline: none; padding: 0;
+  }
+  #cmd::placeholder { color: #1f7a3c; }
+  .tm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  @media (max-width: 560px) {
+    .tm { padding: 0.5rem 0.55rem; gap: 0.35rem; }
+    .tm-prompt { display: none; }
+    .tm-out, .tm-monitor, .tm-status { font-size: 0.72rem; }
+  }
+  @media (max-height: 560px) { .tm-monitor { display: none; } }
+</style>

@@ -1,5 +1,6 @@
 // Gráfico de velas en canvas, con las líneas de tus posiciones (entrada, stop, objetivo, liquidación).
 import { liqPrice, type Position } from './account';
+import { fmtPrice } from './format';
 import type { AssetDef, AssetState } from './market';
 
 const UP = '#7f9a6a';
@@ -8,9 +9,7 @@ const AMBER = '#e0a23e';
 const TEXT = '#998c76';
 const AXIS_W = 64;
 
-export function fmtPrice(def: AssetDef, p: number): string {
-  return p.toLocaleString('es-CO', { minimumFractionDigits: def.digits, maximumFractionDigits: def.digits });
-}
+export { fmtPrice };
 
 export class Chart {
   private ctx: CanvasRenderingContext2D;
