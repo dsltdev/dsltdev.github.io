@@ -115,6 +115,11 @@ export const MONETIZATION = {
   adsenseBannerSlot: '',
   /** true = Google sirve anuncios de prueba simulados. Úsalo al integrar; apágalo al publicar. */
   adsenseTestMode: false,
+  /**
+   * ¿Se muestran anuncios reales en el casino? Déjalo en false hasta confirmar en el Policy Center de
+   * AdSense que un casino de fichas virtuales es compatible: un rechazo podría afectar a todo el sitio.
+   */
+  casinoAds: false,
   /** Link de donación (Wompi, Buy Me a Coffee, etc.). Vacío = botón oculto. */
   donateUrl: '',
   /** Boost que se obtiene al ver un anuncio con recompensa. */

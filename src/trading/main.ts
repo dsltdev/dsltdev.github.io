@@ -1,7 +1,6 @@
 // Cableado de la Mesa de trading: bucle del mercado, órdenes, posiciones, historial y logros.
 import { hasRewardedAds, initAds, showRewardedAd, track } from '../game/ads';
 import { buzz, isSoundOn, play, setSound, unlock } from '../game/audio';
-import { fmt } from '../game/logic';
 import {
   FEE,
   LIQ_LOSS,
@@ -13,10 +12,8 @@ import {
   canRecharge,
   checkTraderAchievements,
   closePosition,
-  deserializeAccount,
   equity,
   liqPrice,
-  newAccount,
   openPnl,
   openPosition,
   processTick,
@@ -28,12 +25,12 @@ import {
   type Side,
   type Trade
 } from './account';
-import { Chart, fmtPrice } from './chart';
-import { ASSETS, changePct, deserializeMarket, newMarket, stepMarket, type AssetDef } from './market';
+import { Chart } from './chart';
+import { fmtPrice, money, pctText } from './format';
+import { ASSETS, changePct, stepMarket, type AssetDef } from './market';
+import { loadSession, saveSession } from './store';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
-const SAVE_KEY = 'pagos-trader:v1';
-const SPEEDS = [0, 1, 3, 10];
 
 function h<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): HTMLElementTagNameMap[K] {
   const e = document.createElement(tag);
@@ -46,44 +43,13 @@ const defOf = (id: string) => ASSETS.find((a) => a.id === id)!;
 
 // ---------- Formato ----------
 
-const nf = new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-function money(n: number, signed = false): string {
-  const abs = Math.abs(n);
-  if (abs < 0.005) return '$0,00';
-  const body = abs >= 1e6 ? fmt(abs) : nf.format(abs);
-  return `${n < 0 ? '-' : signed ? '+' : ''}$${body}`;
-}
-const pctText = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(1).replace('.', ',')}%`;
 const cls = (n: number) => (n > 0.004 ? 'is-up' : n < -0.004 ? 'is-down' : '');
 
 // ---------- Estado y guardado ----------
 
-function load() {
-  try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (raw) {
-      const d = JSON.parse(raw);
-      const m = deserializeMarket(d.market);
-      const a = deserializeAccount(d.acct);
-      if (m && a) {
-        return {
-          m,
-          a,
-          selected: ASSETS.some((x) => x.id === d.selected) ? (d.selected as string) : 'btc',
-          speed: SPEEDS.includes(d.speed) ? (d.speed as number) : 1
-        };
-      }
-    }
-  } catch {
-    /* sin guardado válido: empieza de cero */
-  }
-  return { m: newMarket(), a: newAccount(), selected: 'btc', speed: 1 };
-}
-
-const loaded = load();
-const market = loaded.m;
-const acct = loaded.a;
+const loaded = loadSession();
+const market = loaded.market;
+const acct = loaded.acct;
 let selected = loaded.selected;
 let speed = loaded.speed;
 let side: Side = 'long';
@@ -91,11 +57,7 @@ let pct = 25;
 let lev = 1;
 
 function save() {
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ market, acct, selected, speed }));
-  } catch {
-    /* sin almacenamiento no se guarda */
-  }
+  saveSession({ market, acct, selected, speed });
 }
 
 // ---------- Avisos en cola ----------

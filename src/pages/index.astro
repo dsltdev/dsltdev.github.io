@@ -11,13 +11,19 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="pi">
     <header class="pi-top">
-      <span class="pi-side"><a class="pi-link" href="/trading">📈 Mesa de trading</a></span>
+      <span class="pi-side"></span>
       <h1 class="pi-title"><span>[</span>Pagos Idle<span>]</span></h1>
       <span class="pi-side pi-side--end">
         <a id="donate" class="pi-link" href="#" target="_blank" rel="noopener" hidden>♥ Apoyar</a>
         <button id="sound" class="pi-icon" type="button" aria-pressed="true" aria-label="Sonido y vibración: activados" title="Sonido y vibración">🔊</button>
       </span>
     </header>
+
+    <nav class="pi-games" aria-label="Más juegos">
+      <a href="/trading">📈 Mesa de trading</a>
+      <a href="/terminal">⌨ Terminal</a>
+      <a href="/casino">🎰 Casino de fichas</a>
+    </nav>
 
     <div class="pi-hud" aria-live="off">
       <div class="pi-stat">
@@ -181,6 +187,9 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-mono);
     font-size: 0.8rem;
   }
+  .pi-games { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin: 0 0 0.75rem; }
+  .pi-games a { padding: 0.3rem 0.7rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 99px; }
+  .pi-games a:hover { color: var(--accent-light); border-color: var(--accent); }
   .pi-title {
     font-family: var(--font-mono);
     font-size: clamp(1.1rem, 3vw, 1.5rem);

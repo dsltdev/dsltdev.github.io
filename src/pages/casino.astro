@@ -1,0 +1,291 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { LEVELS } from '../casino/wallet';
+---
+
+<Layout
+  title="Casino de fichas virtuales — tragamonedas, blackjack y ruleta gratis"
+  description="Casino social gratis con fichas virtuales sin valor real: tragamonedas, blackjack y ruleta con probabilidades publicadas. Solo mayores de 18 años."
+  image="/og-juego.png"
+  siteName="Pagos Idle"
+  depth={false}
+>
+  <main class="cs" data-theme="verde">
+    <header class="cs-top">
+      <span class="cs-side"><a class="cs-link" href="/">← Juego</a></span>
+      <h1 class="cs-title"><span>[</span>Casino de fichas<span>]</span></h1>
+      <span class="cs-side cs-side--end">
+        <button id="sound" class="cs-icon" type="button" aria-pressed="true" aria-label="Sonido y vibración: activados" title="Sonido y vibración">🔊</button>
+      </span>
+    </header>
+
+    <p class="cs-note" role="note">
+      <strong>Fichas virtuales sin valor real.</strong> No se pueden canjear, vender ni transferir, y no hay premios. Solo para mayores de 18 años. Si el juego deja de ser un pasatiempo, <a href="/juego-responsable">busca ayuda</a>.
+    </p>
+
+    <div class="cs-hud">
+      <div class="cs-stat">
+        <span class="cs-label">Fichas</span>
+        <strong id="chips" class="cs-big">10.000</strong>
+      </div>
+      <div class="cs-stat">
+        <span class="cs-label">Nivel</span>
+        <strong id="level" class="cs-mid">Bronce</strong>
+        <span class="cs-bar" aria-hidden="true"><i id="level-bar"></i></span>
+        <span id="level-next" class="cs-sub"></span>
+      </div>
+      <div class="cs-stat">
+        <span class="cs-label">Sesión</span>
+        <strong id="session" class="cs-mid">0:00</strong>
+      </div>
+      <button id="daily" class="btn btn-secondary cs-daily" type="button">🎁 Regalo del día</button>
+    </div>
+
+    <div class="cs-tabs" role="tablist" aria-label="Juegos">
+      <button role="tab" id="tab-slots" aria-controls="panel-slots" aria-selected="true" data-tab="slots">Tragamonedas</button>
+      <button role="tab" id="tab-blackjack" aria-controls="panel-blackjack" aria-selected="false" data-tab="blackjack">Blackjack</button>
+      <button role="tab" id="tab-roulette" aria-controls="panel-roulette" aria-selected="false" data-tab="roulette">Ruleta</button>
+      <button role="tab" id="tab-info" aria-controls="panel-info" aria-selected="false" data-tab="info">Mi cuenta</button>
+    </div>
+
+    <div id="broke" class="cs-card cs-broke" hidden>
+      <h2>Te quedaste sin fichas suficientes</h2>
+      <p>Pasa. Son fichas virtuales: puedes seguir jugando sin que cueste nada.</p>
+      <div class="cs-actions">
+        <button id="broke-ad" class="btn btn-primary" type="button" hidden>▶ Ver anuncio y recibir 5.000</button>
+        <button id="broke-daily" class="btn btn-secondary" type="button" hidden>🎁 Regalo del día</button>
+        <button id="broke-reset" class="btn btn-secondary" type="button">Reiniciar con 10.000 fichas</button>
+      </div>
+    </div>
+
+    <div id="panel-slots" role="tabpanel" aria-labelledby="tab-slots" class="cs-panel"></div>
+    <div id="panel-blackjack" role="tabpanel" aria-labelledby="tab-blackjack" class="cs-panel" hidden></div>
+    <div id="panel-roulette" role="tabpanel" aria-labelledby="tab-roulette" class="cs-panel" hidden></div>
+
+    <div id="panel-info" role="tabpanel" aria-labelledby="tab-info" class="cs-panel cs-info" hidden>
+      <div class="cs-card">
+        <h2>Probabilidades publicadas</h2>
+        <p class="cs-small">Lo que a largo plazo devuelve cada juego. Siempre hay más fichas que pierdes de las que ganas: la casa tiene ventaja.</p>
+        <p class="cs-row"><span>Tragamonedas</span><strong id="rtp-slots">—</strong></p>
+        <p class="cs-row"><span>Blackjack (estrategia básica)</span><strong>≈ 99,5 %</strong></p>
+        <p class="cs-row"><span>Ruleta europea</span><strong>97,30 %</strong></p>
+      </div>
+
+      <div class="cs-card">
+        <h2>Tu progreso</h2>
+        <p class="cs-row"><span>Giros de tragamonedas</span><strong id="st-spins">0</strong></p>
+        <p class="cs-row"><span>Manos de blackjack</span><strong id="st-hands">0</strong></p>
+        <p class="cs-row"><span>Giros de ruleta</span><strong id="st-rounds">0</strong></p>
+        <p class="cs-row"><span>Fichas apostadas</span><strong id="st-wagered">0</strong></p>
+        <p class="cs-row"><span>Mayor ganancia en una jugada</span><strong id="st-big">0</strong></p>
+        <h3 class="cs-h3">Niveles</h3>
+        <ul class="cs-levels">
+          {LEVELS.map((l) => <li data-theme-of={l.theme}><strong>{l.name}</strong><span>desde {l.min.toLocaleString('es-CO')} fichas apostadas · mesa {l.theme}</span></li>)}
+        </ul>
+        <label class="cs-field" for="theme">Color de la mesa (solo decorativo)</label>
+        <select id="theme"></select>
+      </div>
+
+      <div class="cs-card">
+        <h2>Juego responsable</h2>
+        <p class="cs-small">Aunque las fichas no valen dinero, jugar mucho tiempo también cansa. Puedes ponerte una pausa: el casino se bloquea hasta que termine y no se puede acortar.</p>
+        <div class="cs-actions">
+          <button class="btn btn-secondary" type="button" data-break="15">Pausa de 15 min</button>
+          <button class="btn btn-secondary" type="button" data-break="60">Pausa de 1 hora</button>
+          <button class="btn btn-secondary" type="button" data-break="1440">Pausa de 24 horas</button>
+        </div>
+        <p class="cs-small">Te avisamos cada 30 minutos de sesión. Más información en <a href="/juego-responsable">Juego responsable</a>.</p>
+      </div>
+    </div>
+
+    <footer class="cs-footer">
+      <span>Casino social · fichas sin valor real · +18</span>
+      <nav aria-label="Información legal">
+        <a href="/juego-responsable">Juego responsable</a>
+        <a href="/privacy">Privacidad</a>
+        <a href="/terms">Términos</a>
+      </nav>
+    </footer>
+  </main>
+
+  <div id="toast" class="cs-toast" role="status" aria-live="polite"></div>
+
+  <dialog id="age-dialog" class="cs-dialog" aria-labelledby="age-title">
+    <h2 id="age-title">Solo para mayores de 18 años</h2>
+    <p>Este casino usa <strong>fichas virtuales sin ningún valor real</strong>: no se pueden canjear por dinero ni premios y no hay nada que ganar fuera del juego.</p>
+    <p>Aun así, es un juego de azar simulado y está pensado solo para personas adultas.</p>
+    <div class="cs-actions">
+      <button id="age-yes" class="btn btn-primary" type="button">Tengo 18 años o más</button>
+      <a id="age-no" class="btn btn-outline" href="/">Soy menor de 18</a>
+    </div>
+  </dialog>
+
+  <dialog id="break-dialog" class="cs-dialog" aria-labelledby="break-title">
+    <h2 id="break-title">Estás en una pausa</h2>
+    <p>Decidiste descansar. El casino volverá a abrirse en:</p>
+    <p id="break-left" class="cs-count">0:00</p>
+    <a class="btn btn-outline" href="/">Volver al juego principal</a>
+  </dialog>
+
+  <dialog id="ad-dialog" class="cs-dialog" aria-labelledby="ad-title">
+    <h2 id="ad-title">Anuncio simulado</h2>
+    <p>Modo de prueba: así se verá la espera antes de la recompensa.</p>
+    <p class="cs-count"><span data-ad-count>5</span></p>
+    <button class="btn btn-outline" data-ad-close>Cerrar sin recompensa</button>
+  </dialog>
+</Layout>
+
+<script>
+  import '../casino/main';
+</script>
+
+<style is:global>
+  .cs { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+  .cs [hidden] { display: none !important; }
+
+  .cs[data-theme='verde'] { --felt: #0f3b26; --felt2: #0a2a1b; --edge: #2a8a58; }
+  .cs[data-theme='azul'] { --felt: #0f2f4a; --felt2: #0a2236; --edge: #2a6fa8; }
+  .cs[data-theme='vino'] { --felt: #4a1522; --felt2: #33101a; --edge: #a83a52; }
+  .cs[data-theme='negro'] { --felt: #1d1d1d; --felt2: #111; --edge: #666; }
+  .cs[data-theme='dorado'] { --felt: #4a3a10; --felt2: #33270a; --edge: #c9a227; }
+
+  .cs-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.5rem 0 0.75rem; }
+  .cs-side { flex: 1; }
+  .cs-side--end { display: flex; justify-content: flex-end; }
+  .cs-link { font-family: var(--font-mono); font-size: 0.8rem; white-space: nowrap; }
+  .cs-title { font-family: var(--font-mono); font-size: clamp(1.05rem, 3vw, 1.5rem); text-align: center; }
+  .cs-title span { color: var(--accent); opacity: 0.7; margin: 0 0.25rem; }
+  .cs-icon { width: 2.25rem; height: 2.25rem; font-size: 1.05rem; line-height: 1; color: var(--text); background: var(--surface2); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); cursor: pointer; }
+  .cs-icon[aria-pressed='false'] { opacity: 0.6; }
+
+  .cs-note { font-size: 0.82rem; line-height: 1.55; padding: 0.6rem 0.8rem; margin-bottom: 0.75rem; border-left: 3px solid var(--warning); background: var(--surface); color: var(--text); }
+  .cs-note strong { color: var(--accent-light); }
+
+  .cs-hud { display: grid; grid-template-columns: 1.3fr 1.2fr 0.8fr auto; gap: 0.5rem 1.25rem; align-items: center; padding: 0.7rem 1rem; margin-bottom: 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .cs-stat { display: flex; flex-direction: column; min-width: 0; }
+  .cs-label { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .cs-big { font-family: var(--font-mono); font-size: clamp(1.4rem, 5vw, 2.1rem); line-height: 1.1; color: var(--accent-light); font-variant-numeric: tabular-nums; }
+  .cs-mid { font-family: var(--font-mono); font-size: 1rem; font-variant-numeric: tabular-nums; }
+  .cs-sub { font-family: var(--font-mono); font-size: 0.64rem; color: var(--muted); }
+  .cs-bar { display: block; height: 4px; margin: 0.25rem 0 0.1rem; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .cs-bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+  .cs-daily { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
+  .cs-daily:disabled { opacity: 0.5; cursor: default; }
+
+  .cs-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 0.75rem; overflow-x: auto; }
+  .cs-tabs button { flex: 1; min-width: max-content; padding: 0.75rem 0.7rem; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; color: var(--muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; }
+  .cs-tabs button[aria-selected='true'] { color: var(--accent-light); border-bottom-color: var(--accent); }
+  .cs-tabs button[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; }
+  .cs-tabs button:focus-visible, .cs-icon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .cs-panel { padding: 1rem; border: 1px solid var(--edge); border-radius: var(--radius); background: linear-gradient(180deg, var(--felt), var(--felt2)); }
+  .cs-info { background: none; border-color: var(--border); display: grid; gap: 0.75rem; padding: 0.75rem; }
+
+  .cs-card { padding: 0.9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); }
+  .cs-card h2 { font-family: var(--font-mono); font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--accent-light); }
+  .cs-card p { font-size: 0.85rem; line-height: 1.5; margin-bottom: 0.5rem; }
+  .cs-broke { margin-bottom: 0.75rem; border-color: var(--warning); }
+  .cs-h3 { font-family: var(--font-mono); font-size: 0.85rem; margin: 0.9rem 0 0.4rem; color: var(--accent-light); }
+  .cs-small { font-size: 0.78rem !important; color: var(--muted); }
+  .cs-row { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--border); padding-bottom: 0.25rem; }
+  .cs-row strong { font-family: var(--font-mono); color: var(--accent-light); }
+  .cs-levels { list-style: none; padding: 0; display: grid; gap: 0.35rem; font-size: 0.8rem; }
+  .cs-levels li { display: flex; flex-direction: column; opacity: 0.55; }
+  .cs-levels li.is-on { opacity: 1; }
+  .cs-levels span { color: var(--muted); font-size: 0.72rem; }
+  .cs-field { display: block; margin: 0.9rem 0 0.3rem; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  #theme { width: 100%; padding: 0.5rem; font-family: var(--font-mono); color: var(--text); background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+
+  /* Elementos comunes de los juegos */
+  .cs-msg { min-height: 2.6em; margin: 0.6rem 0; font-size: 0.9rem; line-height: 1.5; text-align: center; color: #f4ead4; }
+  .cs-label + .cs-chips, .cs-chips { margin-top: 0.3rem; }
+  .cs-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+  .cs-chips button { min-width: 3.6rem; padding: 0.5rem 0.7rem; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: #f4ead4; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(244, 234, 212, 0.35); border-radius: 99px; cursor: pointer; }
+  .cs-chips button[aria-pressed='true'] { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+  .cs-chips button:focus-visible, .cs-cell:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .cs-panel .cs-label { text-align: center; margin-top: 0.6rem; color: rgba(244, 234, 212, 0.75); }
+  .cs-main-btn { display: block; width: 100%; max-width: 360px; margin: 0.9rem auto 0; padding: 0.9rem 1rem; font-size: 1rem; }
+  .cs-main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cs-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.6rem; }
+  .cs-actions .btn { padding: 0.65rem 1rem; font-size: 0.82rem; }
+  .cs-actions .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .cs-details { margin-top: 1rem; font-size: 0.82rem; color: #f4ead4; }
+  .cs-details summary { cursor: pointer; font-family: var(--font-mono); font-weight: 600; padding: 0.3rem 0; }
+  .cs-details p, .cs-rules { color: rgba(244, 234, 212, 0.85); line-height: 1.55; margin: 0.4rem 0; }
+  .cs-rules { padding-left: 1.2rem; }
+
+  /* Tragamonedas */
+  .cs-slot-canvas { display: block; width: 100%; max-width: 420px; aspect-ratio: 1; margin: 0 auto; border: 2px solid var(--edge); border-radius: var(--radius); background: #120d07; }
+  .cs-pay { display: grid; gap: 0.35rem; margin-top: 0.4rem; }
+  .cs-pay-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+  .cs-pay-row strong { margin-left: auto; font-family: var(--font-mono); color: var(--accent-light); }
+  .cs-pay-icon { width: 30px; height: 30px; border-radius: 4px; flex: none; }
+
+  /* Blackjack */
+  .cs-bj-box { padding: 0.6rem; margin-bottom: 0.6rem; border: 1px solid rgba(244, 234, 212, 0.2); border-radius: var(--radius); background: rgba(0, 0, 0, 0.18); min-height: 7.5rem; }
+  .cs-bj-box.is-active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(224, 162, 62, 0.25); }
+  .cs-bj-head { display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; align-items: center; margin-bottom: 0.4rem; font-family: var(--font-mono); font-size: 0.78rem; color: #f4ead4; }
+  .cs-cards { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .cs-pc-r, .cs-pc-s { line-height: 1.05; }
+  .cs-pc { position: relative; display: flex; flex-direction: column; align-items: flex-start; width: 3.4rem; height: 4.8rem; padding: 0.3rem 0.4rem; font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: #1c1712; background: #f8f1df; border-radius: 6px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); }
+  .cs-pc.cs-pc-red { color: #b8402f; }
+  .cs-pc .cs-pc-s { font-size: 1.5rem; margin-top: auto; align-self: flex-end; }
+  .cs-pc--back { background: repeating-linear-gradient(45deg, #2a4f86, #2a4f86 6px, #1c3a66 6px, #1c3a66 12px); border: 2px solid #f8f1df; }
+  .cs-deal { animation: cs-deal 0.35s var(--ease-out) both; }
+  @keyframes cs-deal { from { opacity: 0; transform: translateY(-18px) rotate(-6deg); } to { opacity: 1; transform: none; } }
+  .cs-badge { padding: 0.05rem 0.5rem; border-radius: 99px; font-size: 0.7rem; color: #10180b; background: #9bd0a5; }
+  .cs-badge--lose, .cs-badge--bust { color: #1d0d09; background: #d0745c; }
+  .cs-badge--push { background: #d9c9a4; }
+  .cs-badge--blackjack { background: var(--accent-light); }
+
+  /* Ruleta */
+  .cs-wheel { display: block; width: min(100%, 300px); aspect-ratio: 1; margin: 0 auto; }
+  .cs-results { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: center; min-height: 1.8rem; margin-top: 0.5rem; }
+  .cs-pill { min-width: 1.7rem; padding: 0.1rem 0.4rem; text-align: center; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; color: #f4ead4; border-radius: 99px; border: 1px solid rgba(244, 234, 212, 0.4); }
+  .cs-red { background: #b8402f; }
+  .cs-black { background: #1c1712; }
+  .cs-green { background: #2f7a4a; }
+  .cs-board { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.6rem; }
+  .cs-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .cs-outside { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 0.3rem; }
+  .cs-cell { position: relative; padding: 0.55rem 0.2rem; font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem; color: #f4ead4; border: 1px solid rgba(244, 234, 212, 0.35); border-radius: 4px; cursor: pointer; }
+  .cs-cell.cs-out:not(.cs-red):not(.cs-black) { background: rgba(0, 0, 0, 0.3); font-size: 0.74rem; }
+  .cs-cell:hover { border-color: #fff; }
+  .cs-cell.is-win { box-shadow: 0 0 0 3px var(--accent-light), 0 0 14px var(--accent); }
+  .cs-stake { position: absolute; top: -6px; right: -4px; padding: 0 0.35rem; font-size: 0.66rem; color: var(--accent-ink); background: var(--accent-light); border-radius: 99px; }
+  .cs-total { text-align: center; font-family: var(--font-mono); font-size: 0.85rem; color: #f4ead4; margin-top: 0.6rem; }
+  @media (min-width: 760px) {
+    .cs-board { flex-direction: row; align-items: stretch; }
+    .cs-zero { flex: 0 0 3rem; }
+    .cs-nums { flex: 1; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(3, auto); }
+    .cs-nums .cs-cell { grid-row: var(--r); grid-column: var(--c); }
+    .cs-outside { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  .cs-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+  .cs-footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .cs-footer a { color: var(--muted); }
+  .cs-footer a:hover { color: var(--accent-light); }
+
+  .cs-toast { position: fixed; left: 50%; bottom: 1.25rem; transform: translate(-50%, 1rem); z-index: 40; max-width: min(92vw, 420px); padding: 0.7rem 1rem; font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-ink); background: var(--accent-light); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none; transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out); }
+  .cs-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+  .cs-dialog { margin: auto; padding: 1.5rem; max-width: min(92vw, 420px); text-align: center; color: var(--text); background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius-lg); }
+  .cs-dialog::backdrop { background: rgba(0, 0, 0, 0.85); }
+  .cs-dialog h2 { font-family: var(--font-mono); margin-bottom: 0.6rem; }
+  .cs-dialog p { font-size: 0.88rem; color: var(--muted); line-height: 1.55; margin-bottom: 0.6rem; }
+  .cs-dialog p strong { color: var(--accent-light); }
+  .cs-count { font-family: var(--font-mono); font-size: 2.6rem; color: var(--accent-light) !important; margin: 0.6rem 0; }
+
+  @media (max-width: 640px) {
+    .cs { padding: 0.5rem 0.75rem 2rem; }
+    .cs-hud { grid-template-columns: 1.2fr 1fr 0.8fr; gap: 0.4rem 0.8rem; padding: 0.55rem 0.7rem; }
+    .cs-daily { grid-column: 1 / -1; }
+    .cs-tabs button { padding: 0.7rem 0.45rem; font-size: 0.74rem; }
+    .cs-panel { padding: 0.7rem; }
+    .cs-pc { width: 3rem; height: 4.3rem; font-size: 0.95rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs-toast { transition: none; }
+    .cs-deal { animation: none; }
+  }
+</style>
