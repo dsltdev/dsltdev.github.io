@@ -1,0 +1,441 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Práctica del DOM — ejercicios con comprobación automática"
+  description="Ejercicios para aprender a manejar el DOM con JavaScript: escribe tu código, ejecútalo y comprueba al instante si está bien."
+  siteName="Pagos Idle"
+  noindex={true}
+  depth={false}
+>
+  <main class="pd">
+    <header class="pd-top">
+      <a class="pd-back" href="/">← Volver al juego</a>
+      <h1><span>[</span>Práctica del DOM<span>]</span></h1>
+      <p class="pd-lead">
+        Doce ejercicios, de menos a más. Escribe tu código, pulsa <strong>Ejecutar</strong> y la página comprueba si
+        lo lograste. Tu progreso y tu código se guardan en este navegador.
+      </p>
+      <div id="pd-progress" class="pd-progress" role="progressbar" aria-label="Progreso" aria-valuemin="0" aria-valuenow="0" aria-valuemax="12">
+        <div id="pd-bar" class="pd-bar"></div>
+      </div>
+      <p id="pd-progress-text" class="pd-small" aria-live="polite"></p>
+    </header>
+
+    <nav id="pd-nav" class="pd-nav" aria-label="Ejercicios"></nav>
+
+    <section class="pd-ex" aria-labelledby="pd-title">
+      <p id="pd-nivel" class="pd-nivel"></p>
+      <h2 id="pd-title" class="pd-h2"></h2>
+      <p id="pd-concepto" class="pd-concepto"></p>
+
+      <h3>Qué tienes que lograr</h3>
+      <ol id="pd-pasos" class="pd-pasos"></ol>
+
+      <div class="pd-cols">
+        <div class="pd-col">
+          <h3>HTML de partida</h3>
+          <pre class="pd-pre"><code id="pd-html"></code></pre>
+
+          <h3><label for="pd-code">Tu código (JavaScript)</label></h3>
+          <textarea
+            id="pd-code"
+            class="pd-editor"
+            rows="12"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            aria-describedby="pd-editor-help"></textarea>
+          <p id="pd-editor-help" class="pd-small">
+            Ctrl + Enter ejecuta. Tab inserta espacios; pulsa Esc y luego Tab para salir del cuadro.
+          </p>
+
+          <div class="pd-actions">
+            <button id="pd-run" class="pd-btn pd-btn--main" type="button">▶ Ejecutar</button>
+            <button id="pd-btn-hint" class="pd-btn" type="button">Pista</button>
+            <button id="pd-btn-solution" class="pd-btn" type="button" aria-expanded="false" aria-controls="pd-solution">Ver solución</button>
+            <button id="pd-btn-reset" class="pd-btn" type="button">Restaurar</button>
+          </div>
+          <p id="pd-hint" class="pd-hint" role="status" hidden></p>
+          <div id="pd-solution" class="pd-solution" hidden>
+            <h3>Una forma de resolverlo</h3>
+            <pre class="pd-pre"><code id="pd-solution-code"></code></pre>
+            <p class="pd-small">Hay muchas soluciones válidas. Lo importante es que la tuya pase las comprobaciones.</p>
+          </div>
+        </div>
+
+        <div class="pd-col">
+          <h3>Vista previa</h3>
+          <iframe id="pd-frame" class="pd-frame" sandbox="allow-scripts" title="Vista previa del ejercicio"></iframe>
+
+          <h3>Resultado</h3>
+          <div id="pd-result" class="pd-result" role="status" aria-live="polite"></div>
+
+          <h3>Consola</h3>
+          <pre id="pd-console" class="pd-console"></pre>
+
+          <p id="pd-tucodigo" class="pd-tucodigo" hidden></p>
+          <p class="pd-small"><a id="pd-mdn" href="https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model" target="_blank" rel="noopener noreferrer" hidden></a></p>
+        </div>
+      </div>
+
+      <div class="pd-pager">
+        <button id="pd-prev" class="pd-btn" type="button">← Anterior</button>
+        <button id="pd-next" class="pd-btn pd-btn--main" type="button">Siguiente →</button>
+      </div>
+    </section>
+
+    <footer class="pd-foot">
+      <p class="pd-small">
+        Tu código se ejecuta en un recuadro aislado de tu navegador: no se envía a ningún servidor ni puede tocar tus partidas del juego.
+        La interfaz de esta página está en <code>src/practica/main.ts</code>: léela, es otro ejemplo de DOM real.
+      </p>
+      <button id="pd-clear" class="pd-link" type="button">Borrar mi progreso</button>
+    </footer>
+  </main>
+</Layout>
+
+<script>
+  import '../practica/main';
+</script>
+
+<style is:global>
+  .pd {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+  }
+  .pd h1 {
+    font-family: var(--font-mono);
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 0.4rem 0 0.5rem;
+  }
+  .pd h1 span {
+    color: var(--accent);
+  }
+  .pd h3 {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.1rem 0 0.4rem;
+  }
+  .pd-h2 {
+    font-family: var(--font-mono);
+    font-size: clamp(1.15rem, 3vw, 1.5rem);
+    margin: 0.1rem 0 0.6rem;
+  }
+  .pd code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--accent-light);
+  }
+  .pd-back {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .pd-back:hover {
+    text-decoration: underline;
+  }
+  .pd-lead {
+    color: var(--muted);
+    max-width: 62ch;
+  }
+  .pd-small {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0.35rem 0 0;
+  }
+
+  .pd-progress {
+    height: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 0.9rem;
+  }
+  .pd-bar {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.3s var(--ease-out);
+  }
+
+  .pd-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1rem 0 0.5rem;
+  }
+  .pd-nav-btn {
+    min-width: 2.4rem;
+    min-height: 2.4rem;
+    padding: 0 0.6rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .pd-nav-btn:hover {
+    border-color: var(--accent-dim);
+  }
+  .pd-nav-btn.is-done {
+    color: var(--success);
+    border-color: var(--success);
+  }
+  .pd-nav-btn.is-done::after {
+    content: ' ✓';
+  }
+  .pd-nav-btn[aria-current='step'] {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .pd-ex {
+    margin-top: 0.5rem;
+    padding: 1.1rem 1.1rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .pd-nivel {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin: 0;
+  }
+  .pd-concepto {
+    max-width: 70ch;
+  }
+  .pd-pasos {
+    margin: 0.2rem 0 0;
+    padding-left: 1.3rem;
+  }
+  .pd-pasos li {
+    margin: 0.25rem 0;
+  }
+
+  .pd-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0 1.4rem;
+  }
+  @media (min-width: 900px) {
+    .pd-cols {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    }
+  }
+  .pd-col {
+    min-width: 0;
+  }
+
+  .pd-pre {
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    font-size: 0.85rem;
+    tab-size: 2;
+  }
+  .pd-pre code {
+    color: var(--text);
+  }
+  .pd-editor {
+    display: block;
+    width: 100%;
+    min-height: 14rem;
+    padding: 0.7rem 0.85rem;
+    font-family: var(--font-mono);
+    /* 16px: evita el zoom automático de iOS al tocar el cuadro */
+    font-size: 16px;
+    line-height: 1.5;
+    tab-size: 2;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    resize: vertical;
+  }
+  .pd-editor:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .pd-actions,
+  .pd-pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+  .pd-pager {
+    justify-content: space-between;
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .pd-btn {
+    min-height: 2.6rem;
+    padding: 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .pd-btn:hover:not(:disabled) {
+    border-color: var(--accent-dim);
+  }
+  .pd-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .pd-btn--main {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .pd-btn--main:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .pd-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: none;
+    border: 0;
+    padding: 0.4rem 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .pd-hint {
+    margin: 0.7rem 0 0;
+    padding: 0.6rem 0.8rem;
+    background: var(--glass-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+  .pd-solution {
+    margin-top: 0.4rem;
+  }
+
+  .pd-frame {
+    display: block;
+    width: 100%;
+    height: 230px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: #1c1712;
+  }
+  .pd-result {
+    min-height: 3rem;
+  }
+  .pd-result p {
+    margin: 0.4rem 0 0;
+  }
+  .pd-checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pd-checks li {
+    padding: 0.3rem 0.6rem;
+    margin: 0.25rem 0;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    background: var(--surface2);
+  }
+  .pd-checks li.ok {
+    color: var(--success);
+    border-left: 3px solid var(--success);
+  }
+  .pd-checks li.bad {
+    color: #e0b6a8;
+    border-left: 3px solid var(--danger);
+  }
+  .pd-ok {
+    color: var(--success);
+    font-weight: 600;
+  }
+  .pd-error {
+    color: #e0b6a8;
+    padding: 0.5rem 0.7rem;
+    background: var(--danger-glow);
+    border-left: 3px solid var(--danger);
+    border-radius: var(--radius-sm);
+    overflow-wrap: anywhere;
+  }
+  .pd-warn {
+    color: var(--accent-light);
+  }
+  .pd-dim {
+    color: var(--muted);
+  }
+  .pd-console {
+    margin: 0;
+    padding: 0.6rem 0.8rem;
+    min-height: 3.4rem;
+    max-height: 11rem;
+    overflow: auto;
+    font-size: 0.85rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .pd-c-err {
+    color: #e0b6a8;
+  }
+  .pd-c-warn {
+    color: var(--accent-light);
+  }
+  .pd-tucodigo {
+    margin: 1.1rem 0 0;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+  .pd-foot {
+    margin-top: 1.6rem;
+  }
+
+  @media (max-width: 560px) {
+    .pd {
+      padding: 0.6rem 0.75rem 2.5rem;
+    }
+    .pd-ex {
+      padding: 0.9rem 0.8rem 1.1rem;
+    }
+    .pd-btn {
+      flex: 1 1 auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pd-bar {
+      transition: none;
+    }
+  }
+</style>
