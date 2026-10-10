@@ -142,6 +142,41 @@ const ld = {
       </div>
     </section>
 
+    <section class="sv-libro" aria-labelledby="h-libro">
+      <div class="sv-wrap">
+        <figure class="sv-libro-fig">
+          <div class="sv-libro-head">
+            <h2 id="h-libro" class="sv-libro-title">Partida doble</h2>
+            <button type="button" class="sv-libro-btn" id="sv-libro-btn" aria-pressed="true" aria-label="Pausar la animación">
+              <span aria-hidden="true" id="sv-libro-ico">❚❚</span>
+              <span id="sv-libro-txt">Pausar</span>
+            </button>
+          </div>
+          <div class="sv-libro-lienzo">
+            <canvas
+              id="sv-libro-canvas"
+              role="img"
+              aria-label="Animación generativa: pares de hilos ámbar y azul que se trenzan como imágenes especulares y se cancelan en una línea de cierre; de vez en cuando un hilo rojo sin pareja cruza la línea y queda a la deriva."
+            ></canvas>
+          </div>
+          <div class="sv-libro-pie">
+            <ul class="sv-leyenda" aria-label="Leyenda">
+              <li><i class="sv-d sv-d--deb"></i>Débito</li>
+              <li><i class="sv-d sv-d--cre"></i>Crédito</li>
+              <li><i class="sv-d sv-d--orf"></i>Sin pareja</li>
+            </ul>
+            <p class="sv-libro-cuenta" aria-hidden="true">
+              <span id="sv-libro-cerr">0</span> cierres · <span id="sv-libro-orf">0</span> sin pareja
+            </p>
+          </div>
+          <figcaption class="sv-libro-cap">
+            En un libro sano todo se cancela. Lo que revisa una auditoría es lo que no cierra: el cobro duplicado, el
+            webhook perdido, el reintento que nadie vio.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
     <section class="sv-sec" aria-labelledby="h-revisiones">
       <div class="sv-wrap">
         <h2 id="h-revisiones" class="sv-h2">Lo que busco en tu integración</h2>
@@ -294,6 +329,8 @@ const ld = {
 </Layout>
 
 <script>
+  import { montarLibro } from '../landing/libro';
+
   // Mide qué botón se toca (Plausible no usa cookies). Si la analítica no cargó, no pasa nada.
   type Plausible = (evento: string, opciones?: { props?: Record<string, string> }) => void;
   document.addEventListener('click', (e) => {
@@ -305,6 +342,37 @@ const ld = {
       /* sin analítica el botón funciona igual */
     }
   });
+
+  // Banda "Partida doble": arte generativo (ver docs/partida-doble.md). Respeta "reducir movimiento".
+  const lienzo = document.getElementById('sv-libro-canvas') as HTMLCanvasElement | null;
+  const btn = document.getElementById('sv-libro-btn') as HTMLButtonElement | null;
+  if (lienzo && btn) {
+    const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ico = document.getElementById('sv-libro-ico');
+    const txt = document.getElementById('sv-libro-txt');
+    const cerr = document.getElementById('sv-libro-cerr');
+    const orf = document.getElementById('sv-libro-orf');
+    const pintarBoton = (on: boolean) => {
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', on ? 'Pausar la animación' : 'Reanudar la animación');
+      if (ico) ico.textContent = on ? '❚❚' : '▶';
+      if (txt) txt.textContent = on ? 'Pausar' : 'Animar';
+    };
+    pintarBoton(!quieto);
+    const libro = montarLibro(lienzo, {
+      reducedMotion: quieto,
+      onStats: (c, s) => {
+        if (cerr) cerr.textContent = String(c);
+        if (orf) orf.textContent = String(s);
+      },
+      onPlayingChange: pintarBoton
+    });
+    let activo = !quieto;
+    btn.addEventListener('click', () => {
+      activo = !activo;
+      libro.setPlaying(activo);
+    });
+  }
 </script>
 
 <style>
@@ -372,6 +440,119 @@ const ld = {
     .sv-nav {
       display: flex;
     }
+  }
+
+  /* Banda de arte generativo: "Partida doble" */
+  .sv-libro {
+    padding-block: 0 clamp(2rem, 5vw, 3.5rem);
+  }
+  .sv-libro-fig {
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .sv-libro-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.9rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .sv-libro-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sv-libro-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .sv-libro-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent-light);
+  }
+  .sv-libro-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sv-libro-lienzo {
+    width: 100%;
+    line-height: 0;
+  }
+  .sv-libro-lienzo canvas {
+    display: block;
+    width: 100%;
+    min-height: 210px;
+  }
+  .sv-libro-pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem 1.25rem;
+    padding: 0.55rem 0.9rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .sv-leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sv-leyenda li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .sv-d {
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+  .sv-d--deb {
+    background: #e0a23e;
+  }
+  .sv-d--cre {
+    background: #6fb3c7;
+  }
+  .sv-d--orf {
+    background: #ef6a4a;
+  }
+  .sv-libro-cuenta {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .sv-libro-cap {
+    margin: 0;
+    padding: 0.8rem 0.9rem 0.95rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--muted);
   }
 
   /* Hero */
