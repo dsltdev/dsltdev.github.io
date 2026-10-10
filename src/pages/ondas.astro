@@ -1,0 +1,437 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Ondas y frecuencias — simulador con sonido"
+  description="Simulador interactivo de ondas: frecuencia, amplitud, fase, formas de onda, armónicos, pulsaciones e interferencia, con osciloscopio, espectro y sonido en el navegador."
+  siteName="Ondas y frecuencias"
+  noindex={true}
+  depth={false}
+>
+  <main class="wv">
+    <header class="wv-top">
+      <a class="wv-back" href="/">← Volver al juego</a>
+      <h1><span>[</span>Ondas y frecuencias<span>]</span></h1>
+      <p class="wv-lead">
+        Mezcla dos ondas, míralas en el osciloscopio y escúchalas. Cambia la frecuencia, la amplitud, la forma y la
+        fase, y descubre las pulsaciones, los armónicos y la cancelación.
+      </p>
+    </header>
+
+    <section class="wv-card" aria-labelledby="wv-h-ejemplos">
+      <h2 id="wv-h-ejemplos" class="wv-h">Ejemplos para empezar</h2>
+      <div id="wv-presets" class="wv-presets" role="group" aria-label="Ejemplos"></div>
+      <p id="wv-preset-desc" class="wv-small" aria-live="polite"></p>
+    </section>
+
+    <section class="wv-card" aria-labelledby="wv-h-scope">
+      <h2 id="wv-h-scope" class="wv-h">Osciloscopio</h2>
+      <canvas id="wv-scope" class="wv-canvas wv-canvas--scope" role="img" aria-label="Osciloscopio"></canvas>
+      <div class="wv-tiempo">
+        <label for="wv-win">Ventana de tiempo</label>
+        <input id="wv-win" type="range" min="0" max="1000" step="1" />
+        <output id="wv-win-out" for="wv-win" class="wv-out wv-out--ancho"></output>
+        <button id="wv-auto" class="wv-btn" type="button">Ajustar</button>
+        <label class="wv-check"><input id="wv-anim" type="checkbox" /> Animar</label>
+      </div>
+    </section>
+
+    <div id="wv-osc" class="wv-osc"></div>
+
+    <section class="wv-card" aria-labelledby="wv-h-info">
+      <h2 id="wv-h-info" class="wv-h">Qué está pasando</h2>
+      <ul id="wv-info" class="wv-info"></ul>
+    </section>
+
+    <section class="wv-card" aria-labelledby="wv-h-spec">
+      <h2 id="wv-h-spec" class="wv-h">Espectro</h2>
+      <canvas id="wv-spec" class="wv-canvas wv-canvas--spec" role="img" aria-label="Espectro: amplitud de cada armónico según su frecuencia, en escala logarítmica"></canvas>
+      <p class="wv-small">
+        Cada barra es un armónico: una onda senoidal pura tiene una sola; la cuadrada, la triangular y la de sierra
+        son sumas de senos de frecuencias múltiplos de la fundamental. El eje de frecuencias es logarítmico.
+      </p>
+    </section>
+
+    <section class="wv-card wv-sound" aria-labelledby="wv-h-sound">
+      <h2 id="wv-h-sound" class="wv-h">Sonido</h2>
+      <div class="wv-sound-row">
+        <button id="wv-sound" class="wv-btn wv-btn--main" type="button" aria-pressed="false">🔊 Activar sonido</button>
+        <label for="wv-vol">Volumen</label>
+        <input id="wv-vol" type="range" min="0" max="100" step="1" />
+        <output id="wv-vol-out" for="wv-vol" class="wv-out"></output>
+      </div>
+      <p id="wv-sound-state" class="wv-small" role="status" aria-live="polite"></p>
+      <p class="wv-aviso">
+        Empieza con el volumen bajo y súbelo despacio. Las frecuencias muy agudas pueden resultar molestas y los
+        sonidos fuertes dañan el oído. Si usas audífonos, con más razón.
+      </p>
+    </section>
+
+    <details class="wv-card wv-ayuda">
+      <summary>¿Qué estoy viendo? Conceptos clave</summary>
+      <ul>
+        <li><strong>Frecuencia</strong>: cuántos ciclos hace la onda por segundo (Hz). Más frecuencia, sonido más agudo. 440 Hz es la nota La.</li>
+        <li><strong>Amplitud</strong>: qué tan alta es la onda. Más amplitud, sonido más fuerte.</li>
+        <li><strong>Periodo</strong>: lo que dura un ciclo, T = 1 ÷ f. A 440 Hz son 2,27 milisegundos.</li>
+        <li><strong>Longitud de onda</strong>: la distancia que recorre el sonido en un ciclo, λ = v ÷ f, con v ≈ 343 m/s en el aire.</li>
+        <li><strong>Forma de onda</strong>: la misma nota suena distinta según la forma (el timbre), porque cambia la mezcla de armónicos.</li>
+        <li><strong>Superposición</strong>: cuando dos ondas coinciden, sus valores se suman en cada instante (la línea clara es A + B).</li>
+        <li><strong>Pulsaciones</strong>: dos frecuencias muy cercanas se suman y se restan alternadamente; el volumen late a la diferencia entre ellas.</li>
+        <li><strong>Fase</strong>: cuánto va desfasada una onda respecto a otra. Con 180° y la misma frecuencia, se cancelan.</li>
+        <li><strong>Consonancia</strong>: dos notas suenan bien juntas cuando su razón de frecuencias es de números pequeños (2:1 octava, 3:2 quinta).</li>
+      </ul>
+    </details>
+
+    <footer class="wv-foot">
+      <p class="wv-small">Tus ajustes se guardan en este navegador. Todo se calcula y suena en tu dispositivo.</p>
+      <button id="wv-reset" class="wv-link" type="button">Restablecer valores</button>
+    </footer>
+  </main>
+</Layout>
+
+<script>
+  import '../ondas/main';
+</script>
+
+<style is:global>
+  .wv {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    /* casillas y controles nativos en oscuro (si no, las casillas sin marcar salen blancas) */
+    color-scheme: dark;
+  }
+  .wv h1 {
+    font-family: var(--font-mono);
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 0.4rem 0 0.5rem;
+  }
+  .wv h1 span {
+    color: var(--accent);
+  }
+  .wv-back {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .wv-back:hover {
+    text-decoration: underline;
+  }
+  .wv-lead {
+    color: var(--muted);
+    max-width: 62ch;
+  }
+  .wv-small {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.5rem 0 0;
+  }
+  .wv-card {
+    margin-top: 1rem;
+    padding: 1rem 1.1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .wv-h {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.7rem;
+    font-weight: 600;
+  }
+
+  /* Lienzos */
+  .wv-canvas {
+    display: block;
+    width: 100%;
+    background: #14100b;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+  }
+  .wv-canvas--scope {
+    aspect-ratio: 16 / 7;
+    min-height: 220px;
+  }
+  .wv-canvas--spec {
+    aspect-ratio: 16 / 5;
+    min-height: 170px;
+  }
+
+  /* Ventana de tiempo */
+  .wv-tiempo {
+    display: grid;
+    grid-template-columns: auto minmax(120px, 1fr) auto auto;
+    gap: 0.5rem 0.8rem;
+    align-items: center;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+  }
+  .wv-tiempo .wv-out--ancho {
+    grid-column: 1 / -1;
+    order: 5;
+  }
+  .wv-check {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    cursor: pointer;
+  }
+  .wv-check input {
+    width: 1.5rem;
+    height: 1.5rem;
+    accent-color: var(--accent);
+  }
+
+  /* Paneles de onda */
+  .wv-osc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  @media (min-width: 760px) {
+    .wv-osc {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .wv-panel {
+    padding: 0.9rem 1rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--c);
+    border-radius: var(--radius-lg);
+  }
+  .wv-panel.is-off .wv-formas,
+  .wv-panel.is-off .wv-campo,
+  .wv-panel.is-off .wv-read {
+    opacity: 0.45;
+  }
+  .wv-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+  .wv-panel-head input[type='checkbox'] {
+    width: 1.6rem;
+    height: 1.6rem;
+    accent-color: var(--c);
+  }
+  .wv-panel-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .wv-swatch {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 2px;
+    background: var(--c);
+  }
+  .wv-formas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+    margin-bottom: 0.8rem;
+  }
+  .wv-forma {
+    min-height: 2.4rem;
+    padding: 0 0.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .wv-forma[aria-pressed='true'] {
+    color: var(--accent-ink);
+    background: var(--c);
+    border-color: var(--c);
+  }
+  .wv-campo {
+    margin-top: 0.6rem;
+  }
+  .wv-campo > label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.15rem;
+  }
+  .wv-doble {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .wv-doble input[type='range'] {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .wv-num {
+    width: 5.5rem;
+    min-height: 2.4rem;
+    padding: 0 0.5rem;
+    text-align: right;
+    font-family: var(--font-mono);
+    /* 16 px: el iPhone no hace zoom al tocar el campo */
+    font-size: 16px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+  .wv-unidad {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .wv-out {
+    min-width: 3.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent-light);
+    text-align: right;
+  }
+  .wv-out--ancho {
+    text-align: left;
+    color: var(--muted);
+  }
+  .wv-read {
+    margin: 0.8rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+  .wv input[type='range'] {
+    accent-color: var(--accent);
+    min-height: 1.6rem;
+  }
+
+  /* Ejemplos, botones */
+  .wv-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .wv-chip,
+  .wv-btn {
+    min-height: 2.5rem;
+    padding: 0 0.95rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .wv-chip:hover,
+  .wv-btn:hover:not(:disabled) {
+    border-color: var(--accent-dim);
+  }
+  .wv-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .wv-btn--main {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .wv-btn--main:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .wv-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: none;
+    border: 0;
+    padding: 0.4rem 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .wv-info {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+  .wv-info li {
+    margin: 0.3rem 0;
+  }
+
+  .wv-sound-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.9rem;
+  }
+  .wv-sound-row input[type='range'] {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+  .wv-aviso {
+    margin: 0.7rem 0 0;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: var(--glass-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+
+  .wv-ayuda summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .wv-ayuda ul {
+    margin: 0.8rem 0 0;
+    padding-left: 1.2rem;
+  }
+  .wv-ayuda li {
+    margin: 0.4rem 0;
+  }
+  .wv-foot {
+    margin-top: 1.4rem;
+  }
+
+  @media (max-width: 560px) {
+    .wv {
+      padding: 0.6rem 0.7rem 2.5rem;
+    }
+    .wv-card {
+      padding: 0.85rem 0.8rem 0.95rem;
+    }
+    .wv-tiempo {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .wv-tiempo label[for='wv-win'] {
+      grid-column: 1 / -1;
+    }
+    .wv-tiempo input[type='range'] {
+      grid-column: 1 / -1;
+    }
+    .wv-tiempo .wv-out--ancho {
+      order: 0;
+      grid-column: 1 / -1;
+    }
+  }
+</style>
