@@ -150,3 +150,8 @@ de los jugadores sigue siendo compatible mientras no cambies los `id`.
 
 La antigua portada personal sigue en `/portafolio` (sin enlazar y con `noindex`), y el blog, `/desk`
 y `/4d` no se tocaron. Si no los quieres, se pueden borrar sin afectar al juego.
+
+## Asistente de IA en la landing
+
+Chat opcional que responde dudas de la auditoría y lleva al visitante a pagar con Wompi o a escribirte. Corre en un Worker de Cloudflare (carpeta `asistente/`) con la API de Claude. Está apagado hasta que pongas la URL del Worker en `OFERTA.asistenteUrl`. Guía de publicación, control de gasto y privacidad en `asistente/README.md`.
+

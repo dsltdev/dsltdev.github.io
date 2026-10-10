@@ -9,7 +9,9 @@ export const OFERTA = {
   /** Enlace de pago de Wompi de la auditoría. */
   pagoAuditoria: 'https://checkout.wompi.co/l/VPOS_c5Twxg',
   auditoria: { precio: 150000, entrega: '24 horas hábiles' },
-  monitoreo: { precio: 180000 }
+  monitoreo: { precio: 180000 },
+  /** URL del Worker del asistente de IA (carpeta asistente/). Vacía = el asistente no se muestra. */
+  asistenteUrl: ''
 } as const;
 
 /** 150000 -> "$150.000 COP" */

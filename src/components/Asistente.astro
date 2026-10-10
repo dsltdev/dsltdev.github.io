@@ -1,0 +1,425 @@
+---
+// Asistente de IA de la landing. Habla con el Worker de asistente/ (la llave de la API nunca está en el sitio).
+// Solo se dibuja si hay una URL configurada: sin Worker desplegado, el sitio queda exactamente igual.
+interface Props {
+  url: string;
+}
+const { url } = Astro.props;
+const sugerencias = ['¿Qué incluye la auditoría?', '¿Qué necesitás de mí?', '¿Cuánto tarda?'];
+---
+
+{
+  url && (
+    <div class="as-root" id="as-root" data-url={url}>
+      <button type="button" class="as-fab" id="as-fab" aria-expanded="false" aria-controls="as-panel" data-track="asistente_abrir" data-donde="boton">
+        <span class="as-fab-dot" aria-hidden="true" />
+        Preguntale a la IA
+      </button>
+
+      <div class="as-panel" id="as-panel" role="dialog" aria-modal="false" aria-labelledby="as-title" hidden>
+        <div class="as-head">
+          <div>
+            <h2 id="as-title" class="as-title">Asistente de IA</h2>
+            <p class="as-sub">Responde con IA, no es David. Solo sabe lo que dice esta página.</p>
+          </div>
+          <button type="button" class="as-close" id="as-close" aria-label="Cerrar el asistente">✕</button>
+        </div>
+
+        <div class="as-log" id="as-log" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversación">
+          <p class="as-msg as-msg--bot">Hola. Puedo contarte cómo funciona la auditoría de pagos, qué revisa y cuánto cuesta. ¿Qué querés saber?</p>
+        </div>
+
+        <div class="as-chips" id="as-chips">
+          {sugerencias.map((s) => (
+            <button type="button" class="as-chip" data-sug={s}>
+              {s}
+            </button>
+          ))}
+        </div>
+
+        <form class="as-form" id="as-form" autocomplete="off">
+          <label for="as-input" class="as-sr">Tu pregunta</label>
+          <input id="as-input" class="as-input" type="text" maxlength="600" placeholder="Escribí tu pregunta…" enterkeyhint="send" />
+          <button type="submit" class="as-send" id="as-send">Enviar</button>
+        </form>
+        <p class="as-note">Tu mensaje se procesa con la API de Claude. No pegues llaves, contraseñas ni datos de tarjeta.</p>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import { OFERTA, mailto } from '../data/oferta';
+
+  type Msg = { role: 'user' | 'assistant'; content: string };
+  type Respuesta = { reply?: string; cta?: 'pagar' | 'correo' | null; error?: string };
+  type Plausible = (evento: string, opciones?: { props?: Record<string, string> }) => void;
+
+  const raiz = document.getElementById('as-root');
+  if (raiz) {
+    const url = (raiz.dataset.url ?? '').replace(/\/$/, '');
+    const fab = document.getElementById('as-fab') as HTMLButtonElement;
+    const panel = document.getElementById('as-panel') as HTMLElement;
+    const cerrar = document.getElementById('as-close') as HTMLButtonElement;
+    const log = document.getElementById('as-log') as HTMLElement;
+    const chips = document.getElementById('as-chips') as HTMLElement;
+    const form = document.getElementById('as-form') as HTMLFormElement;
+    const input = document.getElementById('as-input') as HTMLInputElement;
+    const enviar = document.getElementById('as-send') as HTMLButtonElement;
+
+    const MAX_PREGUNTAS = 6; // el Worker acepta 12 mensajes: 6 preguntas y 6 respuestas
+    const historial: Msg[] = [];
+    let ocupado = false;
+
+    const medir = (evento: string, donde: string) => {
+      try {
+        (window as unknown as { plausible?: Plausible }).plausible?.(evento, { props: { donde } });
+      } catch {
+        /* sin analítica todo funciona igual */
+      }
+    };
+
+    const abajo = () => {
+      log.scrollTop = log.scrollHeight;
+    };
+    const burbuja = (texto: string, quien: 'bot' | 'user') => {
+      const p = document.createElement('p');
+      p.className = `as-msg as-msg--${quien}`;
+      p.textContent = texto; // nunca innerHTML: lo que escribe el modelo o el visitante es solo texto
+      log.appendChild(p);
+      abajo();
+      return p;
+    };
+    const acciones = (cta: 'pagar' | 'correo') => {
+      const a = document.createElement('a');
+      a.className = 'as-cta';
+      a.dataset.donde = 'asistente';
+      if (cta === 'pagar') {
+        a.href = OFERTA.pagoAuditoria;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.dataset.track = 'landing_pagar';
+        a.textContent = 'Pagar la auditoría con Wompi →';
+      } else {
+        a.href = mailto('Consulta desde el asistente');
+        a.dataset.track = 'landing_correo';
+        a.textContent = `Escribirle a ${OFERTA.nombre.split(' ')[0]} →`;
+      }
+      log.appendChild(a);
+      abajo();
+    };
+
+    const abrir = (abierto: boolean) => {
+      panel.hidden = !abierto;
+      fab.setAttribute('aria-expanded', String(abierto));
+      fab.hidden = abierto;
+      if (abierto) input.focus();
+      else fab.focus();
+    };
+    fab.addEventListener('click', () => abrir(true));
+    cerrar.addEventListener('click', () => abrir(false));
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') abrir(false);
+    });
+
+    const preguntar = async (texto: string) => {
+      const t = texto.trim();
+      if (!t || ocupado) return;
+      const hechas = historial.filter((m) => m.role === 'user').length;
+      if (hechas >= MAX_PREGUNTAS) {
+        burbuja('Llegamos al máximo de preguntas de esta conversación. Para seguir, escribile directamente a David.', 'bot');
+        acciones('correo');
+        return;
+      }
+      ocupado = true;
+      enviar.disabled = true;
+      input.value = '';
+      chips.hidden = true;
+      burbuja(t, 'user');
+      historial.push({ role: 'user', content: t });
+      medir('asistente_mensaje', String(hechas + 1));
+      log.setAttribute('aria-busy', 'true');
+      const espera = burbuja('Escribiendo…', 'bot');
+      espera.classList.add('as-msg--espera');
+      const ctrl = new AbortController();
+      const corte = window.setTimeout(() => ctrl.abort(), 25000);
+      try {
+        const r = await fetch(`${url}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: historial }),
+          signal: ctrl.signal
+        });
+        const d = (await r.json().catch(() => ({}))) as Respuesta;
+        espera.remove();
+        if (r.ok && d.reply) {
+          historial.push({ role: 'assistant', content: d.reply });
+          burbuja(d.reply, 'bot');
+          if (d.cta === 'pagar' || d.cta === 'correo') acciones(d.cta);
+        } else {
+          historial.pop();
+          burbuja(d.error ?? `El asistente no está disponible ahora. Escribile a ${OFERTA.email}.`, 'bot');
+          acciones('correo');
+        }
+      } catch {
+        espera.remove();
+        historial.pop();
+        burbuja(`No pude conectarme con el asistente. Escribile a ${OFERTA.email}.`, 'bot');
+        acciones('correo');
+      } finally {
+        window.clearTimeout(corte);
+        log.removeAttribute('aria-busy');
+        ocupado = false;
+        enviar.disabled = false;
+        input.focus();
+      }
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      void preguntar(input.value);
+    });
+    chips.addEventListener('click', (e) => {
+      const b = (e.target as Element).closest<HTMLElement>('[data-sug]');
+      if (b?.dataset.sug) void preguntar(b.dataset.sug);
+    });
+  }
+</script>
+
+<style is:global>
+  .as-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .as-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+  }
+  .as-fab:hover {
+    background: var(--accent-light);
+  }
+  .as-fab:focus-visible,
+  .as-close:focus-visible,
+  .as-chip:focus-visible,
+  .as-send:focus-visible,
+  .as-cta:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+  }
+  .as-fab[hidden] {
+    display: none;
+  }
+  .as-fab-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent-ink);
+  }
+  .as-panel {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 31;
+    width: min(23.5rem, calc(100vw - 2rem));
+    max-height: min(36rem, calc(100dvh - 2rem));
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border-strong, var(--border));
+    border-radius: var(--radius-lg, 10px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+  }
+  .as-panel[hidden] {
+    display: none;
+  }
+  .as-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .as-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .as-sub {
+    margin: 0.2rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  .as-close {
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .as-close:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .as-log {
+    flex: 1;
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.8rem 0.9rem;
+    overflow-y: auto;
+  }
+  .as-msg {
+    margin: 0;
+    max-width: 88%;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    border-radius: var(--radius);
+  }
+  .as-msg--bot {
+    align-self: flex-start;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .as-msg--user {
+    align-self: flex-end;
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+  .as-msg--espera {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .as-cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+  .as-cta:hover {
+    background: var(--accent);
+  }
+  .as-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0 0.9rem 0.7rem;
+  }
+  .as-chips[hidden] {
+    display: none;
+  }
+  .as-chip {
+    min-height: 2rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border-strong, var(--border));
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .as-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent-light);
+  }
+  .as-form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.7rem 0.9rem 0.4rem;
+    border-top: 1px solid var(--border);
+  }
+  .as-input {
+    flex: 1;
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.7rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong, var(--border));
+    border-radius: var(--radius-sm);
+  }
+  .as-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .as-send {
+    flex: none;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .as-send:disabled {
+    opacity: 0.55;
+    cursor: progress;
+  }
+  .as-note {
+    margin: 0;
+    padding: 0.2rem 0.9rem 0.7rem;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  @media (max-width: 520px) {
+    .as-panel {
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-height: min(34rem, 86dvh);
+      border-radius: var(--radius-lg, 10px) var(--radius-lg, 10px) 0 0;
+    }
+  }
+</style>
