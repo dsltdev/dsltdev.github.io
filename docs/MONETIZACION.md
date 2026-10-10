@@ -1,6 +1,6 @@
 # Cómo monetizar Pagos Idle
 
-`dsltdev.com` abre directamente el juego. Todo el dinero se activa en **un solo archivo**:
+El juego vive en `dsltdev.com/juego` (la portada `dsltdev.com` es la landing de servicios). Todo el dinero se activa en **un solo archivo**:
 `src/game/config.ts` (objeto `MONETIZATION`). Un campo vacío = esa vía apagada; el juego funciona igual.
 
 > Realismo: los ingresos dependen del tráfico. Hoy puedes dejar **todos los canales listos**, pero
@@ -18,7 +18,7 @@
 | Banner de AdSense | Opcional; falta `adsenseBannerSlot` |
 
 Mientras no haya `adsenseClient`, el botón "Ver anuncio" **no aparece** (no prometemos algo que no
-existe). Para probar el flujo sin Google, abre `https://dsltdev.com/?demoads`.
+existe). Para probar el flujo sin Google, abre `https://dsltdev.com/juego?demoads`.
 
 ## Ruta para hoy (en este orden)
 
@@ -117,6 +117,24 @@ principal y del trading.
 > depende de los detalles (premios, compras, canjes). Mientras nada de valor entre ni salga, el riesgo
 > es bajo; si algún día se vende algo que mejore las probabilidades o se canjean fichas, cambia por completo.
 
+## Landing de servicios (`/`)
+
+La portada vende dos cosas con precio fijo (auditoría de pagos y monitoreo mensual) y desarrollo fintech a la
+medida por cotización. El juego pasó a `dsltdev.com/juego`.
+
+- **Dónde se cambia todo:** `src/data/oferta.ts` (precios, enlace de pago de Wompi, correo, ciudad). Los textos
+  están en `src/pages/index.astro`.
+- **Cobro:** el botón "Pagar la auditoría" abre el enlace de Wompi de la auditoría. No hay servidor que confirme
+  el pago: tú ves el cobro en Wompi y entregas el reporte cuando el cliente te escribe con el acceso. El monitoreo
+  y el desarrollo se acuerdan por correo.
+- **Eventos de Plausible** (créalos como *goals* en Plausible para ver el embudo): `landing_pagar` y
+  `landing_correo`, ambos con la propiedad `donde` (`encabezado`, `hero`, `servicios`, `monitoreo`, `desarrollo`
+  o `final`).
+- **Solo hechos reales:** la landing no tiene testimonios, cifras de clientes ni garantías, porque no hay datos
+  que las respalden. Agrega testimonios solo cuando un cliente real los autorice.
+- **Pendiente de revisar:** `/privacy` y `/terms` están escritos para el juego; conviene una versión para el
+  servicio (qué datos recibes del cliente, confidencialidad, alcance de la auditoría, política de devolución).
+
 ## Medir qué funciona
 
 El juego envía eventos a Plausible: `rewarded_ad_start`, `rewarded_ad_complete`,
@@ -132,3 +150,8 @@ de los jugadores sigue siendo compatible mientras no cambies los `id`.
 
 La antigua portada personal sigue en `/portafolio` (sin enlazar y con `noindex`), y el blog, `/desk`
 y `/4d` no se tocaron. Si no los quieres, se pueden borrar sin afectar al juego.
+
+## Asistente de IA en la landing
+
+Chat opcional que responde dudas de la auditoría y lleva al visitante a pagar con Wompi o a escribirte. Corre en un Worker de Cloudflare (carpeta `asistente/`) con la API de Claude. Está apagado hasta que pongas la URL del Worker en `OFERTA.asistenteUrl`. Guía de publicación, control de gasto y privacidad en `asistente/README.md`.
+
