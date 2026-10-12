@@ -59,7 +59,7 @@ Encontré un webhook de Wompi que rechazaba el 100% de los payouts reales — nu
 **Cuerpo:**
 ```
 Contexto rápido: reviso integraciones de pago en producción (Wompi,
-Bancolombia) y me encontré este caso hace unos días.
+Bancolombia) y me encontré este caso en una revisión reciente.
 
 Un webhook de Wompi Payouts (confirma transferencias salientes) estaba
 verificando la firma con el secreto y el formato del checkout normal —
