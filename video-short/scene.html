@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Short · El webhook que rechazaba cada pago real</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e14; --surface: #131826; --surface2: #171d2e; --border: #232c42; --border-strong: #2e3a56;
+    --accent: #3556d4; --accent-light: #6b85ea; --text: #e8ecf7; --muted: #8a92ab;
+    --ok: #6fbf73; --warn: #e0a03c; --bad: #e8664d;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif; --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: #000; }
+  /* Escenario 1080×1920 (9:16). Zona segura: sin texto en los primeros ~150 px ni en los últimos ~420 px. */
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--text); font-family: var(--sans);
+    background: radial-gradient(900px 700px at 80% 12%, rgba(53,86,212,.22), transparent 70%), linear-gradient(160deg, #0b0e14 0%, #0f1420 45%, #0b0e14 100%); }
+  #grid { position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 90px 90px; -webkit-mask-image: linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent); }
+  #brand { position: absolute; left: 72px; top: 150px; font: 600 30px var(--mono); color: var(--accent-light); letter-spacing: -.01em; }
+  #brand span { color: var(--muted); font-weight: 400; }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .head { position: absolute; left: 72px; right: 72px; top: 250px; font: 700 80px/1.06 var(--sans); letter-spacing: -.02em; }
+  .head em { font-style: normal; color: var(--accent-light); }
+  .head em.bad { color: var(--bad); }
+  .sub { position: absolute; left: 72px; right: 72px; top: 560px; font: 500 44px/1.3 var(--sans); color: var(--muted); }
+  .vis { position: absolute; left: 72px; right: 72px; top: 640px; }
+  [data-in] { opacity: 0; }
+  .card { background: var(--surface); border: 2px solid var(--border-strong); border-radius: 22px; padding: 30px 34px; }
+  .mono { font-family: var(--mono); }
+  .tag { display: inline-block; font: 500 28px var(--mono); color: var(--muted); }
+
+  /* Escena 1 */
+  .stamps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 90px; }
+  .stamp { font: 600 120px/1 var(--mono); color: var(--bad); border: 6px solid var(--bad); border-radius: 18px; padding: 34px 0; text-align: center; background: rgba(232,102,77,.08); }
+  /* Escena 2 */
+  .row { display: grid; grid-template-columns: 1.1fr 1fr 1fr; align-items: center; gap: 12px; padding: 26px 8px; border-bottom: 2px solid var(--border); font: 500 38px var(--mono); }
+  .row.hd { color: var(--muted); font-size: 28px; padding-bottom: 18px; }
+  .okc { color: var(--ok); } .warnc { color: var(--warn); }
+  .dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: var(--warn); margin-right: 14px; }
+  /* Escena 3 */
+  .json { font: 500 34px/1.5 var(--mono); white-space: pre; }
+  .json .k { color: var(--accent-light); } .json .hl { background: rgba(224,160,60,.2); color: var(--warn); border-radius: 6px; padding: 0 6px; }
+  .secret { margin-top: 14px; font: 500 30px var(--mono); color: var(--muted); } .secret b { color: var(--text); font-weight: 600; }
+  .ctitle { font: 600 30px var(--sans); color: var(--muted); margin-bottom: 14px; letter-spacing: .04em; text-transform: uppercase; }
+  .wrong { margin-top: 26px; border-color: var(--bad); background: rgba(232,102,77,.1); font: 500 32px/1.45 var(--mono); }
+  .wrong b { color: var(--bad); }
+  /* Escena 4 */
+  .term { font: 500 31px/1.0 var(--mono); }
+  .tl { padding: 15px 0; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  .tl .t { color: var(--muted); margin-right: 18px; } .tl .c { color: var(--bad); font-weight: 600; }
+  .chip { display: inline-block; margin-top: 30px; padding: 16px 28px; border-radius: 999px; border: 2px solid var(--warn); color: var(--warn); font: 600 36px var(--sans); }
+  /* Escena 5 */
+  .diff { font: 500 31px/1.5 var(--mono); }
+  .diff .m { color: var(--bad); background: rgba(232,102,77,.12); display: block; padding: 10px 16px; border-radius: 10px; margin-bottom: 12px; white-space: pre; }
+  .diff .p { color: var(--ok); background: rgba(111,191,115,.12); display: block; padding: 10px 16px; border-radius: 10px; white-space: pre; }
+  .flip { position: relative; height: 130px; margin-top: 34px; font: 600 54px var(--mono); }
+  .flip > div { position: absolute; left: 0; top: 0; }
+  /* Escena 6 */
+  .cta-head { position: absolute; left: 72px; right: 72px; top: 330px; font: 700 84px/1.06 var(--sans); letter-spacing: -.02em; }
+  .cta-head em { font-style: normal; color: var(--accent-light); }
+  .offer { position: absolute; left: 72px; right: 72px; top: 860px; border-color: var(--accent); background: linear-gradient(180deg, rgba(53,86,212,.22), rgba(53,86,212,.08)); text-align: center; padding: 56px 40px; }
+  .offer .n { font: 600 40px var(--sans); color: var(--muted); }
+  .offer .p { font: 700 130px/1.1 var(--sans); letter-spacing: -.03em; margin: 14px 0 6px; }
+  .offer .s { font: 500 38px var(--mono); color: var(--accent-light); }
+  .cta-url { position: absolute; left: 0; right: 0; top: 1280px; text-align: center; font: 600 64px var(--mono); }
+  .cta-url small { display: block; font: 500 34px var(--sans); color: var(--muted); margin-top: 14px; }
+  #bar { position: absolute; left: 0; bottom: 0; height: 8px; background: var(--accent-light); width: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <div id="brand">[ DL ] David López <span>· IA aplicada al dinero</span></div>
+
+  <section class="scene" data-s="0,3.9">
+    <h1 class="head" data-in="0.15">Este webhook <em class="bad">rechazó</em> cada pago real.</h1>
+    <p class="sub" data-in="1.7" style="top:590px">Durante semanas. Y nadie lo notó.</p>
+    <div class="vis"><div class="stamps" id="stamps"></div></div>
+  </section>
+
+  <section class="scene" data-s="3.9,10.8">
+    <h2 class="head" data-in="4.0">Las transferencias se quedaban en <em>pending</em>. Para siempre.</h2>
+    <div class="vis" style="top:700px"><div class="card" id="rows"></div>
+      <p class="tag" data-in="7.9" style="margin-top:26px">Caso real · ids de ejemplo</p></div>
+  </section>
+
+  <section class="scene" data-s="10.8,19.8">
+    <h2 class="head" data-in="10.9">No faltaba validación. Validaba con la <em>llave equivocada</em>.</h2>
+    <div class="vis" style="top:690px">
+      <div class="card" data-in="11.8" style="margin-bottom:22px">
+        <div class="ctitle">Webhook de checkout</div>
+        <div class="json">{ <span class="k">"signature"</span>: {
+    <span class="hl">"timestamp"</span>: 1730000000,
+    <span class="k">"checksum"</span>: "…" } }</div>
+        <div class="secret">secreto → <b>WOMPI_EVENTS_KEY</b></div>
+      </div>
+      <div class="card" data-in="13.4">
+        <div class="ctitle">Webhook de Payouts</div>
+        <div class="json">{ <span class="hl">"timestamp"</span>: 1730000000,
+  <span class="k">"signature"</span>: { <span class="k">"checksum"</span>: "…" } }</div>
+        <div class="secret">secreto → <b>WOMPI_PAYOUTS_EVENTS_KEY</b></div>
+      </div>
+      <div class="card wrong" data-in="16.2"><b>✗</b> verifyEventSignature(<br>&nbsp;&nbsp;body, <b>WOMPI_EVENTS_KEY</b>)<br><span style="color:var(--muted)">usado también para Payouts</span></div>
+    </div>
+  </section>
+
+  <section class="scene" data-s="19.8,26.8">
+    <h2 class="head" data-in="19.9">Respondía <em class="bad">401</em>. Igual que ante un fraude.</h2>
+    <div class="vis" style="top:700px"><div class="card term" id="term"></div>
+      <div class="chip" data-in="23.9">parece un rechazo legítimo</div></div>
+    <p class="sub" data-in="25.0" style="top:1330px; font-size:50px; color:var(--text); font-weight:600">Por eso nadie lo notó.</p>
+  </section>
+
+  <section class="scene" data-s="26.8,31.8">
+    <h2 class="head" data-in="26.9">El arreglo: un verificador <em>propio</em> para Payouts.</h2>
+    <div class="vis" style="top:690px">
+      <div class="card diff" data-in="27.6">
+        <span class="m">- verifyEventSignature(
+    body, WOMPI_EVENTS_KEY)</span>
+        <span class="p" data-in="28.4">+ verifyPayoutsSignature(
+    body, WOMPI_PAYOUTS_EVENTS_KEY)</span>
+      </div>
+      <div class="flip">
+        <div class="warnc" data-in="27.2" data-out="29.6"><span class="dot" style="width:26px;height:26px"></span>pending</div>
+        <div class="okc" data-in="29.7">✓ approved</div>
+      </div>
+      <p class="tag" data-in="30.2" style="margin-top:10px">Nada elegante: dejar de asumir que dos webhooks comparten esquema.</p>
+    </div>
+  </section>
+
+  <section class="scene" data-s="31.8,39" data-last="1">
+    <h2 class="cta-head" data-in="31.9">¿Tu integración de pagos tiene un bug <em>silencioso</em>?</h2>
+    <div class="card offer" data-in="33.2">
+      <div class="n">Auditoría de pagos · precio fijo</div>
+      <div class="p">$150.000</div>
+      <div class="s">COP · reporte en 24 h hábiles</div>
+    </div>
+    <div class="cta-url" data-in="34.6">dsltdev.com<small>Link en mi perfil</small></div>
+  </section>
+
+  <div id="bar"></div>
+</div>
+
+<script>
+  const DURATION = 39;
+  const clamp = (x) => Math.min(1, Math.max(0, x));
+  const ease = (x) => 1 - Math.pow(1 - x, 3);
+  const seg = (t, a, b) => ease(clamp((t - a) / (b - a)));
+
+  // Contenido generado: así los tiempos quedan junto a los datos.
+  const stamps = document.getElementById('stamps');
+  for (let i = 0; i < 9; i++) {
+    const d = document.createElement('div');
+    d.className = 'stamp'; d.textContent = '401'; d.dataset.in = String(0.5 + i * 0.22); d.dataset.pop = '1';
+    stamps.append(d);
+  }
+
+  const rows = document.getElementById('rows');
+  const mk = (cls, html, at) => { const r = document.createElement('div'); r.className = cls; r.innerHTML = html; if (at != null) r.dataset.in = String(at); rows.append(r); };
+  mk('row hd', '<span>Payout</span><span>En Wompi</span><span>En tu base</span>');
+  ['po_7f3a', 'po_91c2', 'po_a04e', 'po_3b88', 'po_d5f1', 'po_62a7'].forEach((id, i) =>
+    mk('row', `<span>${id}</span><span class="okc">✓ aprobada</span><span class="warnc"><i class="dot pulse"></i>pending</span>`, 4.7 + i * 0.4));
+
+  const term = document.getElementById('term');
+  const lines = ['10:02:11', '10:09:48', '10:31:05', '11:14:37', '12:03:52', '12:47:19'];
+  lines.forEach((t, i) => {
+    const l = document.createElement('div');
+    l.className = 'tl'; l.dataset.in = String(20.6 + i * 0.5);
+    l.innerHTML = `<span class="t">${t}</span>POST /webhooks/payouts <span class="c">401</span>`;
+    term.append(l);
+  });
+
+  const scenes = [...document.querySelectorAll('.scene')];
+  const bar = document.getElementById('bar');
+
+  window.DURATION = DURATION;
+  window.renderAt = (t) => {
+    for (const s of scenes) {
+      const [a, b] = s.dataset.s.split(',').map(Number);
+      const on = t >= a && t < b;
+      const fadeOut = s.dataset.last ? 1 : 1 - seg(t, b - 0.3, b);
+      s.style.opacity = on ? String(Math.min(seg(t, a, a + 0.2), fadeOut)) : '0';
+      s.style.visibility = on ? 'visible' : 'hidden';
+      if (!on) continue;
+      for (const el of s.querySelectorAll('[data-in]')) {
+        const k = seg(t, Number(el.dataset.in), Number(el.dataset.in) + 0.45);
+        const out = el.dataset.out ? 1 - seg(t, Number(el.dataset.out), Number(el.dataset.out) + 0.25) : 1;
+        el.style.opacity = String(k * out);
+        el.style.transform = el.dataset.pop ? `scale(${1.5 - 0.5 * k})` : `translateY(${(1 - k) * 36}px)`;
+      }
+      for (const p of s.querySelectorAll('.pulse')) p.style.opacity = String(0.55 + 0.45 * Math.sin(t * 6));
+    }
+    bar.style.width = `${(t / DURATION) * 100}%`;
+  };
+  window.renderAt(0);
+</script>
+</body>
+</html>
