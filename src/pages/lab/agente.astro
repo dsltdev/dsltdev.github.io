@@ -1,0 +1,710 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import traceJson from '../../data/traces/payouts-audit.json';
+
+const { meta, capturedAt, prompt } = traceJson;
+const seconds = Math.round(meta.durationMs / 1000);
+const rawMinutes = meta.rawSpanMs ? (meta.rawSpanMs / 60000).toFixed(1).replace('.', ',') : null;
+---
+
+<Layout
+  title="Lab — agente auditor"
+  description="Replay en 3D de un agente de IA auditando un webhook de pagos."
+  noindex
+>
+  <main class="agent">
+    <section class="stage" id="stage">
+      <canvas id="scene" aria-label="Visualización 3D del agente: un núcleo central y los archivos que va revisando"></canvas>
+      <div class="labels" id="labels" aria-hidden="true"></div>
+
+      <header class="hud">
+        <a href="/lab" class="back">← Lab</a>
+        <h1>Agente auditor</h1>
+        <p class="task">{prompt}</p>
+        <p class="prov">
+          <span class="badge">Traza real</span>
+          {capturedAt} · {meta.model} · {meta.toolCalls} llamadas · {seconds} s
+        </p>
+      </header>
+
+      <div class="controls" role="group" aria-label="Controles del replay">
+        <button id="play" type="button" class="primary">Reproducir</button>
+        <button id="restart" type="button">Reiniciar</button>
+        <div class="speeds" role="group" aria-label="Velocidad">
+          <button type="button" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" data-speed="2" aria-pressed="false">2×</button>
+          <button type="button" data-speed="4" aria-pressed="false">4×</button>
+        </div>
+        <div class="track">
+          <div class="ticks" id="ticks" aria-hidden="true"></div>
+          <input id="scrub" type="range" min="0" max="1" step="10" value="0" aria-label="Posición en la traza" />
+        </div>
+        <span class="clock" id="clock">0:00</span>
+      </div>
+    </section>
+
+    <aside class="panel" id="panel">
+      <h2>Qué hizo el agente</h2>
+      <ol class="feed" id="feed" role="log"></ol>
+
+      <section class="findings" id="findings" aria-label="Hallazgos" hidden>
+        <h2>Hallazgos <span class="count" id="count"></span></h2>
+        <ol id="findingList"></ol>
+      </section>
+
+      <details class="how">
+        <summary>¿Qué estoy viendo exactamente?</summary>
+        <p>
+          Una auditoría real de un handler de webhooks <em>reconstruido</em> a partir del caso de
+          <a href="/blog/webhook-payouts-wompi-firma-invalida">Wompi Payouts</a>: sin código ni datos de clientes.
+        </p>
+        <p>
+          Para ser honestos con lo que ves: el agente fue la sesión de Claude Code que escribió ese código,
+          así que no es una auditoría a ciegas. Solo se muestran las llamadas de lectura que terminaron bien,
+          no el razonamiento interno{rawMinutes && (
+            <Fragment>, y las esperas por permisos ({meta.cappedGaps} pausas, {rawMinutes} min de tramo real) se recortaron a 12 s</Fragment>
+          )}.
+        </p>
+        <p>
+          Los tiempos y las llamadas salen del transcript de la sesión con
+          <code>scripts/trace-from-session.mjs</code>.
+        </p>
+      </details>
+    </aside>
+  </main>
+</Layout>
+
+<style is:global>
+  body { margin: 0; background: #0b0e14; }
+</style>
+
+<style is:global>
+  .agent {
+    --bg: #0b0e14;
+    --surface: #131826;
+    --border: #232c42;
+    --border-strong: #2e3a56;
+    --text: #e8ecf7;
+    --muted: #8a92ab;
+    --muted-dim: #5c6480;
+    --accent: #3556d4;
+    --accent-light: #6b85ea;
+    --danger: #b4543f;
+    --warning: #c98a3a;
+    --success: #7f9a6a;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  /* ── Escena ─────────────────────────────── */
+  .agent .stage {
+    position: relative;
+    height: 100dvh;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 45%, #131826 0%, #0b0e14 72%);
+  }
+  .agent canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .agent .labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+
+  .agent .node-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    font: 500 11px 'IBM Plex Mono', monospace;
+    color: var(--muted-dim);
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.25s, background 0.25s;
+    will-change: transform;
+  }
+  .agent .node-label.on { color: var(--muted); }
+  .agent .node-label.active { color: var(--text); background: rgba(53, 86, 212, 0.28); }
+
+  .agent .hud { position: absolute; top: 24px; left: 24px; right: 24px; max-width: 420px; pointer-events: none; }
+  .agent .hud > * { pointer-events: auto; }
+  .agent .back { color: var(--muted); font: 500 13px 'IBM Plex Mono', monospace; text-decoration: none; }
+  .agent .back:hover { color: var(--accent-light); }
+  .agent h1 { margin: 12px 0 6px; font: 600 20px 'IBM Plex Mono', monospace; letter-spacing: -0.01em; }
+  .agent .task { margin: 0 0 10px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .agent .prov { margin: 0; color: var(--muted-dim); font: 400 12px 'IBM Plex Mono', monospace; }
+  .agent .badge {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 1px 7px;
+    border: 1px solid var(--success);
+    border-radius: 999px;
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  /* ── Controles ──────────────────────────── */
+  .agent .controls {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .agent button {
+    font: 500 12px 'IBM Plex Mono', monospace;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+  .agent button:hover { border-color: var(--accent-light); }
+  .agent button.primary { background: var(--accent); border-color: var(--accent); min-width: 104px; }
+  .agent button.primary:hover { background: var(--accent-light); border-color: var(--accent-light); }
+  .agent button[aria-pressed='true'] { background: var(--border-strong); }
+  .agent button:focus-visible, .agent input:focus-visible, .agent summary:focus-visible {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 2px;
+  }
+  .agent .speeds { display: flex; gap: 4px; }
+  .agent .speeds button { padding: 7px 9px; }
+  .agent .track { position: relative; flex: 1; min-width: 80px; height: 24px; }
+  .agent .track input { position: relative; width: 100%; margin: 0; height: 24px; accent-color: var(--accent-light); background: transparent; }
+  .agent .ticks { position: absolute; inset: 0; pointer-events: none; }
+  .agent .tick {
+    position: absolute;
+    top: 3px;
+    width: 2px;
+    height: 6px;
+    margin-left: -1px;
+    border-radius: 1px;
+    background: var(--muted-dim);
+  }
+  .agent .tick.final { background: var(--danger); height: 8px; }
+  .agent .clock { font: 400 12px 'IBM Plex Mono', monospace; color: var(--muted); min-width: 38px; text-align: right; }
+
+  /* ── Panel ──────────────────────────────── */
+  .agent .panel {
+    height: 100dvh;
+    overflow-y: auto;
+    padding: 22px 20px 28px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .agent h2 { margin: 0; font: 600 13px 'IBM Plex Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .agent .count { color: var(--muted-dim); font-weight: 400; }
+  .agent ol { list-style: none; margin: 0; padding: 0; }
+
+  .agent .feed { display: flex; flex-direction: column; gap: 10px; }
+  .agent .feed li { display: grid; grid-template-columns: 34px 1fr; gap: 8px; font-size: 13.5px; line-height: 1.5; animation: rise 0.3s ease-out; }
+  .agent .feed .time { font: 400 11px 'IBM Plex Mono', monospace; color: var(--muted-dim); padding-top: 3px; }
+  .agent .feed p { margin: 0; color: var(--text); }
+  .agent .feed .tool .body { font: 500 12px 'IBM Plex Mono', monospace; color: var(--accent-light); overflow-wrap: anywhere; }
+  .agent .feed .tool .k { color: var(--text); margin-right: 6px; }
+  .agent .feed .result .body { font: 400 12px 'IBM Plex Mono', monospace; color: var(--muted-dim); }
+  .agent .feed .final p { color: var(--text); }
+  .agent code { font: 500 0.9em 'IBM Plex Mono', monospace; background: rgba(107, 133, 234, 0.12); padding: 1px 4px; border-radius: 4px; }
+
+  .agent .findings ol { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .agent .finding {
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--sev, var(--muted));
+    border-radius: 8px;
+    opacity: 0;
+    animation: rise 0.4s ease-out forwards;
+    animation-delay: calc(var(--i, 0) * 120ms);
+  }
+  .agent .finding[data-sev='CRÍTICO'] { --sev: var(--danger); }
+  .agent .finding[data-sev='ALTO'] { --sev: var(--warning); }
+  .agent .finding[data-sev='MEDIO'] { --sev: var(--accent-light); }
+  .agent .finding[data-sev='BAJO'] { --sev: var(--muted); }
+  .agent .finding .head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .agent .chip { font: 600 10px 'IBM Plex Mono', monospace; color: var(--sev); letter-spacing: 0.05em; }
+  .agent .finding strong { font-weight: 600; font-size: 13.5px; }
+  .agent .finding .where { display: block; margin-top: 4px; font: 400 11px 'IBM Plex Mono', monospace; color: var(--muted-dim); }
+  .agent .finding p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+  .agent .how { color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .agent .how summary { cursor: pointer; font: 500 12px 'IBM Plex Mono', monospace; color: var(--accent-light); }
+  .agent .how p { margin: 10px 0 0; }
+  .agent .how a { color: var(--accent-light); }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .agent .feed li, .agent .finding { animation: none; opacity: 1; }
+  }
+
+  /* ── Móvil / estrecho ───────────────────── */
+  @media (max-width: 900px) {
+    .agent { grid-template-columns: 1fr; }
+    .agent .stage { height: 64dvh; min-height: 440px; }
+    .agent .panel { height: auto; border-left: 0; border-top: 1px solid var(--border); }
+    .agent .hud { top: 16px; left: 16px; right: 16px; }
+    .agent .task { display: none; }
+    .agent .controls { left: 12px; right: 12px; bottom: 12px; gap: 8px; padding: 8px 10px; flex-wrap: wrap; }
+    .agent .speeds { display: none; }
+    .agent .track { order: 5; flex-basis: 100%; }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import vertexShader from '../../shaders/blob.vert?raw';
+  import fragmentShader from '../../shaders/blob.frag?raw';
+  import traceJson from '../../data/traces/payouts-audit.json';
+  import { buildSteps, fmtTime, inlineMd, parseFinal, type Severity, type Trace, type TraceEvent } from '../../lib/trace';
+
+  const trace = traceJson as unknown as Trace;
+  const { nodes, steps } = buildSteps(trace);
+  const events = trace.events;
+  const DURATION = trace.meta.durationMs;
+  const TOTAL = DURATION + 3000; // margen para ver el estado final
+  const OUT_MS = 700;
+  const IN_MS = 700;
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const stage = $('stage');
+  const canvas = $<HTMLCanvasElement>('scene');
+  const labelsEl = $('labels');
+  const feedEl = $('feed');
+  const panelEl = $('panel');
+  const findingsEl = $('findings');
+  const findingListEl = $('findingList');
+  const countEl = $('count');
+  const playBtn = $<HTMLButtonElement>('play');
+  const restartBtn = $<HTMLButtonElement>('restart');
+  const scrub = $<HTMLInputElement>('scrub');
+  const ticksEl = $('ticks');
+  const clockEl = $('clock');
+  const speedBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-speed]'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Datos derivados ──────────────────────────────
+  const finalEvent = events.find((e): e is Extract<TraceEvent, { kind: 'final' }> => e.kind === 'final');
+  const parsed = finalEvent ? parseFinal(finalEvent.text) : { summary: '', findings: [] };
+  const finalT = finalEvent?.t ?? Infinity;
+  const stepById = new Map(steps.map((s) => [s.id, s]));
+
+  const C = {
+    accent: new THREE.Color('#3556d4'),
+    light: new THREE.Color('#6b85ea'),
+    deep: new THREE.Color('#131826'),
+    muted: new THREE.Color('#5c6480'),
+    text: new THREE.Color('#e8ecf7'),
+    ok: new THREE.Color('#7f9a6a'),
+    danger: new THREE.Color('#b4543f'),
+    warning: new THREE.Color('#c98a3a'),
+  };
+  const SEV_ORDER: Severity[] = ['CRÍTICO', 'ALTO', 'MEDIO', 'BAJO'];
+  const SEV_COLOR: Record<Severity, THREE.Color> = {
+    CRÍTICO: C.danger,
+    ALTO: C.warning,
+    MEDIO: C.light,
+    BAJO: C.muted,
+  };
+  const topSeverity = SEV_ORDER.find((s) => parsed.findings.some((f) => f.sev === s));
+  const doneMid = (topSeverity ? SEV_COLOR[topSeverity] : C.accent).clone();
+  const doneRim = doneMid.clone().lerp(C.text, 0.35);
+
+  // ── Escena ───────────────────────────────────────
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  const world = new THREE.Group();
+  scene.add(world);
+
+  const blobMat = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    uniforms: {
+      uTime: { value: 0 },
+      uAmp: { value: 0.2 },
+      uFreq: { value: 1.2 },
+      uDeep: { value: C.deep.clone() },
+      uMid: { value: C.accent.clone() },
+      uRim: { value: C.light.clone() },
+    },
+  });
+  const blob = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 128), blobMat);
+  world.add(blob);
+
+  // Polvo de fondo para dar profundidad
+  const dust = new Float32Array(500 * 3);
+  for (let i = 0; i < 500; i++) {
+    const r = 6 + Math.random() * 8;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    dust[i * 3] = r * Math.sin(ph) * Math.cos(th);
+    dust[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th);
+    dust[i * 3 + 2] = r * Math.cos(ph) - 4;
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dust, 3));
+  scene.add(
+    new THREE.Points(
+      dustGeo,
+      new THREE.PointsMaterial({ color: C.light, size: 0.03, transparent: true, opacity: 0.45, depthWrite: false }),
+    ),
+  );
+
+  // Nodos: uno por archivo / comando
+  interface NodeView {
+    group: THREE.Group;
+    wire: THREE.MeshBasicMaterial;
+    solid: THREE.MeshBasicMaterial;
+    edgeMat: THREE.LineBasicMaterial;
+    edgeGeo: THREE.BufferGeometry;
+    label: HTMLElement;
+    pos: THREE.Vector3;
+    on: boolean;
+    active: boolean;
+  }
+  const views: NodeView[] = nodes.map((n) => {
+    const group = new THREE.Group();
+    const wire = new THREE.MeshBasicMaterial({ color: C.muted.clone(), wireframe: true, transparent: true, opacity: 0.9 });
+    const solid = new THREE.MeshBasicMaterial({ color: C.accent.clone(), transparent: true, opacity: 0 });
+    group.add(
+      new THREE.Mesh(new THREE.OctahedronGeometry(0.2), wire),
+      new THREE.Mesh(new THREE.OctahedronGeometry(0.13), solid),
+    );
+    const edgeGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+    const edgeMat = new THREE.LineBasicMaterial({ color: C.light.clone(), transparent: true, opacity: 0 });
+    world.add(group, new THREE.Line(edgeGeo, edgeMat));
+
+    const label = document.createElement('div');
+    label.className = `node-label ${n.kind}`;
+    label.textContent = n.label;
+    labelsEl.append(label);
+    return { group, wire, solid, edgeMat, edgeGeo, label, pos: new THREE.Vector3(), on: false, active: false };
+  });
+
+  // Paquetes: viajan núcleo → nodo (llamada) y nodo → núcleo (resultado)
+  const packetGeo = new THREE.SphereGeometry(0.07, 16, 16);
+  const packets = steps.map(() => {
+    const mesh = new THREE.Mesh(packetGeo, new THREE.MeshBasicMaterial({ color: C.text.clone(), transparent: true }));
+    mesh.visible = false;
+    world.add(mesh);
+    return mesh;
+  });
+
+  const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+  function layout(aspect: number) {
+    const rx = aspect > 1.25 ? 3.1 : aspect > 0.9 ? 2.5 : 1.9;
+    const ry = aspect > 0.9 ? 1.9 : 2.3;
+    views.forEach((v, i) => {
+      // En sentido horario, media vuelta desplazados para no dejar un nodo bajo el HUD.
+      const a = Math.PI / 2 - Math.PI / views.length - (i / views.length) * Math.PI * 2;
+      v.pos.set(Math.cos(a) * rx, Math.sin(a) * ry, Math.sin(a * 2) * 0.35);
+      v.group.position.copy(v.pos);
+      const attr = v.edgeGeo.attributes.position as THREE.BufferAttribute;
+      attr.setXYZ(1, v.pos.x, v.pos.y, v.pos.z);
+      attr.needsUpdate = true;
+    });
+    world.position.y = -0.35; // deja aire arriba para el HUD
+    const needW = rx + 1.1;
+    const needH = ry + 1.2 + 0.35;
+    camera.position.z = Math.max(needW / (tanHalfFov * aspect), needH / tanHalfFov);
+  }
+
+  function resize() {
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    layout(camera.aspect);
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage);
+  resize();
+
+  // ── Panel: feed y hallazgos ──────────────────────
+  const timeCell = (t: number) => {
+    const el = document.createElement('span');
+    el.className = 'time';
+    el.textContent = fmtTime(t);
+    return el;
+  };
+
+  const feedItems: { t: number; build: () => HTMLLIElement }[] = [];
+  for (const e of events) {
+    if (e.kind === 'text') {
+      feedItems.push({
+        t: e.t,
+        build: () => {
+          const li = document.createElement('li');
+          li.className = 'text';
+          const p = document.createElement('p');
+          p.innerHTML = inlineMd(e.text);
+          li.append(timeCell(e.t), p);
+          return li;
+        },
+      });
+    } else if (e.kind === 'tool') {
+      const step = stepById.get(e.id);
+      if (!step) continue;
+      feedItems.push({
+        t: e.t,
+        build: () => {
+          const li = document.createElement('li');
+          li.className = 'tool';
+          const body = document.createElement('span');
+          body.className = 'body';
+          const k = document.createElement('span');
+          k.className = 'k';
+          k.textContent = e.name;
+          body.append(k, step.command.replace(/^Read /, ''));
+          li.append(timeCell(e.t), body);
+          return li;
+        },
+      });
+    } else if (e.kind === 'result') {
+      const step = stepById.get(e.id);
+      if (!step) continue;
+      feedItems.push({
+        t: e.t,
+        build: () => {
+          const li = document.createElement('li');
+          li.className = 'result';
+          const body = document.createElement('span');
+          body.className = 'body';
+          body.textContent = `↳ ${step.summary}`;
+          li.append(timeCell(e.t), body);
+          return li;
+        },
+      });
+    } else if (e.kind === 'final') {
+      feedItems.push({
+        t: e.t,
+        build: () => {
+          const li = document.createElement('li');
+          li.className = 'final';
+          const p = document.createElement('p');
+          p.innerHTML = inlineMd(parsed.summary);
+          li.append(timeCell(e.t), p);
+          return li;
+        },
+      });
+    }
+  }
+
+  parsed.findings.forEach((f, i) => {
+    const li = document.createElement('li');
+    li.className = 'finding';
+    li.dataset.sev = f.sev;
+    li.style.setProperty('--i', String(i));
+    const head = document.createElement('div');
+    head.className = 'head';
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = f.sev;
+    const title = document.createElement('strong');
+    title.textContent = f.title;
+    head.append(chip, title);
+    const where = document.createElement('span');
+    where.className = 'where';
+    where.textContent = f.where;
+    const detail = document.createElement('p');
+    detail.innerHTML = inlineMd(f.detail);
+    li.append(head, where, detail);
+    findingListEl.append(li);
+  });
+  countEl.textContent = `(${parsed.findings.length})`;
+
+  let shown = 0;
+  function syncPanel(t: number) {
+    let target = 0;
+    while (target < feedItems.length && feedItems[target].t <= t) target++;
+    if (target < shown) {
+      feedEl.replaceChildren();
+      shown = 0;
+    }
+    const appended = target > shown;
+    while (shown < target) feedEl.append(feedItems[shown++].build());
+    if (appended) panelEl.scrollTop = panelEl.scrollHeight;
+
+    const showFindings = t >= finalT && parsed.findings.length > 0;
+    const reveal = showFindings && findingsEl.hidden;
+    findingsEl.hidden = !showFindings;
+    // Al aparecer los hallazgos, llevar la vista hasta ellos (el feed ya está al final).
+    if (reveal) findingsEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  // ── Línea de tiempo ──────────────────────────────
+  scrub.max = String(TOTAL);
+  for (const s of steps) {
+    const tick = document.createElement('span');
+    tick.className = 'tick';
+    tick.style.left = `${(s.tCall / TOTAL) * 100}%`;
+    ticksEl.append(tick);
+  }
+  if (finalEvent) {
+    const tick = document.createElement('span');
+    tick.className = 'tick final';
+    tick.style.left = `${(finalEvent.t / TOTAL) * 100}%`;
+    ticksEl.append(tick);
+  }
+
+  // ── Reproductor ──────────────────────────────────
+  let t = 0;
+  let playing = false;
+  let speed = 1;
+  let scrubbing = false;
+
+  function setPlaying(v: boolean) {
+    playing = v;
+    playBtn.textContent = v ? 'Pausa' : t >= TOTAL ? 'Repetir' : 'Reproducir';
+  }
+  playBtn.addEventListener('click', () => {
+    if (t >= TOTAL) t = 0;
+    setPlaying(!playing);
+  });
+  restartBtn.addEventListener('click', () => {
+    t = 0;
+    setPlaying(true);
+  });
+  speedBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      speed = Number(b.dataset.speed);
+      speedBtns.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+    }),
+  );
+  scrub.addEventListener('pointerdown', () => (scrubbing = true));
+  scrub.addEventListener('pointerup', () => (scrubbing = false));
+  scrub.addEventListener('input', () => {
+    t = Number(scrub.value);
+    setPlaying(playing);
+  });
+
+  // ── Frame ────────────────────────────────────────
+  const ease = (x: number) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+  const tmp = new THREE.Vector3();
+  const pointer = { x: 0, y: 0 };
+  stage.addEventListener('pointermove', (e) => {
+    const r = stage.getBoundingClientRect();
+    pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    pointer.y = ((e.clientY - r.top) / r.height) * 2 - 1;
+  });
+
+  function frame(dt: number) {
+    const visited = new Array<boolean>(views.length).fill(false);
+    const active = new Array<boolean>(views.length).fill(false);
+    let mode = (t >= finalT ? 'done' : 'think') as 'think' | 'tool' | 'done';
+    let pulse = 0;
+
+    steps.forEach((s, i) => {
+      const outEnd = s.tCall + OUT_MS;
+      const inStart = Math.max(s.tResult, outEnd);
+      const inEnd = inStart + IN_MS;
+      const target = views[s.node].pos;
+      const packet = packets[i];
+      const mat = packet.material as THREE.MeshBasicMaterial;
+
+      if (t >= s.tCall) visited[s.node] = true;
+      if (t >= s.tCall && t < inEnd) {
+        active[s.node] = true;
+        if (mode !== 'done') mode = 'tool';
+      }
+
+      if (t >= s.tCall && t < outEnd) {
+        packet.position.copy(target).multiplyScalar(ease((t - s.tCall) / OUT_MS));
+        mat.color.copy(C.text);
+        packet.visible = true;
+      } else if (t >= inStart && t < inEnd) {
+        packet.position.copy(target).multiplyScalar(1 - ease((t - inStart) / IN_MS));
+        mat.color.copy(s.ok ? C.ok : C.danger);
+        packet.visible = true;
+      } else {
+        packet.visible = false;
+      }
+      if (t >= inEnd) pulse = Math.max(pulse, Math.exp(-(t - inEnd) / 450));
+    });
+
+    const k = 1 - Math.exp(-dt * 4);
+    const u = blobMat.uniforms;
+    const params =
+      mode === 'tool' ? { amp: 0.38, freq: 2.3 } : mode === 'done' ? { amp: 0.16, freq: 1.0 } : { amp: 0.26, freq: 1.7 };
+    u.uAmp.value += (params.amp + pulse * 0.22 - u.uAmp.value) * k;
+    u.uFreq.value += (params.freq - u.uFreq.value) * k;
+    (u.uMid.value as THREE.Color).lerp(mode === 'done' ? doneMid : C.accent, k);
+    (u.uRim.value as THREE.Color).lerp(mode === 'done' ? doneRim : C.light, k);
+    if (!reduceMotion) u.uTime.value += dt;
+    blob.scale.setScalar(1 + pulse * 0.07);
+
+    views.forEach((v, i) => {
+      const kc = 1 - Math.exp(-dt * 8);
+      const wireTarget = active[i] ? C.text : visited[i] ? C.light : C.muted;
+      v.wire.color.lerp(wireTarget, kc);
+      v.solid.opacity += ((visited[i] ? 0.45 : 0) - v.solid.opacity) * kc;
+      v.edgeMat.opacity += ((active[i] ? 0.9 : visited[i] ? 0.3 : 0) - v.edgeMat.opacity) * kc;
+      v.group.scale.setScalar(active[i] ? 1.35 : 1);
+      v.group.rotation.y += dt * (active[i] ? 2.2 : 0.4);
+      if (v.on !== visited[i]) v.label.classList.toggle('on', (v.on = visited[i]));
+      if (v.active !== active[i]) v.label.classList.toggle('active', (v.active = active[i]));
+    });
+
+    world.rotation.y += (pointer.x * 0.18 - world.rotation.y) * 0.05;
+    world.rotation.x += (pointer.y * 0.1 - world.rotation.x) * 0.05;
+    world.updateMatrixWorld();
+
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    views.forEach((v) => {
+      tmp.copy(v.pos).applyMatrix4(world.matrixWorld).project(camera);
+      v.label.style.transform = `translate(${(tmp.x * 0.5 + 0.5) * w}px, ${(-tmp.y * 0.5 + 0.5) * h + 28}px) translateX(-50%)`;
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  const timer = new THREE.Timer();
+  timer.connect(document);
+  let rafId = 0;
+  let lastClock = '';
+
+  function tick() {
+    timer.update();
+    const dt = Math.min(timer.getDelta(), 0.1);
+
+    if (playing) {
+      t = Math.min(TOTAL, t + dt * 1000 * speed);
+      if (t >= TOTAL) setPlaying(false);
+    }
+    frame(dt);
+    syncPanel(t);
+
+    if (!scrubbing) scrub.value = String(t);
+    const clock = `${fmtTime(Math.min(t, DURATION))} / ${fmtTime(DURATION)}`;
+    if (clock !== lastClock) clockEl.textContent = lastClock = clock;
+
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(rafId);
+    } else {
+      timer.update();
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+
+  setPlaying(false);
+  if (!reduceMotion) setTimeout(() => setPlaying(true), 700);
+</script>

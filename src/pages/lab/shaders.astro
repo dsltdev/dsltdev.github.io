@@ -1,0 +1,236 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Lab — shaders"
+  description="Experimentos con shaders GLSL en three.js."
+  noindex
+>
+  <main class="lab">
+    <canvas id="scene" aria-label="Esfera deformada por un shader"></canvas>
+
+    <header class="lab-hud">
+      <a href="/lab" class="lab-back">← Lab</a>
+      <h1>Shader · blob</h1>
+      <p>Ruido simplex en el vertex shader. Fresnel en el fragment.</p>
+
+      <div class="controls">
+        <label>
+          <span>amplitud</span>
+          <input id="amp" type="range" min="0" max="0.9" step="0.01" value="0.35" />
+          <output id="ampOut">0.35</output>
+        </label>
+        <label>
+          <span>frecuencia</span>
+          <input id="freq" type="range" min="0.2" max="4" step="0.05" value="1.2" />
+          <output id="freqOut">1.20</output>
+        </label>
+      </div>
+    </header>
+
+    <div class="lab-stats" id="stats" aria-hidden="true"></div>
+  </main>
+</Layout>
+
+<style is:global>
+  body { margin: 0; background: var(--bg, #0b0e14); overflow: hidden; }
+</style>
+
+<style>
+  .lab {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 45%, #131826 0%, #0b0e14 70%);
+    color: var(--text, #e8ecf7);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: grab;
+  }
+  canvas:active { cursor: grabbing; }
+  .lab-hud {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    pointer-events: none;
+  }
+  .lab-hud > * { pointer-events: auto; }
+  .lab-back {
+    color: var(--muted, #8a92ab);
+    font: 500 13px 'IBM Plex Mono', monospace;
+    text-decoration: none;
+  }
+  .lab-back:hover { color: var(--accent-light, #6b85ea); }
+  h1 {
+    margin: 12px 0 4px;
+    font: 600 20px 'IBM Plex Mono', monospace;
+    letter-spacing: -0.01em;
+  }
+  p {
+    margin: 0;
+    color: var(--muted, #8a92ab);
+    font-size: 14px;
+  }
+  .controls {
+    margin-top: 20px;
+    display: grid;
+    gap: 10px;
+    width: 260px;
+  }
+  label {
+    display: grid;
+    grid-template-columns: 76px 1fr 40px;
+    align-items: center;
+    gap: 10px;
+    font: 400 12px 'IBM Plex Mono', monospace;
+    color: var(--muted, #8a92ab);
+  }
+  output { color: var(--text, #e8ecf7); text-align: right; }
+  input[type='range'] { width: 100%; accent-color: var(--accent, #3556d4); }
+  .lab-stats {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    color: var(--muted-dim, #5c6480);
+    font: 400 12px 'IBM Plex Mono', monospace;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import vertexShader from '../../shaders/blob.vert?raw';
+  import fragmentShader from '../../shaders/blob.frag?raw';
+
+  const canvas = document.getElementById('scene') as HTMLCanvasElement;
+  const stats = document.getElementById('stats') as HTMLElement;
+  const ampInput = document.getElementById('amp') as HTMLInputElement;
+  const freqInput = document.getElementById('freq') as HTMLInputElement;
+  const ampOut = document.getElementById('ampOut') as HTMLOutputElement;
+  const freqOut = document.getElementById('freqOut') as HTMLOutputElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 5.5);
+
+  const baseAmp = () => parseFloat(ampInput.value);
+
+  const material = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    uniforms: {
+      uTime: { value: 0 },
+      uAmp: { value: baseAmp() },
+      uFreq: { value: parseFloat(freqInput.value) },
+      uDeep: { value: new THREE.Color('#131826') },
+      uMid: { value: new THREE.Color('#3556d4') },
+      uRim: { value: new THREE.Color('#6b85ea') },
+    },
+  });
+
+  const blob = new THREE.Mesh(new THREE.SphereGeometry(1.4, 160, 160), material);
+  scene.add(blob);
+
+  // Sliders → uniforms
+  const syncControls = () => {
+    freqOut.textContent = parseFloat(freqInput.value).toFixed(2);
+    ampOut.textContent = baseAmp().toFixed(2);
+    material.uniforms.uFreq.value = parseFloat(freqInput.value);
+  };
+  ampInput.addEventListener('input', syncControls);
+  freqInput.addEventListener('input', syncControls);
+  syncControls();
+
+  // Cursor: inclina el blob; la velocidad del cursor "excita" la amplitud y decae.
+  const pointer = { x: 0, y: 0 };
+  let excite = 0;
+  let spinX = 0;
+  let spinY = 0;
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  canvas.addEventListener('pointermove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    excite = Math.min(excite + Math.hypot(dx, dy) * 0.004, 0.5);
+    if (dragging) {
+      spinY += dx * 0.005;
+      spinX += dy * 0.005;
+    }
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  canvas.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  const endDrag = () => { dragging = false; };
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+
+  function resize() {
+    const { clientWidth: w, clientHeight: h } = canvas;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // Radio máximo del blob ≈ 1.4 + 0.9 (amplitud máx.); en pantallas verticales
+    // hay que alejar la cámara para que quepa a lo ancho.
+    const fitWidth = 2.4 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
+    camera.position.z = Math.max(5.5, fitWidth);
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const timer = new THREE.Timer();
+  timer.connect(document);
+  let frames = 0;
+  let acc = 0;
+  let rafId = 0;
+
+  function tick() {
+    timer.update();
+    const dt = timer.getDelta();
+
+    if (!reduceMotion) material.uniforms.uTime.value = timer.getElapsed();
+    excite *= Math.exp(-dt * 2.5);
+    material.uniforms.uAmp.value = baseAmp() + (reduceMotion ? 0 : excite);
+
+    blob.rotation.y += (pointer.x * 0.5 + spinY - blob.rotation.y) * 0.06;
+    blob.rotation.x += (pointer.y * 0.4 + spinX - blob.rotation.x) * 0.06;
+
+    renderer.render(scene, camera);
+
+    frames++;
+    acc += dt;
+    if (acc >= 0.5) {
+      stats.textContent = `${Math.round(frames / acc)} fps`;
+      frames = 0;
+      acc = 0;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(rafId);
+    } else {
+      timer.update();
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+</script>

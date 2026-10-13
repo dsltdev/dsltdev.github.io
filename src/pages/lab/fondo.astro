@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AgentsBackground from '../../components/AgentsBackground.astro';
+---
+
+<Layout
+  title="Lab — agentes de fondo"
+  description="Fondo animado con varios agentes que colaboran."
+  noindex
+>
+  <AgentsBackground labels />
+
+  <main class="demo">
+    <a href="/lab" class="back">← Lab</a>
+
+    <section class="hero">
+      <p class="eyebrow">Fondo de prueba</p>
+      <h1>Auditoría de pagos con agentes que trabajan en equipo</h1>
+      <p class="lead">
+        Un orquestador reparte el trabajo: uno lee el código, otro verifica firmas, otro audita y otro redacta el
+        informe. Así se ve ese equipo detrás del contenido, sin estorbar la lectura.
+      </p>
+      <div class="actions">
+        <a class="btn" href="/lab/agente">Ver una auditoría real</a>
+        <label class="toggle"><input id="roles" type="checkbox" checked /> Mostrar roles</label>
+        <button id="pause" type="button" class="ghost">Pausar</button>
+      </div>
+    </section>
+
+    <section class="cards">
+      <article>
+        <h2>Lee</h2>
+        <p>Recorre el repositorio y reúne los archivos relevantes del flujo de webhooks.</p>
+      </article>
+      <article>
+        <h2>Verifica</h2>
+        <p>Comprueba firmas, secretos y qué esquema usa cada tipo de evento.</p>
+      </article>
+      <article>
+        <h2>Informa</h2>
+        <p>Ordena los hallazgos por severidad, con archivo, línea y arreglo propuesto.</p>
+      </article>
+    </section>
+
+    <p class="note">
+      Es una simulación decorativa: los roles y el reparto de tareas son una metáfora, no actividad real de agentes.
+    </p>
+  </main>
+</Layout>
+
+<style is:global>
+  body { margin: 0; background: #0b0e14; }
+</style>
+
+<style>
+  .demo {
+    position: relative;
+    z-index: 1;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 24px 24px 80px;
+    color: #e8ecf7;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .back { color: #8a92ab; font: 500 13px 'IBM Plex Mono', monospace; text-decoration: none; }
+  .back:hover { color: #6b85ea; }
+  .hero { padding: 18vh 0 8vh; }
+  .eyebrow { margin: 0 0 12px; color: #6b85ea; font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  h1 { margin: 0 0 18px; font: 600 clamp(28px, 5vw, 46px) / 1.15 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: -0.02em; max-width: 18ch; }
+  .lead { margin: 0 0 28px; max-width: 54ch; color: #a7aec6; font-size: 17px; line-height: 1.6; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .btn {
+    padding: 11px 18px;
+    background: #3556d4;
+    color: #f5f7ff;
+    border-radius: 8px;
+    text-decoration: none;
+    font: 600 14px 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .btn:hover { background: #6b85ea; }
+  .toggle { display: inline-flex; align-items: center; gap: 8px; color: #8a92ab; font: 400 13px 'IBM Plex Mono', monospace; cursor: pointer; }
+  .ghost {
+    background: transparent;
+    color: #8a92ab;
+    border: 1px solid #2e3a56;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font: 500 12px 'IBM Plex Mono', monospace;
+    cursor: pointer;
+  }
+  .ghost:hover { border-color: #6b85ea; color: #e8ecf7; }
+  .btn:focus-visible, .ghost:focus-visible, .toggle input:focus-visible { outline: 2px solid #6b85ea; outline-offset: 2px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .cards article {
+    padding: 18px;
+    background: rgba(19, 24, 38, 0.72);
+    border: 1px solid #232c42;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+  }
+  .cards h2 { margin: 0 0 6px; font: 600 15px 'IBM Plex Mono', monospace; }
+  .cards p { margin: 0; color: #a7aec6; font-size: 14px; line-height: 1.55; }
+  .note { margin: 36px 0 0; color: #5c6480; font: 400 12px 'IBM Plex Mono', monospace; }
+</style>
+
+<script>
+  const bg = document.querySelector<HTMLElement>('[data-agents-bg]');
+  const roles = document.getElementById('roles') as HTMLInputElement | null;
+  const pause = document.getElementById('pause') as HTMLButtonElement | null;
+  roles?.addEventListener('change', () => {
+    if (bg) bg.dataset.labels = roles.checked ? 'on' : 'off';
+  });
+  pause?.addEventListener('click', () => {
+    if (!bg) return;
+    const paused = bg.dataset.paused !== 'true';
+    bg.dataset.paused = String(paused);
+    pause.textContent = paused ? 'Reanudar' : 'Pausar';
+  });
+</script>

@@ -1,0 +1,143 @@
+{
+  "capturedAt": "2026-10-10",
+  "fixture": "lab-fixtures/payouts-webhook",
+  "prompt": "El equipo reporta que las transferencias salientes (payouts) se quedan en `pending` para siempre, aunque el proveedor ya las procesó. Audita este repositorio: encuentra la causa raíz y cualquier otro riesgo en el manejo de webhooks.",
+  "meta": {
+    "source": "session",
+    "model": "claude-sonnet-5-5",
+    "durationMs": 50912,
+    "rawSpanMs": 763652,
+    "cappedGaps": 2,
+    "toolCalls": 6,
+    "tools": [
+      "Read",
+      "Bash (find y grep, solo lectura)"
+    ]
+  },
+  "events": [
+    {
+      "t": 0,
+      "kind": "tool",
+      "id": "toolu_01LFLdNrb6EAsbffHPgajcQr",
+      "name": "Bash",
+      "input": {
+        "command": "find . -type f | sort",
+        "description": "List fixture files (read-only)"
+      }
+    },
+    {
+      "t": 192,
+      "kind": "result",
+      "id": "toolu_01LFLdNrb6EAsbffHPgajcQr",
+      "ok": true,
+      "length": 875,
+      "preview": ".env.example\nREADME.md\nsrc/routes/webhooks.js\nsrc/signature.js\nsrc/transfers.js\ntest/webhooks.test.js"
+    },
+    {
+      "t": 12192,
+      "kind": "text",
+      "text": "El síntoma es \"se queda en `pending`\", así que el sospechoso es el handler que debería actualizar el estado. Leo las rutas de webhooks."
+    },
+    {
+      "t": 12834,
+      "kind": "tool",
+      "id": "toolu_012bjo41fyqcMFVDAx4fQjfL",
+      "name": "Read",
+      "input": {
+        "file_path": "src/routes/webhooks.js"
+      }
+    },
+    {
+      "t": 13027,
+      "kind": "result",
+      "id": "toolu_012bjo41fyqcMFVDAx4fQjfL",
+      "ok": true,
+      "length": 1105,
+      "preview": "1\timport { verifyEventSignature } from '../signature.js';\n2\timport { updateTransferStatus } from '../transfers.js';\n3\t\n4\t// Confirmación de pagos de checkout: actualiza la orden asociada.\n5\texport function handleCheckoutWebhook(req, res) {\n6\t  const event = req.body;\n7\t\n8\t  if (!verifyEventSignature(event, process.env.WOMPI_EVENTS_KEY)) {\n9\t    return res.status(401).json({ error: 'invalid_signatu…"
+    },
+    {
+      "t": 15075,
+      "kind": "text",
+      "text": "El handler de payouts reutiliza `verifyEventSignature` con la misma variable de entorno que checkout. Reviso cómo lee la firma esa función, para ver si el sobre de payouts puede llegar a coincidir."
+    },
+    {
+      "t": 15772,
+      "kind": "tool",
+      "id": "toolu_01SoU3cwTvGn1N7CGVnvZj78",
+      "name": "Read",
+      "input": {
+        "file_path": "src/signature.js"
+      }
+    },
+    {
+      "t": 15935,
+      "kind": "result",
+      "id": "toolu_01SoU3cwTvGn1N7CGVnvZj78",
+      "ok": true,
+      "length": 687,
+      "preview": "1\timport { createHash } from 'node:crypto';\n2\t\n3\t// Verifica un evento firmado: concatena los valores de `signature.properties`\n4\t// (rutas dentro de `data`), el timestamp y el secreto, y compara el SHA-256.\n5\texport function verifyEventSignature(event, secret) {\n6\t  const { properties, checksum, timestamp } = event.signature ?? {};\n7\t  if (!properties || !checksum || !timestamp) return false;\n8\t\n…"
+    },
+    {
+      "t": 22741,
+      "kind": "text",
+      "text": "Confirmado: la función lee `timestamp` desde dentro de `event.signature`. Busco si el repo tiene algún secreto o verificador específico de payouts que el handler debería estar usando."
+    },
+    {
+      "t": 34741,
+      "kind": "tool",
+      "id": "toolu_01Jmjf8VFawgFik8x6B3k4We",
+      "name": "Bash",
+      "input": {
+        "command": "grep -rnE 'PAYOUTS_EVENTS_KEY|handlePayoutsWebhook|updateTransferStatus|createTransfer' --include='*.js' --include='.env.example' . ",
+        "description": "Search for payouts key and handler usage (read-only)"
+      }
+    },
+    {
+      "t": 35027,
+      "kind": "result",
+      "id": "toolu_01Jmjf8VFawgFik8x6B3k4We",
+      "ok": true,
+      "length": 418,
+      "preview": ".env.example:2:WOMPI_PAYOUTS_EVENTS_KEY=\nsrc/transfers.js:4:export function createTransfer(id, amountInCents) {\nsrc/transfers.js:12:export function updateTransferStatus(id, status) {\nsrc/routes/webhooks.js:2:import { updateTransferStatus } from '../transfers.js';\nsrc/routes/webhooks.js:18:export function handlePayoutsWebhook(req, res) {\nsrc/routes/webhooks.js:28:  updateTransferStatus(transfer.id,…"
+    },
+    {
+      "t": 39619,
+      "kind": "tool",
+      "id": "toolu_01EaKStq6RwBKQ9FGB5EmiSB",
+      "name": "Read",
+      "input": {
+        "file_path": "test/webhooks.test.js"
+      }
+    },
+    {
+      "t": 39770,
+      "kind": "result",
+      "id": "toolu_01EaKStq6RwBKQ9FGB5EmiSB",
+      "ok": true,
+      "length": 1467,
+      "preview": "1\timport { test } from 'node:test';\n2\timport assert from 'node:assert/strict';\n3\timport { createHash } from 'node:crypto';\n4\timport { handleCheckoutWebhook } from '../src/routes/webhooks.js';\n5\t\n6\tprocess.env.WOMPI_EVENTS_KEY = 'test_events_key';\n7\t\n8\tfunction signedCheckoutEvent() {\n9\t  const data = { transaction: { id: 'tx_1', status: 'APPROVED', amount_in_cents: 5000000 } };\n10\t  const timestam…"
+    },
+    {
+      "t": 43276,
+      "kind": "tool",
+      "id": "toolu_01DdAQvqPbaZfnSkyfUwRENq",
+      "name": "Read",
+      "input": {
+        "file_path": "src/transfers.js"
+      }
+    },
+    {
+      "t": 43422,
+      "kind": "result",
+      "id": "toolu_01DdAQvqPbaZfnSkyfUwRENq",
+      "ok": true,
+      "length": 460,
+      "preview": "1\t// Almacén en memoria de transferencias salientes (payouts).\n2\tconst transfers = new Map();\n3\t\n4\texport function createTransfer(id, amountInCents) {\n5\t  transfers.set(id, { id, amountInCents, status: 'pending' });\n6\t}\n7\t\n8\texport function getTransfer(id) {\n9\t  return transfers.get(id);\n10\t}\n11\t\n12\texport function updateTransferStatus(id, status) {\n13\t  const transfer = transfers.get(id);\n14\t  if…"
+    },
+    {
+      "t": 50912,
+      "kind": "final",
+      "text": "**Causa raíz.** Las transferencias se quedan en `pending` porque el webhook de payouts nunca valida: `handlePayoutsWebhook` verifica con la función y el secreto de checkout, y el sobre de payouts no coincide en forma ni en llave. Responde `401 invalid_signature` en cada evento real, que parece un rechazo legítimo y por eso nadie lo nota.\n\n- [CRÍTICO] Payouts se verifica con el esquema de checkout — src/routes/webhooks.js:23\n  El handler usa `verifyEventSignature` y `WOMPI_EVENTS_KEY`; esa función lee `timestamp` dentro de `signature` (src/signature.js:6) y el sobre de payouts lo trae como hermano, además de usar otro secreto. Crear un verificador propio que use `WOMPI_PAYOUTS_EVENTS_KEY` y lea el `timestamp` del nivel correcto.\n- [ALTO] El secreto de payouts está declarado pero nunca se lee — .env.example:2\n  `WOMPI_PAYOUTS_EVENTS_KEY` no aparece en ningún archivo de código. Es la señal de que el handler quedó conectado a la llave equivocada; el fix del hallazgo anterior debe consumirla.\n- [ALTO] El handler de payouts no tiene ningún test — test/webhooks.test.js:4\n  Solo se importa y prueba `handleCheckoutWebhook`, así que el 401 permanente nunca se detectó. Agregar un test con un evento firmado con el esquema real de payouts.\n- [MEDIO] Sin protección contra repetición ni eventos duplicados — src/routes/webhooks.js:27\n  No se deduplica por id de evento ni se valida que el `timestamp` sea reciente, así que un evento capturado puede reenviarse. Guardar el id procesado y rechazar firmas fuera de una ventana corta.\n- [MEDIO] El estado se sobrescribe sin validar transiciones — src/transfers.js:15\n  Un evento tardío o repetido puede devolver una transferencia de `approved` a `pending`. Aceptar solo transiciones válidas.\n- [BAJO] Se registra el cuerpo completo del webhook — src/routes/webhooks.js:21\n  `console.log` vuelca el evento entero, incluyendo datos de la transferencia, antes de verificar la firma. Registrar solo id y tipo de evento.\n- [BAJO] La comparación del checksum no es de tiempo constante — src/signature.js:16\n  Se usa `===` sobre el hash. Usar `crypto.timingSafeEqual`."
+    }
+  ]
+}

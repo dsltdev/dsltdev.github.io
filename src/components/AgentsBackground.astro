@@ -1,0 +1,313 @@
+---
+// Fondo decorativo: varios "agentes" (orbes) con roles que se pasan tareas entre sí.
+// Es una simulación visual, no actividad real. Uso:
+//   <AgentsBackground />                 fondo discreto
+//   <AgentsBackground labels />          con el rol de cada agente
+// Se puede controlar en caliente con data-labels="on|off" y data-paused="true|false".
+interface Props {
+  labels?: boolean;
+}
+const { labels = false } = Astro.props;
+---
+
+<div class="agents-bg" data-agents-bg data-labels={labels ? 'on' : 'off'} aria-hidden="true">
+  <canvas></canvas>
+  <div class="agents-labels"></div>
+</div>
+
+<style is:global>
+  .agents-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .agents-bg canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .agents-labels {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    transition: opacity 0.4s;
+  }
+  .agents-bg[data-labels='off'] .agents-labels {
+    opacity: 0;
+  }
+  .agents-bg .agent-tag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    font: 500 11px 'IBM Plex Mono', monospace;
+    letter-spacing: 0.04em;
+    color: #8a92ab;
+    opacity: 0.55;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import vertexShader from '../shaders/blob.vert?raw';
+  import fragmentShader from '../shaders/orb.frag?raw';
+
+  interface Role {
+    label: string;
+    color: string;
+    radius: number;
+    base: [number, number, number];
+  }
+  const ROLES: Role[] = [
+    { label: 'orquestador', color: '#6b85ea', radius: 0.95, base: [0, 0.2, 0] },
+    { label: 'lector', color: '#3556d4', radius: 0.68, base: [-5.2, 1.8, -1] },
+    { label: 'verificador', color: '#7f9a6a', radius: 0.68, base: [-2.6, -2.9, 0.6] },
+    { label: 'auditor', color: '#c98a3a', radius: 0.68, base: [3.0, -2.6, -0.4] },
+    { label: 'redactor', color: '#8a92ab', radius: 0.68, base: [5.0, 2.2, -1.2] },
+  ];
+  // Cada tarea recorre esta ruta; todas las aristas existen en EDGES.
+  const EDGES: [number, number][] = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4]];
+  const FLOW = [0, 1, 2, 3, 4, 0];
+  const MAX_TOKENS = 3;
+  const SPAWN_EVERY = 3.5;
+  const MOVE_SECONDS = 1.1;
+
+  const edgeBetween = (a: number, b: number) =>
+    EDGES.findIndex(([x, y]) => (x === a && y === b) || (x === b && y === a));
+
+  const root = document.querySelector<HTMLElement>('[data-agents-bg]');
+  const canvas = root?.querySelector('canvas');
+  const labelsEl = root?.querySelector<HTMLElement>('.agents-labels');
+  if (root && canvas && labelsEl) init(root, canvas, labelsEl);
+
+  function init(root: HTMLElement, canvas: HTMLCanvasElement, labelsEl: HTMLElement) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const small = window.matchMedia('(max-width: 700px)').matches;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: !small, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setClearColor(0x000000, 0);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 60);
+    camera.position.z = 13;
+
+    const light = new THREE.Color('#e8ecf7');
+    const deep = new THREE.Color('#131826');
+    const segments = small ? 40 : 72;
+
+    interface AgentView {
+      mesh: THREE.Mesh;
+      uniforms: Record<string, THREE.IUniform>;
+      base: THREE.Vector3;
+      phase: number;
+      amp: number;
+      pulse: number;
+      working: number;
+      tag: HTMLElement;
+    }
+    const agents: AgentView[] = ROLES.map((role, i) => {
+      const color = new THREE.Color(role.color);
+      const uniforms = {
+        uTime: { value: 0 },
+        uAmp: { value: 0.15 },
+        uFreq: { value: 1.3 },
+        uDeep: { value: deep.clone() },
+        uMid: { value: color.clone() },
+        uRim: { value: color.clone().lerp(light, 0.35) },
+        uOpacity: { value: 0.72 }, // fondo: tiene que ceder ante el texto, sin perder el color del rol
+      };
+      const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(role.radius, segments, segments),
+        new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true, depthWrite: false }),
+      );
+      scene.add(mesh);
+      const tag = document.createElement('div');
+      tag.className = 'agent-tag';
+      tag.textContent = role.label;
+      labelsEl.append(tag);
+      return { mesh, uniforms, base: new THREE.Vector3(...role.base), phase: i * 1.7, amp: 0.15, pulse: 0, working: 0, tag };
+    });
+
+    // Aristas: se iluminan mientras viaja un paquete por ellas.
+    const edgeMats = EDGES.map(() => new THREE.LineBasicMaterial({ color: 0x6b85ea, transparent: true, opacity: 0.1 }));
+    const edgeGeos = EDGES.map(() => new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]));
+    edgeGeos.forEach((g, i) => scene.add(new THREE.Line(g, edgeMats[i])));
+    const edgeGlow = EDGES.map(() => 0);
+
+    // Paquetes (uno por tarea activa): núcleo + halo
+    const packets = Array.from({ length: MAX_TOKENS }, () => {
+      const group = new THREE.Group();
+      const core = new THREE.MeshBasicMaterial({ color: light, transparent: true, opacity: 0.95 });
+      const halo = new THREE.MeshBasicMaterial({ color: 0x6b85ea, transparent: true, opacity: 0.22, depthWrite: false });
+      group.add(new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), core), new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 12), halo));
+      group.visible = false;
+      scene.add(group);
+      return { group, halo };
+    });
+
+    interface Token {
+      step: number;
+      mode: 'work' | 'move';
+      t: number;
+      dur: number;
+    }
+    const tokens: Token[] = [];
+    let spawnIn = 0.4;
+
+    const pos = agents.map(() => new THREE.Vector3());
+    function placeAgents(time: number, aspect: number) {
+      const sx = THREE.MathUtils.clamp(aspect / 1.6, 0.5, 1.15);
+      const sy = aspect < 1 ? 1.35 : 1;
+      agents.forEach((a, i) => {
+        pos[i].set(
+          a.base.x * sx + Math.sin(time * 0.21 + a.phase) * 0.45,
+          a.base.y * sy + Math.cos(time * 0.17 + a.phase) * 0.35,
+          a.base.z + Math.sin(time * 0.13 + a.phase) * 0.3,
+        );
+        a.mesh.position.copy(pos[i]);
+      });
+      EDGES.forEach(([x, y], i) => {
+        const attr = edgeGeos[i].attributes.position as THREE.BufferAttribute;
+        attr.setXYZ(0, pos[x].x, pos[x].y, pos[x].z);
+        attr.setXYZ(1, pos[y].x, pos[y].y, pos[y].z);
+        attr.needsUpdate = true;
+      });
+    }
+
+    function simulate(dt: number) {
+      spawnIn -= dt;
+      if (spawnIn <= 0 && tokens.length < MAX_TOKENS) {
+        tokens.push({ step: 0, mode: 'work', t: 0, dur: 0.6 + Math.random() });
+        spawnIn = SPAWN_EVERY;
+      }
+      agents.forEach((a) => (a.working = 0));
+      edgeGlow.fill(0);
+
+      for (let i = tokens.length - 1; i >= 0; i--) {
+        const k = tokens[i];
+        k.t += dt;
+        const from = FLOW[k.step];
+        if (k.mode === 'work') {
+          agents[from].working += 1;
+          if (k.t >= k.dur) {
+            if (k.step === FLOW.length - 1) {
+              tokens.splice(i, 1); // el orquestador cierra la tarea
+              continue;
+            }
+            k.mode = 'move';
+            k.t = 0;
+            k.dur = MOVE_SECONDS;
+          }
+        } else {
+          edgeGlow[edgeBetween(from, FLOW[k.step + 1])] = 1;
+          if (k.t >= k.dur) {
+            k.step += 1;
+            k.mode = 'work';
+            k.t = 0;
+            k.dur = 1.2 + Math.random() * 1.2;
+            agents[FLOW[k.step]].pulse = 1;
+          }
+        }
+      }
+    }
+
+    function applyState(dt: number, time: number) {
+      const kLerp = 1 - Math.exp(-dt * 4);
+      agents.forEach((a) => {
+        a.pulse *= Math.exp(-dt * 2.2);
+        const target = 0.06 + Math.min(a.working, 2) * 0.06 + a.pulse * 0.09;
+        a.amp += (target - a.amp) * kLerp;
+        a.uniforms.uAmp.value = a.amp;
+        a.uniforms.uFreq.value = 1.3 + a.working * 0.5;
+        a.uniforms.uTime.value = time;
+        a.mesh.scale.setScalar(1 + a.pulse * 0.08);
+      });
+      edgeMats.forEach((m, i) => {
+        m.opacity += ((edgeGlow[i] ? 0.55 : 0.1) - m.opacity) * kLerp;
+      });
+      packets.forEach((p, i) => {
+        const k = tokens[i];
+        if (!k || k.mode !== 'move') {
+          p.group.visible = false;
+          return;
+        }
+        const from = pos[FLOW[k.step]];
+        const to = pos[FLOW[k.step + 1]];
+        const e = k.t / k.dur;
+        const eased = e < 0.5 ? 2 * e * e : 1 - Math.pow(-2 * e + 2, 2) / 2;
+        p.group.position.lerpVectors(from, to, eased);
+        p.halo.opacity = 0.16 + 0.12 * Math.sin(e * Math.PI);
+        p.group.visible = true;
+      });
+    }
+
+    const tmp = new THREE.Vector3();
+    function updateLabels(w: number, h: number) {
+      agents.forEach((a, i) => {
+        tmp.copy(pos[i]).project(camera);
+        // Píxeles por unidad de mundo a la profundidad del agente, para dejar la etiqueta bajo el orbe.
+        const pxPerUnit = h / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (camera.position.z - pos[i].z));
+        const below = ROLES[i].radius * 1.35 * pxPerUnit + 6;
+        a.tag.style.transform = `translate(${(tmp.x * 0.5 + 0.5) * w}px, ${(-tmp.y * 0.5 + 0.5) * h + below}px) translateX(-50%)`;
+      });
+    }
+
+    const pointer = { x: 0, y: 0 };
+    window.addEventListener('pointermove', (e) => {
+      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+
+    function resize() {
+      const w = root.clientWidth;
+      const h = root.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      if (reduceMotion) drawFrame(0);
+    }
+
+    let time = 0;
+    function drawFrame(dt: number) {
+      const aspect = camera.aspect;
+      placeAgents(time, aspect);
+      applyState(dt, time);
+      camera.position.x += (pointer.x * 0.6 - camera.position.x) * 0.03;
+      camera.position.y += (-pointer.y * 0.4 - camera.position.y) * 0.03;
+      camera.lookAt(0, 0, 0);
+      renderer.render(scene, camera);
+      if (root.dataset.labels === 'on') updateLabels(root.clientWidth, root.clientHeight);
+    }
+
+    new ResizeObserver(resize).observe(root);
+    resize();
+    if (reduceMotion) return; // un solo cuadro estático
+
+    const timer = new THREE.Timer();
+    timer.connect(document);
+    let rafId = 0;
+    function tick() {
+      timer.update();
+      const dt = Math.min(timer.getDelta(), 0.1);
+      if (root.dataset.paused !== 'true') {
+        time += dt;
+        simulate(dt);
+        drawFrame(dt);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+    rafId = requestAnimationFrame(tick);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+      } else {
+        timer.update();
+        rafId = requestAnimationFrame(tick);
+      }
+    });
+  }
+</script>
