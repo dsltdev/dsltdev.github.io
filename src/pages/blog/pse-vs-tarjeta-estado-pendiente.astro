@@ -1,0 +1,96 @@
+---
+import Articulo from '../../components/Articulo.astro';
+---
+
+<Articulo
+  slug="pse-vs-tarjeta-estado-pendiente"
+  title="PSE y tarjeta: por qué no puedes cobrar cuando el cliente vuelve a tu página"
+  description="La tarjeta responde casi al instante y PSE responde cuando el banco confirma. Qué cambia en tu integración de pagos y dónde se rompe."
+  fecha="2026-10-14"
+  lede="En el checkout, PSE y tarjeta se ven casi iguales. Por dentro son dos recorridos distintos, y la diferencia más peligrosa es de tiempo: una responde ya, la otra responde cuando el banco confirma."
+  pregunta="¿Tu sistema distingue un pago aprobado de uno que todavía está pendiente?"
+>
+  <h2>Dos recorridos distintos para el mismo botón</h2>
+  <p>
+    Con <strong>tarjeta</strong>, el cliente escribe los datos en tu checkout y el
+    resultado llega casi enseguida: aprobado o rechazado. Con <strong>PSE</strong>,
+    el cliente sale a la página de su banco, inicia sesión allá y autoriza el débito
+    desde su cuenta. Tu sistema no ve nada de eso mientras ocurre.
+  </p>
+  <p>
+    Esa diferencia no cambia solo la experiencia del cliente. Cambia en qué momento
+    tu sistema <em>puede saber</em> si te pagaron.
+  </p>
+
+  <h2>El error: confiar en que el cliente vuelve</h2>
+  <p>
+    Un patrón común es marcar el pedido como pagado cuando el cliente regresa a la
+    página de agradecimiento. Con tarjeta casi siempre coincide con la realidad. Con
+    PSE hay dos formas de que falle:
+  </p>
+  <ul>
+    <li>
+      <strong>El cliente vuelve y el pago sigue pendiente.</strong> Si entregas el
+      producto en ese momento, entregaste algo que todavía no cobraste.
+    </li>
+    <li>
+      <strong>El cliente nunca vuelve.</strong> Pagó en el banco, cerró la pestaña y
+      no pasó por tu página de regreso. Si tu sistema solo reacciona a esa visita,
+      ese pago queda sin registrar.
+    </li>
+  </ul>
+  <p>
+    La página de regreso sirve para mostrarle algo al cliente. No es una
+    confirmación de pago.
+  </p>
+
+  <h2>La fuente de verdad es el webhook</h2>
+  <p>
+    Lo que sí es una confirmación es la notificación que el proveedor le manda a tu
+    servidor cuando el estado de la transacción cambia. Un pago pasa por estados
+    como pendiente, aprobado o rechazado, y tu sistema tiene que aceptar que el
+    estado final puede llegar después de que el cliente ya se fue.
+  </p>
+  <p>
+    Eso trae tres exigencias que con tarjeta se pueden ignorar y con PSE no:
+  </p>
+  <ul>
+    <li>
+      <strong>Un estado intermedio explícito.</strong> "Pendiente" tiene que existir
+      en tu base de datos como algo distinto de "pagado" y de "fallido".
+    </li>
+    <li>
+      <strong>Tolerar repeticiones y desorden.</strong> Un proveedor puede reenviar
+      una notificación. Procesarla dos veces no debe cobrarte, entregar o devolver
+      dos veces.
+    </li>
+    <li>
+      <strong>Una firma que realmente valide.</strong> El webhook es el punto donde
+      tu sistema decide creer algo sobre dinero. Si la verificación está mal
+      conectada, o rechaza todo o acepta cualquier cosa. En <a href="/blog/webhook-payouts-wompi-firma-invalida">un caso real</a> la
+      verificación usaba el secreto equivocado y nunca validó una notificación
+      verdadera.
+    </li>
+  </ul>
+
+  <h2>Lo que cambia con tarjeta: contracargos</h2>
+  <p>
+    La tarjeta trae otro tiempo de ida y vuelta: el cliente puede desconocer el pago
+    días o semanas después. Tu sistema necesita una forma de reaccionar a un pago que
+    se revierte, algo que con un débito autorizado en el banco normalmente no tiene
+    el mismo recorrido. Las condiciones exactas dependen de tu proveedor y de tu
+    contrato, así que conviene confirmarlas con ellos.
+  </p>
+
+  <h2>Cómo probarlo sin adivinar</h2>
+  <ol>
+    <li>Haz un pago PSE de prueba y <strong>cierra la pestaña del banco sin volver</strong> a tu sitio. ¿Se registra igual cuando llega la notificación?</li>
+    <li>Fíjate qué muestra tu sistema mientras el pago está pendiente. ¿Entrega algo antes de tiempo?</li>
+    <li>Reenvía la misma notificación dos veces. ¿Cambia algo la segunda vez?</li>
+    <li>Prueba con una firma alterada. ¿La rechaza?</li>
+  </ol>
+  <p>
+    Si alguna de esas pruebas te da una respuesta que no esperabas, ahí hay dinero en
+    juego. Eso es lo que reviso en una auditoría de integración de pagos.
+  </p>
+</Articulo>

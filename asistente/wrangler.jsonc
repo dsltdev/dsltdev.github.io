@@ -1,0 +1,17 @@
+{
+  "name": "dsltdev-asistente",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-01",
+  // Opcional pero recomendado: límite por visitante (10 preguntas por minuto).
+  // Descomenta, y crea el namespace en el panel de Cloudflare (Workers → Rate Limiting).
+  // "ratelimits": [{ "name": "LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } }],
+  //
+  // Opcional: tope diario de conversaciones (variable MAX_DIA, 300 por defecto).
+  // Crea el KV con `npx wrangler kv namespace create CUOTA` y pega el id.
+  // "kv_namespaces": [{ "binding": "CUOTA", "id": "PEGA_AQUI_EL_ID" }],
+  "vars": {
+    "MODEL": "claude-haiku-5-5",
+    "ALLOWED_ORIGINS": "https://dsltdev.com,https://www.dsltdev.com",
+    "MAX_DIA": "300"
+  }
+}
