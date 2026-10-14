@@ -5,14 +5,23 @@ interface Props {
   title: string;
   description: string;
   updated: string;
+  /** "juego": páginas del juego Pagos Idle. "sitio": páginas que cubren los servicios y el sitio completo. */
+  variant?: 'juego' | 'sitio';
 }
 
-const { title, description, updated } = Astro.props;
+const { title, description, updated, variant = 'juego' } = Astro.props;
+const sitio = variant === 'sitio';
 ---
 
-<Layout title={`${title} — Pagos Idle`} description={description} siteName="Pagos Idle" image="/og-juego.png" depth={false}>
+<Layout
+  title={`${title} — ${sitio ? 'David López' : 'Pagos Idle'}`}
+  description={description}
+  siteName={sitio ? 'David López' : 'Pagos Idle'}
+  image={sitio ? '/og-servicios.png' : '/og-juego.png'}
+  depth={false}
+>
   <main class="legal">
-    <a href="/juego" class="legal-back">← Volver al juego</a>
+    {sitio ? <a href="/" class="legal-back">← Volver al inicio</a> : <a href="/juego" class="legal-back">← Volver al juego</a>}
     <h1>{title}</h1>
     <p class="legal-updated">Última actualización: {updated}</p>
     <div class="legal-body">
@@ -56,6 +65,11 @@ const { title, description, updated } = Astro.props;
     font-family: var(--font-display);
     font-size: 1.1rem;
     margin: 2rem 0 0.5rem;
+  }
+  .legal-body :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin: 1.5rem 0 0.4rem;
   }
   .legal-body :global(p),
   .legal-body :global(li) {

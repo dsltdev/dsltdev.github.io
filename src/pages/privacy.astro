@@ -1,24 +1,78 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
+import { OFERTA } from '../data/oferta';
 ---
 
 <LegalPage
+  variant="sitio"
   title="Política de Privacidad"
-  description="Qué datos usa Pagos Idle: partida guardada en tu navegador, analítica sin cookies y anuncios de Google."
-  updated="7 de octubre de 2026"
+  description="Qué datos usa este sitio: contacto por correo, accesos de una auditoría, el asistente de IA, pagos con Wompi, analítica sin cookies y el juego Pagos Idle."
+  updated="14 de octubre de 2026"
 >
-  <h2>1. Resumen</h2>
-  <p>Pagos Idle no tiene registro ni cuentas. Tu partida se guarda en tu propio navegador y no la recibimos. Para mantener el juego gratis usamos analítica sin cookies y, cuando están activados, anuncios de Google.</p>
+  <p>Este documento cubre todo dsltdev.com. La <a href="#servicios">Parte A</a> explica cómo trato los datos de quienes consultan o contratan mis servicios. La <a href="#juego">Parte B</a> explica lo que se guarda al jugar a Pagos Idle y a sus modos.</p>
 
-  <h2>2. Qué se guarda en tu dispositivo</h2>
+  <h2 id="servicios">Parte A · Servicios (auditoría de pagos y desarrollo fintech)</h2>
+
+  <h3>A1. Quién es el responsable</h3>
+  <p>{OFERTA.nombre}, {OFERTA.ciudad}. Es la persona que decide cómo se usan los datos descritos aquí. Contacto para cualquier tema de privacidad: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+
+  <h3>A2. Qué datos recibo y para qué</h3>
   <ul>
-    <li><strong>Tu partida</strong> (saldo, negocios, mejoras, licencias y códigos canjeados) tu <strong>cuenta de la Mesa de trading</strong> (capital virtual, posiciones, historial y logros) y tu <strong>billetera del Casino</strong> (fichas, nivel, estadísticas, fecha en que confirmaste ser mayor de 18 años y pausas que hayas activado) se guardan en el almacenamiento local (<code>localStorage</code>) de tu navegador. Si borras los datos del sitio o cambias de dispositivo, las perderás. No se envían a ningún servidor nuestro.</li>
+    <li><strong>Lo que me escribes por correo:</strong> tu nombre, tu correo y lo que cuentes de tu proyecto. Lo uso para responderte y, si lo pides, enviarte una cotización.</li>
+    <li><strong>Lo que me das para una auditoría:</strong> acceso de lectura a tu repositorio o a un staging y, si aplica, registros (logs) o el contenido de un webhook de prueba. Lo uso únicamente para hacer tu auditoría y entregarte el reporte.</li>
+    <li><strong>Datos de contacto al pagar:</strong> los que dejes en la página de pago de Wompi, para identificar tu compra y coordinar la entrega.</li>
+  </ul>
+  <p>No necesito tus llaves privadas, secretos de producción ni acceso de escritura, y no deberías enviármelos. Si por error me llega alguno, te lo aviso para que lo revoques y lo reemplaces por uno nuevo.</p>
+
+  <h3>A3. Qué hago con el acceso a tu código</h3>
+  <ul>
+    <li>Lo uso solo para tu auditoría y no lo comparto con terceros.</li>
+    <li>Al entregarte el reporte puedes revocar el acceso que me diste. Si quieres que elimine lo que conserve de tu proyecto, escríbeme y lo hago.</li>
+    <li>El reporte es para ti. No lo publico ni lo uso como caso sin tu autorización por escrito.</li>
   </ul>
 
-  <h2>3. Analítica</h2>
-  <p>En el casino, el sitio <strong>no carga anuncios de terceros</strong>. Medimos visitas y acciones generales del juego (por ejemplo, cuántas personas ven un anuncio o abren el pago) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, una herramienta que <strong>no usa cookies</strong> ni crea perfiles individuales de los visitantes.</p>
+  <h3>A4. Pagos</h3>
+  <p>El pago se procesa en la página de <strong>Wompi</strong>. Yo no veo ni guardo los datos de tu tarjeta o cuenta bancaria; los trata Wompi según su propia política de privacidad.</p>
 
-  <h2>4. Anuncios</h2>
+  <h3>A5. Asistente de IA</h3>
+  <p>Cuando el asistente de IA está activo en la portada, lo que escribes en el chat viaja por un Worker de Cloudflare hasta la API de <strong>Claude</strong> (Anthropic), que genera la respuesta.</p>
+  <ul>
+    <li>Mi Worker <strong>no guarda ni registra</strong> tus mensajes. Cada conversación vive en tu navegador y se pierde al cerrar o recargar la página.</li>
+    <li>Anthropic procesa el texto para responderte y puede conservarlo según sus propias políticas: <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a>.</li>
+    <li>Para limitar el abuso, Cloudflare puede usar tu dirección IP de forma técnica (por ejemplo, para contar cuántas preguntas haces por minuto).</li>
+    <li><strong>No escribas</strong> llaves, contraseñas, datos de tarjeta ni información confidencial de tu empresa en el chat. Para eso, escríbeme por correo.</li>
+    <li>Es una IA: puede equivocarse y sus respuestas no son una oferta ni un compromiso. Lo que valen son los precios y condiciones publicados en esta página y en los <a href="/terms">Términos</a>.</li>
+  </ul>
+
+  <h3>A6. Analítica</h3>
+  <p>Mido visitas y acciones generales (por ejemplo, cuántas personas pulsan "Pagar la auditoría" o abren el asistente) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que <strong>no usa cookies</strong> ni crea perfiles individuales.</p>
+
+  <h3>A7. Servicios de terceros</h3>
+  <ul>
+    <li><strong>Hosting y red:</strong> GitHub Pages y Cloudflare sirven el sitio y pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
+    <li><strong>Tipografías:</strong> se cargan desde Google Fonts, por lo que Google recibe tu dirección IP al abrir la página.</li>
+  </ul>
+
+  <h3>A8. Tus derechos</h3>
+  <p>Puedes pedirme conocer los datos personales que tengo sobre ti, actualizarlos, rectificarlos o eliminarlos, y revocar la autorización para usarlos, según la Ley 1581 de 2012 de Colombia y sus normas complementarias. Escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> y te respondo por el mismo medio.</p>
+
+  <h3>A9. Menores</h3>
+  <p>Los servicios están dirigidos a empresas y profesionales. No recojo datos de menores de forma intencionada.</p>
+
+  <h2 id="juego">Parte B · Juego Pagos Idle</h2>
+
+  <h3>B1. Resumen</h3>
+  <p>El juego no tiene registro ni cuentas. Tu partida se guarda en tu propio navegador y no la recibo. Para mantener el juego gratis uso analítica sin cookies y, cuando están activados, anuncios de Google.</p>
+
+  <h3>B2. Qué se guarda en tu dispositivo</h3>
+  <ul>
+    <li><strong>Tu partida</strong> (saldo, negocios, mejoras, licencias y códigos canjeados), tu <strong>cuenta de la Mesa de trading</strong> (capital virtual, posiciones, historial y logros) y tu <strong>billetera del Casino</strong> (fichas, nivel, estadísticas, fecha en que confirmaste ser mayor de 18 años y pausas que hayas activado) se guardan en el almacenamiento local (<code>localStorage</code>) de tu navegador. Si borras los datos del sitio o cambias de dispositivo, las perderás. No se envían a ningún servidor mío.</li>
+  </ul>
+
+  <h3>B3. Analítica</h3>
+  <p>En el casino, el sitio <strong>no carga anuncios de terceros</strong>. Medimos visitas y acciones generales del juego (por ejemplo, cuántas personas ven un anuncio o abren el pago) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que <strong>no usa cookies</strong> ni crea perfiles individuales de los visitantes.</p>
+
+  <h3>B4. Anuncios</h3>
   <p>Cuando los anuncios están activos, el sitio usa los servicios de Google (AdSense y las API de publicidad de Google). Google y sus socios pueden usar cookies e identificadores del dispositivo para mostrar y medir anuncios, incluidos anuncios personalizados según tus visitas a este y otros sitios.</p>
   <ul>
     <li>Cómo usa Google la información de los sitios que usan sus servicios: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</li>
@@ -26,22 +80,20 @@ import LegalPage from '../components/LegalPage.astro';
     <li>Los anuncios con recompensa son opcionales: solo se muestran si pulsas "Ver anuncio".</li>
   </ul>
 
-  <h2>5. Compras</h2>
-  <p>Si hay productos a la venta, el pago se procesa en la página de pago de <strong>Wompi</strong>. Nosotros no vemos ni guardamos datos de tu tarjeta o cuenta. Para entregarte el código de tu compra usamos el contacto que dejes al pagar, únicamente para ese fin.</p>
+  <h3>B5. Compras en el juego</h3>
+  <p>Si hay productos a la venta (como el Pase Pro), el pago se procesa en la página de <strong>Wompi</strong>. No veo ni guardo datos de tu tarjeta o cuenta. Para entregarte el código de tu compra uso el contacto que dejes al pagar, únicamente para ese fin.</p>
 
-  <h2>6. Servicios de terceros</h2>
+  <h3>B6. Servicios de terceros del juego</h3>
   <ul>
-    <li><strong>Hosting y red:</strong> GitHub Pages y Cloudflare sirven el sitio y pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
-    <li><strong>Tipografías:</strong> se cargan desde Google Fonts, por lo que Google recibe tu dirección IP al abrir la página.</li>
     <li>Algunas páginas auxiliares del sitio pueden incluir un formulario de contacto procesado por Formspree.</li>
   </ul>
 
-  <h2>7. Menores</h2>
-  <p>Pagos Idle no está dirigido a menores de 13 años y no recoge datos de ellos de forma intencionada.</p>
+  <h3>B7. Menores</h3>
+  <p>Pagos Idle no está dirigido a menores de 13 años y no recoge datos de ellos de forma intencionada. El Casino es solo para mayores de 18.</p>
 
-  <h2>8. Tus derechos</h2>
-  <p>Puedes borrar tu partida en cualquier momento desde el juego (Tienda → Borrar partida) o limpiando los datos del sitio en tu navegador. Para consultas o para pedir que eliminemos el contacto que dejaste en una compra, escribe a <a href="mailto:dsltdev@icloud.com">dsltdev@icloud.com</a>.</p>
+  <h3>B8. Tus derechos en el juego</h3>
+  <p>Puedes borrar tu partida en cualquier momento desde el juego (Tienda → Borrar partida) o limpiando los datos del sitio en tu navegador. Para pedir que elimine el contacto que dejaste en una compra, escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
 
-  <h2>9. Cambios</h2>
-  <p>Actualizaremos esta política si cambia algo real del sitio (por ejemplo, un nuevo servicio de terceros) y cambiaremos la fecha de arriba.</p>
+  <h2>Cambios</h2>
+  <p>Actualizaré esta política si cambia algo real del sitio (por ejemplo, un nuevo servicio de terceros) y cambiaré la fecha de arriba.</p>
 </LegalPage>

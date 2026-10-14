@@ -43,7 +43,7 @@ Y despliega el sitio como siempre.
 
 ## Privacidad
 
-El Worker **no guarda ni registra** las conversaciones. Pero lo que escribe el visitante sí viaja a la API de Claude, y el panel lo avisa ("No pegues llaves, contraseñas ni datos de tarjeta"). `/privacy` y `/terms` hoy están escritos para el juego: conviene agregar ahí que existe el asistente y a quién se envían los mensajes antes de encenderlo.
+El Worker **no guarda ni registra** las conversaciones. Pero lo que escribe el visitante sí viaja a la API de Claude, y el panel lo avisa ("No pegues llaves, contraseñas ni datos de tarjeta"). `/privacy` (sección A5) y `/terms` (sección A10) ya describen el asistente: si cambias cómo funciona (por ejemplo, si empiezas a guardar conversaciones), actualiza esas dos secciones antes de publicar el cambio.
 
 ## Seguridad: lo que está cubierto y lo que no
 
