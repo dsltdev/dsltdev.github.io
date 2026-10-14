@@ -1,0 +1,94 @@
+---
+/**
+ * Pizza dibujada en SVG. El reparto de toppings sale de un LCG sembrado con
+ * el id, así que el mismo id siempre produce el mismo dibujo en cada build.
+ */
+interface Props {
+  id: string;
+  palette: string[];
+  toppingCount?: number;
+  class?: string;
+}
+
+const { id, palette, toppingCount = 15, class: className } = Astro.props;
+
+let state = [...id].reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) % 2147483647, 7);
+const rand = () => {
+  state = (state * 48271) % 2147483647;
+  return state / 2147483647;
+};
+
+const toppingDots = Array.from({ length: toppingCount }, (_, i) => {
+  const angle = rand() * Math.PI * 2;
+  const dist = Math.sqrt(rand()) * 36;
+  return {
+    cx: 60 + Math.cos(angle) * dist,
+    cy: 60 + Math.sin(angle) * dist,
+    r: 3.4 + rand() * 2.2,
+    fill: palette[i % palette.length],
+    rotate: rand() * 90,
+  };
+});
+
+const charSpots = Array.from({ length: 7 }, () => {
+  const angle = rand() * Math.PI * 2;
+  return {
+    cx: 60 + Math.cos(angle) * 51,
+    cy: 60 + Math.sin(angle) * 51,
+    r: 2.2 + rand() * 1.8,
+  };
+});
+
+const sauce = palette[0];
+---
+
+<svg
+  class:list={['pizza-art', className]}
+  viewBox="0 0 120 120"
+  role="img"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <radialGradient id={`crust-${id}`} cx="40%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#e0b071" />
+      <stop offset="70%" stop-color="#c58f45" />
+      <stop offset="100%" stop-color="#9c6a2c" />
+    </radialGradient>
+    <radialGradient id={`cheese-${id}`} cx="38%" cy="32%" r="80%">
+      <stop offset="0%" stop-color="#f6e3ab" />
+      <stop offset="100%" stop-color="#dcb95f" />
+    </radialGradient>
+  </defs>
+
+  <circle cx="60" cy="60" r="56" fill={`url(#crust-${id})`} />
+  <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(90, 56, 18, 0.45)" stroke-width="1" />
+  {charSpots.map((s) => <circle cx={s.cx} cy={s.cy} r={s.r} fill="rgba(104, 62, 20, 0.35)" />)}
+
+  <circle cx="60" cy="60" r="46" fill={sauce} opacity="0.9" />
+  <circle cx="60" cy="60" r="43" fill={`url(#cheese-${id})`} />
+
+  {
+    toppingDots.map((d) => (
+      <ellipse
+        cx={d.cx}
+        cy={d.cy}
+        rx={d.r}
+        ry={d.r * 0.82}
+        fill={d.fill}
+        transform={`rotate(${d.rotate} ${d.cx} ${d.cy})`}
+      />
+    ))
+  }
+
+  <circle cx="44" cy="42" r="14" fill="rgba(255, 245, 210, 0.16)" />
+</svg>
+
+<style>
+  .pizza-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45));
+  }
+</style>
