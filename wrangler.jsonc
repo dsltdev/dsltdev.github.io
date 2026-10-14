@@ -1,0 +1,19 @@
+{
+  // Despliegue directo del sitio estático (Astro → dist/) a Cloudflare, sin pasar por git ni GitHub Actions.
+  // Es distinto del Worker del asistente de IA (carpeta asistente/) y del de worker/.
+  // Guía paso a paso: docs/DESPLIEGUE-CLOUDFLARE.md
+  "name": "dsltdev-sitio",
+  "compatibility_date": "2026-10-14",
+  "assets": {
+    "directory": "./dist",
+    // /blog y /blog/ funcionan igual; /404.html se usa para lo que no existe.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  // La primera publicación sale solo en la dirección de prueba *.workers.dev.
+  "workers_dev": true,
+  "preview_urls": true
+  // El dominio real se conecta DESPUÉS de revisar la dirección de prueba (pasos en la guía).
+  // Al descomentar esto y desplegar, Cloudflare crea el registro DNS y dsltdev.com pasa a servirse desde aquí:
+  // "routes": [{ "pattern": "dsltdev.com", "custom_domain": true }]
+}
