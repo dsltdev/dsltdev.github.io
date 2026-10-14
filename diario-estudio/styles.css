@@ -1,0 +1,171 @@
+/* Colores y medidas que se repiten en toda la página */
+:root {
+  --fondo: #f3f4f8;
+  --tarjeta: #ffffff;
+  --texto: #1b1d29;
+  --texto-suave: #6b7280;
+  --acento: #4f46e5;
+  --borde: #e4e6ef;
+  --error: #d92d20;
+  --redondeo: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px 16px 48px;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/* El contenido se queda centrado y estrecho, así se lee bien en el móvil */
+.contenedor {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.titulo {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.tarjeta {
+  margin-bottom: 16px;
+  padding: 20px;
+  background-color: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--redondeo);
+}
+
+.subtitulo {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+}
+
+/* Tarjeta de la racha */
+.tarjeta-racha {
+  text-align: center;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.racha-numero {
+  margin: 0;
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.racha-texto {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* Formulario */
+.campo {
+  margin-bottom: 14px;
+}
+
+.etiqueta {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.entrada {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background-color: #fbfbfd;
+  color: var(--texto);
+  /* 16px evita que el móvil haga zoom al escribir */
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.entrada:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+  background-color: #ffffff;
+}
+
+.boton {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--acento);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background-color: #4338ca;
+}
+
+.error {
+  margin: 0 0 12px;
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+/* Lista de sesiones */
+.vacio {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sesion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--borde);
+}
+
+.sesion:first-child {
+  border-top: none;
+}
+
+.sesion-tema {
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.sesion-fecha {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.sesion-minutos {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background-color: #eef0fe;
+  color: var(--acento);
+  font-size: 0.8rem;
+  font-weight: 600;
+}

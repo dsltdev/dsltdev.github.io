@@ -1,0 +1,30 @@
+---
+description: Fechas en hora local (nunca UTC) y reglas de la racha del diario de estudio
+globs: diario-estudio/**
+alwaysApply: false
+---
+
+# Fechas siempre locales, nunca UTC
+
+Cada día se guarda como un texto `AAAA-MM-DD` construido con `getFullYear`, `getMonth` y `getDate`, que ya devuelven la hora local de la persona.
+
+```javascript
+// MAL: toISOString() pasa a UTC y puede devolver el día de ayer o de mañana
+const dia = new Date().toISOString().slice(0, 10);
+
+// MAL: new Date("2026-10-02") se interpreta como medianoche UTC
+const fecha = new Date("2026-10-02");
+
+// BIEN
+const dia = aTextoDeDia(new Date()); // usa getFullYear / getMonth / getDate
+const fecha = aFechaLocal("2026-10-02"); // new Date(2026, 9, 2)
+```
+
+Para moverte entre días usa `setDate` sobre una fecha local. No sumes ni restes milisegundos: con el cambio de horario hay días de 23 y de 25 horas y el cálculo se desvía.
+
+# Reglas de la racha
+
+- Un día cuenta si tiene al menos una sesión, da igual cuántas sean.
+- La racha son los días consecutivos con sesión que terminan hoy.
+- Si hoy todavía no hay sesión pero ayer sí, la racha sigue viva: se cuenta desde ayer y no se rompe hasta que termine el día.
+- Si el último día con sesión es anteayer o anterior, la racha es 0.

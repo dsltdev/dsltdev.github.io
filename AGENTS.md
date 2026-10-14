@@ -8,6 +8,10 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Subprojects
+
+- `diario-estudio/` — a standalone study journal built with plain HTML, CSS, and JavaScript. No dependencies, no build step, and it is not part of the Astro build. Read `diario-estudio/AGENTS.md` before changing anything in that folder.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
