@@ -1,0 +1,133 @@
+---
+// Plantilla de los artículos del blog: encabezado, cuerpo y cierre con la llamada a la auditoría.
+// El enlace al final lleva parámetros utm para que Plausible cuente de qué artículo llegó cada visita a la portada.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import { OFERTA, cop, mailto } from '../data/oferta';
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  fecha: string;
+  lede: string;
+  pregunta: string;
+}
+
+const { slug, title, description, fecha, lede, pregunta } = Astro.props;
+const aLanding = `/?utm_source=blog&utm_medium=articulo&utm_campaign=${slug}#servicios`;
+---
+
+<Layout title={`${title} — David López`} description={description} type="article">
+  <Navbar />
+  <main class="container article">
+    <p class="section-label" style="text-align:left">Blog · {fecha}</p>
+    <h1 class="article-title">{title}</h1>
+    <p class="article-lede">{lede}</p>
+
+    <div class="article-body">
+      <slot />
+    </div>
+
+    <div class="article-cta glass-card">
+      <p>{pregunta}</p>
+      <div class="article-cta-row">
+        <a href={aLanding} class="btn btn-primary">Ver la auditoría · {cop(OFERTA.auditoria.precio)} →</a>
+        <a href={mailto(`Pregunta desde el blog: ${title}`)} class="btn btn-secondary">Escribirme</a>
+      </div>
+    </div>
+
+    <a href="/blog" class="back-link">← Volver al blog</a>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .article {
+    padding-top: 140px;
+    padding-bottom: 100px;
+    max-width: 720px;
+  }
+  .article-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 0.75rem 0 1.25rem;
+    text-wrap: balance;
+  }
+  .article-lede {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+  .article-body :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2.5rem 0 1rem;
+  }
+  .article-body :global(p) {
+    font-size: 1rem;
+    color: var(--ink-soft, var(--text));
+    line-height: 1.8;
+    margin-bottom: 1.1rem;
+  }
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 1.1rem 1.4rem;
+    color: var(--ink-soft, var(--text));
+    line-height: 1.8;
+  }
+  .article-body :global(li) {
+    margin-bottom: 0.6rem;
+  }
+  .article-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    color: var(--gold-light, var(--accent));
+  }
+  .article-body :global(a) {
+    color: var(--accent-light, var(--accent));
+    text-decoration: underline;
+  }
+  .article-cta {
+    margin: 3.5rem 0 2.5rem;
+    padding: 2rem;
+    text-align: center;
+  }
+  .article-cta p {
+    margin: 0 0 1.25rem;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+  .article-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .article {
+      padding-top: 110px;
+    }
+  }
+</style>

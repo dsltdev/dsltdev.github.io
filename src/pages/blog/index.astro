@@ -5,6 +5,18 @@ import Footer from '../../components/Footer.astro';
 
 const posts = [
   {
+    slug: 'cinco-preguntas-webhook-pagos',
+    title: 'Cinco preguntas para saber si tu webhook de pagos funciona de verdad',
+    description: 'Una lista corta para revisar tu integración de pagos: prueba de punta a punta, firma, repeticiones, estados pendientes y alertas.',
+    date: '2026-10-14',
+  },
+  {
+    slug: 'pse-vs-tarjeta-estado-pendiente',
+    title: 'PSE y tarjeta: por qué no puedes cobrar cuando el cliente vuelve a tu página',
+    description: 'La tarjeta responde casi al instante y PSE responde cuando el banco confirma. Qué cambia en tu integración de pagos y dónde se rompe.',
+    date: '2026-10-14',
+  },
+  {
     slug: 'webhook-payouts-wompi-firma-invalida',
     title: 'El webhook que rechazaba cada pago real',
     description: 'Un caso real: por qué la confirmación de Wompi Payouts nunca validaba, y cómo lo encontré revisando código en producción.',
@@ -19,7 +31,7 @@ const posts = [
     <div class="section-header" style="text-align:left; margin-bottom: 3rem;">
       <p class="section-label">Blog</p>
       <h1 class="section-title">Bugs reales, no hipotéticos.</h1>
-      <p class="section-subtitle" style="margin:0">Casos de integraciones de pago que encontré y corregí en sistemas en producción.</p>
+      <p class="section-subtitle" style="margin:0">Casos de integraciones de pago que encontré y corregí en sistemas en producción, y guías para revisar la tuya.</p>
     </div>
 
     <div class="post-list">

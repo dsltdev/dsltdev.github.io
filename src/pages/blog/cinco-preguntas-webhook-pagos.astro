@@ -1,0 +1,62 @@
+---
+import Articulo from '../../components/Articulo.astro';
+---
+
+<Articulo
+  slug="cinco-preguntas-webhook-pagos"
+  title="Cinco preguntas para saber si tu webhook de pagos funciona de verdad"
+  description="Una lista corta para revisar tu integración de pagos: prueba de punta a punta, firma, repeticiones, estados pendientes y alertas."
+  fecha="2026-10-14"
+  lede="Un webhook de pagos puede estar conectado durante semanas sin haber confirmado nunca un pago real. Estas cinco preguntas sirven para descubrir si el tuyo está en ese caso."
+  pregunta="¿Alguna de las cinco te dio una respuesta incómoda?"
+>
+  <h2>1. ¿Lo probaste de punta a punta con un pago real?</h2>
+  <p>
+    Que el endpoint responda 200 con un ejemplo de la documentación no demuestra que
+    acepte una notificación verdadera. La que importa es la que genera el proveedor
+    cuando un pago real cambia de estado. Hazla pasar una vez y comprueba que el
+    estado en tu base de datos cambió solo.
+  </p>
+  <p>
+    Esta fue la causa del <a href="/blog/webhook-payouts-wompi-firma-invalida">caso del webhook de Payouts</a>:
+    estaba conectado, pero nunca validó una notificación real.
+  </p>
+
+  <h2>2. ¿Verifica la firma con el secreto correcto para cada tipo de evento?</h2>
+  <p>
+    No des por hecho que dos webhooks del mismo proveedor se firman igual. Pagos,
+    transferencias salientes y reembolsos pueden usar secretos y formas distintas.
+    Revisa en la documentación de cada uno cuál corresponde, y confirma que tu código
+    no reutiliza la verificación de uno para el otro.
+  </p>
+
+  <h2>3. ¿Qué pasa si la misma notificación llega dos veces?</h2>
+  <p>
+    Los proveedores reintentan cuando no reciben tu respuesta, y las redes fallan. Si
+    procesar dos veces la misma notificación te hace entregar, cobrar o devolver dos
+    veces, tu sistema depende de que nada falle nunca. Envía la misma notificación
+    dos veces en un entorno de prueba y mira qué cambió la segunda vez.
+  </p>
+
+  <h2>4. ¿Tienes un estado "pendiente" y lo respetas?</h2>
+  <p>
+    Algunos medios, como PSE, no confirman al instante. Si tu sistema solo conoce
+    "pagado" y "fallido", va a mentir mientras el banco decide. Lee <a href="/blog/pse-vs-tarjeta-estado-pendiente">por qué no puedes cobrar cuando el cliente vuelve a tu página</a>.
+  </p>
+
+  <h2>5. ¿Alguien se entera si deja de funcionar?</h2>
+  <p>
+    Un webhook roto casi nunca falla con ruido. Responde 401 o 500 y los pagos se
+    quedan sin confirmar. Si ninguna alerta te avisa cuando suben los rechazos o
+    cuando hay pagos pendientes por demasiado tiempo, el problema lo vas a descubrir
+    tú, o un cliente, mucho después.
+  </p>
+
+  <h2>Cómo usar la lista</h2>
+  <p>
+    Si respondiste "no sé" a alguna pregunta, eso ya es un hallazgo. Una auditoría
+    consiste en responderlas con tu código delante: reviso webhooks, montos,
+    reintentos y concurrencia, y te entrego un reporte con cada hallazgo, su
+    severidad y cómo corregirlo.
+  </p>
+</Articulo>
