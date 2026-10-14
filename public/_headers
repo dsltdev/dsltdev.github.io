@@ -1,0 +1,10 @@
+# Encabezados que Cloudflare agrega al servir el sitio (no los usa GitHub Pages).
+
+# Archivos con huella en el nombre: no cambian nunca, se guardan un año.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Para todo el sitio.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
