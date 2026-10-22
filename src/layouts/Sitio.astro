@@ -1,0 +1,51 @@
+---
+import '../styles/base.css';
+import '../styles/sitio.css';
+import { PLATAFORMA } from '../data/plataforma';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Datos estructurados (JSON-LD) de la página. */
+  ld?: Record<string, unknown>;
+}
+
+const { title = `${PLATAFORMA.nombre} — ${PLATAFORMA.titulo}`, description = PLATAFORMA.descripcion, image = '/og-servicios.png', noindex = false, ld } = Astro.props;
+const canonical = new URL(Astro.url.pathname, PLATAFORMA.url).href;
+const imagen = image.startsWith('http') ? image : `${PLATAFORMA.url}${image}`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imagen} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={PLATAFORMA.nombre} />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imagen} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    {ld && <script is:inline type="application/ld+json" set:html={JSON.stringify(ld)} />}
+    <script is:inline defer data-domain="dsltdev.com" src="https://plausible.io/js/script.js"></script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,49 +1,106 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
 import { OFERTA, cop } from '../data/oferta';
+import { PLATAFORMA, PLANES } from '../data/plataforma';
 
 const auditoria = cop(OFERTA.auditoria.precio);
 const monitoreo = cop(OFERTA.monitoreo.precio);
 ---
 
 <LegalPage
-  variant="sitio"
   title="Términos de uso"
-  description="Condiciones de los servicios de auditoría de pagos y desarrollo fintech, del asistente de IA y del juego Pagos Idle."
-  updated="14 de octubre de 2026"
+  description="Condiciones de uso de la plataforma dsltdev (cuenta, planes, datos y responsabilidades) y de los servicios de auditoría y desarrollo."
+  updated="22 de octubre de 2026"
 >
-  <p>Este documento cubre todo dsltdev.com. La <a href="#servicios">Parte A</a> son las condiciones de mis servicios. La <a href="#juego">Parte B</a> son las del juego Pagos Idle y sus modos.</p>
+  <p>Este documento cubre todo dsltdev.com. La <a href="#plataforma">Parte A</a> son las condiciones de la plataforma para llevar tu negocio. La <a href="#servicios">Parte B</a> son las de mis servicios de auditoría y desarrollo.</p>
 
-  <h2 id="servicios">Parte A · Servicios (auditoría de pagos y desarrollo fintech)</h2>
+  <h2 id="plataforma">Parte A · Plataforma</h2>
 
-  <h3>A1. Quién presta el servicio</h3>
+  <h3>A1. Qué es</h3>
+  <p>dsltdev es una plataforma web para registrar ventas, controlar inventario, organizar clientes y ver el resumen de un negocio. La ofrece {OFERTA.nombre}, {OFERTA.ciudad}. Contacto: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+  <p>Al crear una cuenta o usar la plataforma aceptas estos términos y la <a href="/privacy">Política de Privacidad</a>.</p>
+
+  <h3>A2. Tu cuenta y tu negocio</h3>
+  <ul>
+    <li>Debes ser mayor de 18 años y dar datos verdaderos.</li>
+    <li>Eres responsable de tu contraseña y de lo que se haga con tu cuenta. Avísame si crees que alguien entró sin permiso.</li>
+    <li>Quien crea un negocio es su dueño. El dueño responde por las personas a las que dé acceso y por los permisos que les asigne.</li>
+    <li>Los datos del negocio que registras son tuyos. Yo los uso solo para prestarte el servicio, como se explica en la política de privacidad.</li>
+  </ul>
+
+  <h3>A3. Prueba, planes y precios</h3>
+  <ul>
+    <li>Cada negocio nuevo tiene {PLATAFORMA.pruebaDias} días de prueba, sin tarjeta.</li>
+    <li>
+      Los planes y sus precios son los publicados en la <a href="/#planes">portada</a>, en pesos colombianos y por mes:
+      {PLANES.map((p, i) => <span>{i > 0 ? '; ' : ' '}{p.nombre} {p.precio}</span>)}.
+    </li>
+    <li>Cada plan tiene límites de usuarios y de productos, que se indican en la portada.</li>
+    <li>Si cambio los precios o los planes, te avisaré por correo antes de que el cambio te afecte.</li>
+    <li>El cobro de la suscripción se hará a través de Wompi. Antes del primer cobro te lo informaré y necesitaré tu autorización.</li>
+    <li>Puedes dejar de usar la plataforma cuando quieras. Para cancelar tu suscripción o cerrar tu cuenta, escríbeme por correo.</li>
+  </ul>
+
+  <h3>A4. Uso aceptable</h3>
+  <ul>
+    <li>Usa la plataforma solo para actividades legales y para tu propio negocio.</li>
+    <li>No intentes entrar a datos de otros negocios, vulnerar la seguridad, sobrecargar el servicio ni copiar o revender la plataforma.</li>
+    <li>Puedo suspender una cuenta que incumpla estos términos o ponga en riesgo a otras, avisándote cuando sea posible.</li>
+  </ul>
+
+  <h3>A5. Lo que la plataforma no es</h3>
+  <ul>
+    <li><strong>No emite facturas electrónicas</strong> ni reemplaza tu obligación de facturar ante la DIAN.</li>
+    <li>No es un software contable ni te asesora en impuestos o contabilidad. Los reportes son una ayuda para tu gestión; las decisiones y el cumplimiento legal son tuyos.</li>
+    <li>No procesa los pagos de tus clientes: los métodos de pago que registras en una venta son solo una anotación para tus reportes.</li>
+  </ul>
+
+  <h3>A6. Tus datos de clientes</h3>
+  <p>Si registras datos de tus clientes, eres el responsable de tenerlos de forma legal, incluida su autorización cuando la ley la exija (Ley 1581 de 2012). Yo los trato por tu encargo, para prestarte el servicio.</p>
+
+  <h3>A7. Disponibilidad y cambios</h3>
+  <p>La plataforma se ofrece "tal cual". Me esfuerzo por que funcione bien, pero no garantizo disponibilidad continua ni que esté libre de errores. Puedo mejorar, cambiar o retirar funciones; si un cambio te afecta de forma importante, te avisaré.</p>
+  <p>Te recomiendo guardar por tu cuenta la información que sea crítica para tu negocio. Si necesitas una copia de tus datos, pídemela por correo.</p>
+
+  <h3>A8. Responsabilidad</h3>
+  <p>En la medida permitida por la ley, no respondo por pérdidas indirectas, lucro cesante ni por decisiones que tomes con base en lo que muestra la plataforma. Mi responsabilidad total frente a ti por el uso de la plataforma se limita a lo que hayas pagado por ella en los últimos tres meses.</p>
+
+  <h3>A9. Cambios en estos términos</h3>
+  <p>Si cambio estos términos de forma importante, te avisaré por correo o dentro de la plataforma y cambiaré la fecha de arriba. Seguir usando la plataforma después del cambio significa que lo aceptas.</p>
+
+  <h3>A10. Ley aplicable</h3>
+  <p>Estos términos se rigen por las leyes de Colombia.</p>
+
+  <h2 id="servicios">Parte B · Servicios (auditoría de pagos y desarrollo fintech)</h2>
+
+  <h3>B1. Quién presta el servicio</h3>
   <p>{OFERTA.nombre}, {OFERTA.ciudad}. Contacto: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>. Puedes escribirme antes de pagar, sin costo, para resolver dudas.</p>
 
-  <h3>A2. Qué ofrezco</h3>
+  <h3>B2. Qué ofrezco</h3>
   <ul>
     <li><strong>Auditoría de integración de pagos:</strong> {auditoria}. Reviso la parte de tu sistema donde se mueve el dinero (webhooks, montos, reintentos y concurrencia) y te entrego un reporte con cada hallazgo, su severidad, qué pasa y cómo corregirlo.</li>
     <li><strong>Monitoreo mensual:</strong> {monitoreo} al mes, después de una auditoría. Reviso tu integración de nuevo cada vez que haces un deploy que la toca. Se coordina por correo; por ahora no es un cobro automático.</li>
     <li><strong>Desarrollo fintech a la medida:</strong> se cotiza según el alcance, por correo, antes de empezar.</li>
   </ul>
 
-  <h3>A3. Cómo se contrata y se paga</h3>
+  <h3>B3. Cómo se contrata y se paga</h3>
   <ul>
-    <li>La auditoría se paga con el enlace de Wompi de la portada. Los precios son los publicados en esa página al momento del pago y están en pesos colombianos.</li>
+    <li>La auditoría se paga con el enlace de Wompi de la <a href="/servicios">página de servicios</a>. Los precios son los publicados en esa página al momento del pago y están en pesos colombianos.</li>
     <li>Después del pago me escribes a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> con el acceso a tu repositorio o staging.</li>
     <li>El monitoreo y el desarrollo a la medida se acuerdan por correo, con el alcance y el precio por escrito antes de empezar.</li>
   </ul>
 
-  <h3>A4. Acceso que necesito</h3>
+  <h3>B4. Acceso que necesito</h3>
   <ul>
     <li>Acceso de lectura a tu repositorio o a un staging y, si aplica, registros (logs) o el contenido de un webhook de prueba.</li>
     <li><strong>No necesito tus llaves privadas, secretos de producción ni acceso de escritura</strong>, y no debes enviármelos.</li>
     <li>Declaras que tienes autorización para darme ese acceso.</li>
   </ul>
 
-  <h3>A5. Plazo de entrega</h3>
+  <h3>B5. Plazo de entrega</h3>
   <p>Entrego el reporte en {OFERTA.auditoria.entrega}, contadas desde que recibo el acceso. Si falta algo para poder revisar tu integración, te lo pido por correo y el plazo se cuenta desde que lo recibo.</p>
 
-  <h3>A6. Alcance y límites</h3>
+  <h3>B6. Alcance y límites</h3>
   <ul>
     <li>La auditoría cubre el código, los registros y los ejemplos que me das. No puedo revisar lo que no veo.</li>
     <li>No garantizo encontrar todos los problemas ni que tu sistema quede libre de errores o de fraude después de aplicar el reporte.</li>
@@ -51,52 +108,24 @@ const monitoreo = cop(OFERTA.monitoreo.precio);
     <li>Tú decides qué correcciones aplicar y cuándo. Si contratas el desarrollo a la medida, se acuerda por escrito.</li>
   </ul>
 
-  <h3>A7. Confidencialidad y propiedad</h3>
+  <h3>B7. Confidencialidad y propiedad</h3>
   <ul>
     <li>Uso lo que me das solo para tu auditoría y no lo comparto con terceros. Más detalle en la <a href="/privacy">Política de Privacidad</a>.</li>
     <li>El reporte es para ti. Tu código sigue siendo tuyo.</li>
     <li>No publico tu caso ni lo uso como referencia sin tu autorización por escrito.</li>
   </ul>
 
-  <h3>A8. Problemas con tu compra</h3>
+  <h3>B8. Problemas con tu compra</h3>
   <p>Si tienes un problema con tu compra o con el reporte, escríbeme a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> y lo resolvemos.</p>
 
-  <h3>A9. Responsabilidad</h3>
+  <h3>B9. Responsabilidad</h3>
   <p>En la medida permitida por la ley, no respondo por pérdidas indirectas ni por decisiones que tomes con base en el reporte. Las decisiones sobre tu sistema y tu dinero son tuyas.</p>
 
-  <h3>A10. Asistente de IA</h3>
-  <p>El asistente de la portada, cuando está activo, es una inteligencia artificial. Puede equivocarse, no es una persona ni un asesor, y sus respuestas no son una oferta ni un compromiso. Lo que vale son los precios y condiciones de esta página. Si algo importa, confírmalo por correo. Cómo se tratan tus mensajes está en la <a href="/privacy">Política de Privacidad</a>.</p>
+  <h3>B10. Asistente de IA</h3>
+  <p>El asistente de la página de servicios, cuando está activo, es una inteligencia artificial. Puede equivocarse, no es una persona ni un asesor, y sus respuestas no son una oferta ni un compromiso. Lo que vale son los precios y condiciones de esta página y de la de servicios. Si algo importa, confírmalo por correo. Cómo se tratan tus mensajes está en la <a href="/privacy">Política de Privacidad</a>.</p>
 
-  <h3>A11. Ley aplicable</h3>
+  <h3>B11. Ley aplicable</h3>
   <p>Estos términos se rigen por las leyes de Colombia.</p>
-
-  <h2 id="juego">Parte B · Juego Pagos Idle</h2>
-
-  <h3>B1. Qué es Pagos Idle</h3>
-  <p>Pagos Idle es un juego gratuito de entretenimiento que se juega en el navegador. Todo el dinero, los negocios y las licencias del juego son <strong>virtuales</strong>: no tienen valor real, no se pueden retirar ni cambiar por dinero.</p>
-
-  <h3>B2. Mesa de trading (simulador)</h3>
-  <p>La <a href="/trading">Mesa de trading</a> y la <a href="/terminal">Terminal</a> son simuladores con <strong>dinero virtual</strong> y precios ficticios generados por un modelo; no reflejan ningún mercado real. No se pueden hacer depósitos ni retiros, y nada de lo que ocurre allí es asesoría financiera, recomendación de inversión ni garantía de resultados en mercados reales. Operar con dinero real implica riesgo de pérdida.</p>
-
-  <h3>B3. Casino de fichas virtuales</h3>
-  <p>El <a href="/casino">Casino</a> es un juego de entretenimiento con <strong>fichas virtuales sin ningún valor real</strong>. Las fichas no se pueden canjear, vender, transferir ni cambiar por dinero, bienes, premios o servicios, y no hay sorteos ni torneos con premios. Solo pueden usarlo personas <strong>mayores de 18 años</strong>.</p>
-  <p>Las probabilidades de cada juego se publican en la propia página. Ganar o perder fichas no dice nada sobre juegos con dinero real, donde se puede perder dinero. Consulta también <a href="/juego-responsable">Juego responsable</a>.</p>
-
-  <h3>B4. Uso del juego</h3>
-  <p>Puedes jugar libremente. No está permitido intentar vulnerar el sitio, alterar el juego para obtener ventajas con herramientas que afecten a otras personas, ni usar el contenido con fines comerciales sin permiso.</p>
-
-  <h3>B5. Tu partida</h3>
-  <p>La partida se guarda solo en tu navegador. No podemos recuperarla si borras los datos del sitio o cambias de dispositivo. Podemos modificar el equilibrio del juego (costos, producción, recompensas) para mejorarlo.</p>
-
-  <h3>B6. Anuncios y compras en el juego</h3>
-  <ul>
-    <li>El juego puede mostrar anuncios, incluidos anuncios con recompensa que decides ver.</li>
-    <li>Los artículos digitales a la venta (como el Pase Pro) se entregan mediante un código que canjeas en el juego y valen para la partida del dispositivo donde lo canjeas.</li>
-    <li>Si tienes un problema con una compra, escríbeme y lo resolvemos.</li>
-  </ul>
-
-  <h3>B7. Sin garantías</h3>
-  <p>El juego se ofrece "tal cual", sin garantía de disponibilidad continua ni de ausencia de errores. En la medida permitida por la ley, no respondo por pérdidas derivadas de su uso.</p>
 
   <h2>Privacidad y contacto</h2>
   <p>Cómo tratamos los datos está en la <a href="/privacy">Política de Privacidad</a>. Para cualquier consulta: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>

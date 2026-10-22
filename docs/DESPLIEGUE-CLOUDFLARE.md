@@ -33,10 +33,12 @@ El primer despliegue crea el Worker `dsltdev-sitio` y muestra una dirección del
 
 ## Paso 2: revisar la dirección de prueba
 
-- La portada es la landing de servicios, el juego está en `/juego`, el blog y los artículos cargan.
+- La portada es la landing de la plataforma, `/app/` abre el panel (login), `/servicios` es la landing de servicios, y el blog y los artículos cargan.
+- Las direcciones viejas (`/juego`, `/casino`, `/trading`, `/4d`, `/desk`…) redirigen a la portada.
 - `/blog` redirige a `/blog/` y una dirección inventada muestra la página 404 propia.
-- `/ads.txt` responde, `/privacy` y `/terms` cargan.
-- El botón de pago abre Wompi y la banda "Partida doble" se anima.
+- `/privacy` y `/terms` cargan.
+- En `/servicios`, el botón de pago abre Wompi y la banda "Partida doble" se anima.
+- El panel necesita las variables `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY` del Supabase en internet al compilar (ver `.env.example`).
 
 ## Paso 3: conectar dsltdev.com
 

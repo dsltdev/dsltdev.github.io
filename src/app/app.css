@@ -1,0 +1,152 @@
+@import '../styles/base.css';
+
+/* ───────── Formularios ───────── */
+.form { display: grid; gap: 14px; }
+.form-corto { max-width: 420px; }
+.campo { display: grid; gap: 5px; }
+.campo > span { font-size: 13px; font-weight: 600; }
+.campo > small { color: var(--suave); font-size: 12px; }
+input:not([type='checkbox']), select, textarea { width: 100%; background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 9px 11px; }
+input:disabled { background: var(--superficie-2); color: var(--suave); }
+textarea { resize: vertical; }
+input.mini { width: 76px; padding: 6px 8px; text-align: right; }
+input.mini.ancho { width: 112px; }
+.casilla { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.casilla input { width: 18px; height: 18px; accent-color: var(--acento); }
+.fila-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fila-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.msg-error { color: var(--alerta); font-size: 13px; }
+.msg-info { color: var(--ok); font-size: 13px; background: var(--ok-fondo); padding: 10px 12px; border-radius: 8px; }
+
+/* ───────── Autenticación ───────── */
+.auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
+.auth-tarjeta { width: 100%; max-width: 400px; background: var(--superficie); border: 1px solid var(--borde); border-radius: 16px; padding: 28px; box-shadow: var(--sombra); display: grid; gap: 8px; }
+.auth-tarjeta h1 { font-size: 22px; margin-top: 14px; letter-spacing: -0.02em; }
+.auth-sub { color: var(--suave); margin-bottom: 10px; }
+.auth-pie { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 14px; }
+
+/* ───────── Estructura del panel ───────── */
+.panel { display: grid; grid-template-columns: 248px 1fr; min-height: 100dvh; }
+.lateral { background: var(--lateral); color: var(--lateral-texto); padding: 20px 14px; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 0; height: 100dvh; }
+.lateral .marca { padding: 0 8px; color: #fff; }
+.selector-negocio select { background: #2b2926; border-color: #3d3a35; color: var(--lateral-texto); }
+.lateral nav { display: grid; gap: 2px; }
+.lateral nav a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--lateral-suave); text-decoration: none; font-weight: 500; }
+.lateral nav a span { width: 18px; text-align: center; }
+.lateral nav a:hover { background: #2b2926; color: #fff; }
+.lateral nav a.activo { background: var(--acento); color: var(--acento-texto); }
+.lateral-pie { margin-top: auto; display: grid; gap: 10px; }
+.usuario { display: grid; padding: 0 8px; min-width: 0; }
+.usuario strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.usuario small { color: var(--lateral-suave); }
+.contenido { padding: 32px clamp(16px, 4vw, 40px) 64px; max-width: 1100px; width: 100%; min-width: 0; }
+
+.cabecera { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.cabecera h1 { font-size: 26px; letter-spacing: -0.02em; line-height: 1.2; }
+.cabecera p { color: var(--suave); margin-top: 2px; }
+.subtitulo { font-size: 17px; margin: 32px 0 12px; }
+.barra { margin-bottom: 14px; max-width: 420px; }
+
+/* ───────── Tablas ───────── */
+.tabla-caja { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); overflow-x: auto; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); padding: 11px 14px; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+.tabla th.der { text-align: right; }
+.tabla td { padding: 12px 14px; border-bottom: 1px solid var(--borde); vertical-align: middle; }
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla td small { display: block; }
+.fila-clic { cursor: pointer; }
+.fila-clic:hover td { background: var(--superficie-2); }
+.tabla-lineas td { padding: 8px 14px; }
+
+.etiqueta { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--superficie-2); color: var(--suave); }
+.etiqueta-ok { background: var(--ok-fondo); color: var(--ok); }
+.etiqueta-alerta { background: var(--alerta-fondo); color: var(--alerta); }
+
+/* ───────── Tarjetas y KPIs ───────── */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.kpi { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 16px 18px; display: grid; gap: 2px; }
+.kpi span { color: var(--suave); font-size: 13px; font-weight: 500; }
+.kpi strong { font-size: 24px; letter-spacing: -0.02em; }
+.kpi small { color: var(--suave); }
+.dos-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 18px 20px; display: grid; gap: 12px; margin-bottom: 14px; }
+.tarjeta > header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.tarjeta h2 { font-size: 16px; }
+.lista { list-style: none; margin: 0; padding: 0; display: grid; }
+.lista li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
+.lista li:last-child { border-bottom: 0; }
+.lista small { display: block; }
+
+.planes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.plan { border: 1px solid var(--borde); border-radius: var(--radio); padding: 14px 16px; display: grid; gap: 6px; }
+.plan-actual { border-color: var(--acento); background: var(--acento-suave); }
+.plan h3 { font-size: 15px; }
+.plan strong { font-size: 20px; }
+.plan strong small { font-size: 13px; font-weight: 400; color: var(--suave); }
+.plan ul { margin: 0; padding-left: 18px; color: var(--suave); font-size: 14px; }
+
+/* ───────── Estados ───────── */
+.vacio { text-align: center; padding: 56px 16px; display: grid; gap: 8px; justify-items: center; background: var(--superficie); border: 1px dashed var(--borde); border-radius: var(--radio); }
+.vacio-icono { font-size: 30px; color: var(--acento); }
+.vacio h3 { font-size: 17px; }
+.vacio p { color: var(--suave); }
+.vacio .btn { margin-top: 8px; }
+.cargando { color: var(--suave); padding: 40px 0; text-align: center; }
+.caja-error { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--alerta-fondo); color: var(--alerta); padding: 12px 16px; border-radius: var(--radio); }
+
+/* ───────── Modal ───────── */
+.modal-fondo { position: fixed; inset: 0; background: rgb(0 0 0 / 50%); display: grid; place-items: start center; padding: 5vh 16px; overflow-y: auto; z-index: 50; }
+.modal { background: var(--superficie); border: 1px solid var(--borde); border-radius: 14px; width: 100%; max-width: 540px; padding: 20px 22px 22px; box-shadow: var(--sombra); display: grid; gap: 14px; }
+.modal-cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.modal-cab h2 { font-size: 18px; }
+.modal-pie { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.modal-pie .izq { margin-right: auto; }
+
+/* ───────── Venta ───────── */
+.buscador { position: relative; }
+.sugerencias { position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px; list-style: none; background: var(--superficie); border: 1px solid var(--borde); border-radius: 10px; box-shadow: var(--sombra); max-height: 300px; overflow-y: auto; }
+.sugerencias li { padding: 8px 10px; }
+.sugerencias button { width: 100%; display: flex; justify-content: space-between; gap: 12px; background: none; border: 0; padding: 8px 10px; border-radius: 6px; cursor: pointer; text-align: left; }
+.sugerencias button:hover:not(:disabled) { background: var(--superficie-2); }
+.sugerencias button:disabled { opacity: 0.5; cursor: not-allowed; }
+.totales { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px 20px; align-items: baseline; padding-top: 4px; }
+.totales strong { font-size: 20px; }
+.datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 0; }
+.datos dt { font-size: 12px; color: var(--suave); text-transform: uppercase; letter-spacing: 0.04em; }
+.datos dd { margin: 0; font-weight: 600; }
+
+/* ───────── Avisos ───────── */
+.avisos { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 100; max-width: min(92vw, 380px); }
+.aviso { background: var(--texto); color: var(--fondo); padding: 11px 16px; border-radius: 10px; box-shadow: var(--sombra); }
+.aviso-error { background: var(--alerta); color: #fff; }
+
+/* ───────── Móvil ───────── */
+@media (max-width: 860px) {
+  .panel { grid-template-columns: minmax(0, 1fr); }
+  .lateral { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; }
+  .lateral nav { order: 3; display: flex; width: 100%; overflow-x: auto; gap: 4px; }
+  .lateral nav a { white-space: nowrap; }
+  .selector-negocio { flex: 1; min-width: 140px; }
+  .lateral-pie { margin: 0 0 0 auto; display: flex; align-items: center; }
+  .usuario { display: none; }
+  .contenido { padding-top: 22px; }
+  .fila-2, .fila-3 { grid-template-columns: 1fr; }
+
+  /* Las tablas pasan a tarjetas: cada celda lleva su etiqueta (data-et). */
+  .tabla thead { display: none; }
+  .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; }
+  .tabla tr { padding: 10px 14px; border-bottom: 1px solid var(--borde); }
+  .tabla tr:last-child { border-bottom: 0; }
+  .tabla td { border: 0; padding: 3px 0; display: flex; justify-content: space-between; gap: 12px; text-align: right; }
+  .tabla td[data-et]::before { content: attr(data-et); color: var(--suave); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; text-align: left; }
+  .tabla td small { text-align: right; }
+  .tabla-lineas td { display: block; text-align: left; }
+  .tabla-lineas td.der { text-align: left; }
+  .modal-fondo { padding: 0; }
+  .modal { max-width: none !important; min-height: 100dvh; border-radius: 0; border: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

@@ -4,19 +4,70 @@ import { OFERTA } from '../data/oferta';
 ---
 
 <LegalPage
-  variant="sitio"
   title="Política de Privacidad"
-  description="Qué datos usa este sitio: contacto por correo, accesos de una auditoría, el asistente de IA, pagos con Wompi, analítica sin cookies y el juego Pagos Idle."
-  updated="14 de octubre de 2026"
+  description="Qué datos trata la plataforma dsltdev (tu cuenta y los datos de tu negocio), cómo se protegen, con quién se comparten y cómo ejercer tus derechos."
+  updated="22 de octubre de 2026"
 >
-  <p>Este documento cubre todo dsltdev.com. La <a href="#servicios">Parte A</a> explica cómo trato los datos de quienes consultan o contratan mis servicios. La <a href="#juego">Parte B</a> explica lo que se guarda al jugar a Pagos Idle y a sus modos.</p>
+  <p>Este documento cubre todo dsltdev.com. La <a href="#plataforma">Parte A</a> explica cómo se tratan los datos de quienes usan la plataforma para llevar su negocio. La <a href="#servicios">Parte B</a> explica los datos de quienes consultan o contratan mis servicios de auditoría y desarrollo.</p>
 
-  <h2 id="servicios">Parte A · Servicios (auditoría de pagos y desarrollo fintech)</h2>
+  <h2 id="plataforma">Parte A · Plataforma</h2>
 
-  <h3>A1. Quién es el responsable</h3>
-  <p>{OFERTA.nombre}, {OFERTA.ciudad}. Es la persona que decide cómo se usan los datos descritos aquí. Contacto para cualquier tema de privacidad: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+  <h3>A1. Quién es quién</h3>
+  <p>{OFERTA.nombre}, {OFERTA.ciudad}, ofrece la plataforma. Contacto para cualquier tema de privacidad: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+  <ul>
+    <li>Respecto a <strong>los datos de tu cuenta</strong> (quién eres y cómo entras), soy el responsable del tratamiento.</li>
+    <li>Respecto a <strong>los datos de tu negocio</strong> (tus productos, ventas, inventario y, sobre todo, la información de tus clientes), el responsable eres tú, como dueño del negocio. Yo actúo como encargado: los guardo y los muestro para prestarte el servicio, y no los uso para otra cosa.</li>
+  </ul>
+  <p>Como responsable de los datos de tus clientes, te corresponde tener su autorización para registrarlos, según la Ley 1581 de 2012.</p>
 
-  <h3>A2. Qué datos recibo y para qué</h3>
+  <h3>A2. Qué datos se tratan y para qué</h3>
+  <ul>
+    <li><strong>Cuenta:</strong> tu nombre, tu correo y tu contraseña. La contraseña la guarda el sistema de autenticación de forma cifrada; yo no puedo verla. Se usa para que entres y para escribirte sobre tu cuenta.</li>
+    <li><strong>Datos de tu negocio:</strong> nombre del negocio, productos y servicios, precios, existencias, movimientos de inventario, ventas, métodos de pago registrados en cada venta y las personas de tu equipo con su rol. Se usan para que la plataforma funcione.</li>
+    <li><strong>Datos de tus clientes:</strong> los que decidas registrar (nombre, documento, teléfono, correo, dirección y notas). Se usan solo para mostrártelos a ti y a las personas de tu negocio.</li>
+    <li><strong>Suscripción:</strong> el plan que tienes, su estado y las fechas de prueba y de cobro.</li>
+    <li><strong>Datos técnicos:</strong> tu dirección IP y datos del navegador, que los proveedores de hosting registran por seguridad y funcionamiento.</li>
+  </ul>
+  <p>No vendo tus datos ni los de tus clientes, no los uso para publicidad y no los comparto con otros negocios de la plataforma.</p>
+
+  <h3>A3. Separación entre negocios</h3>
+  <p>Cada negocio tiene sus datos aislados: las reglas de la base de datos impiden que una cuenta lea o modifique información de un negocio al que no pertenece. Dentro de un negocio, lo que cada persona puede hacer depende de su rol (dueño, administrador o vendedor).</p>
+
+  <h3>A4. Dónde se guardan y con quién se comparten</h3>
+  <p>La plataforma usa proveedores para funcionar. Pueden procesar datos fuera de Colombia, por lo que tu información puede transferirse a otros países.</p>
+  <ul>
+    <li><strong>Supabase:</strong> base de datos y autenticación. Aquí se guardan tu cuenta y los datos de tu negocio.</li>
+    <li><strong>Cloudflare y GitHub:</strong> alojan y sirven el sitio; pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
+    <li><strong>Wompi:</strong> procesa el cobro de la suscripción cuando esté activo. Yo no veo ni guardo los datos de tu tarjeta o cuenta bancaria; los trata Wompi según su política de privacidad.</li>
+    <li><strong>Google Fonts:</strong> sirve las tipografías, por lo que Google recibe tu dirección IP al abrir una página.</li>
+  </ul>
+  <p>Fuera de estos proveedores, solo comparto datos si una autoridad competente me lo exige por ley.</p>
+
+  <h3>A5. Cookies y almacenamiento en tu navegador</h3>
+  <ul>
+    <li>No uso cookies de publicidad ni de seguimiento.</li>
+    <li>Para mantener tu sesión abierta y recordar qué negocio estabas viendo, el panel guarda información en el almacenamiento local (<code>localStorage</code>) de tu navegador. Se borra al cerrar sesión o al limpiar los datos del sitio.</li>
+    <li>En las páginas públicas (portada, privacidad y términos) mido visitas con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que no usa cookies ni crea perfiles individuales. Dentro del panel no hay analítica.</li>
+  </ul>
+
+  <h3>A6. Cuánto tiempo se conservan</h3>
+  <p>Mientras tu cuenta esté activa. Si pides cerrarla, elimino los datos de tu cuenta y de tu negocio, salvo lo que una ley me obligue a conservar. Los respaldos del proveedor pueden mantener copias durante un tiempo limitado antes de borrarse.</p>
+
+  <h3>A7. Seguridad</h3>
+  <p>La conexión con la plataforma va cifrada (HTTPS) y el acceso a los datos está limitado por cuenta, negocio y rol. Ningún sistema es completamente infalible: si ocurre un incidente que afecte tus datos, te lo comunicaré. Cuida tu contraseña y no la compartas; usa una distinta de la de otros sitios.</p>
+
+  <h3>A8. Tus derechos</h3>
+  <p>Puedes pedirme conocer los datos personales que tengo sobre ti, actualizarlos, rectificarlos o eliminarlos, y revocar la autorización para usarlos, según la Ley 1581 de 2012 de Colombia y sus normas complementarias. También puedes pedir una copia de los datos de tu negocio. Escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> y te respondo por el mismo medio. Si eres cliente de un negocio que usa la plataforma y quieres ejercer tus derechos sobre tus datos, dirígete primero a ese negocio, que es quien los administra.</p>
+
+  <h3>A9. Menores</h3>
+  <p>La plataforma está dirigida a negocios y personas mayores de 18 años. No recojo datos de menores de forma intencionada.</p>
+
+  <h2 id="servicios">Parte B · Servicios (auditoría de pagos y desarrollo fintech)</h2>
+
+  <h3>B1. Quién es el responsable</h3>
+  <p>{OFERTA.nombre}, {OFERTA.ciudad}. Es la persona que decide cómo se usan los datos descritos en esta parte. Contacto: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+
+  <h3>B2. Qué datos recibo y para qué</h3>
   <ul>
     <li><strong>Lo que me escribes por correo:</strong> tu nombre, tu correo y lo que cuentes de tu proyecto. Lo uso para responderte y, si lo pides, enviarte una cotización.</li>
     <li><strong>Lo que me das para una auditoría:</strong> acceso de lectura a tu repositorio o a un staging y, si aplica, registros (logs) o el contenido de un webhook de prueba. Lo uso únicamente para hacer tu auditoría y entregarte el reporte.</li>
@@ -24,76 +75,32 @@ import { OFERTA } from '../data/oferta';
   </ul>
   <p>No necesito tus llaves privadas, secretos de producción ni acceso de escritura, y no deberías enviármelos. Si por error me llega alguno, te lo aviso para que lo revoques y lo reemplaces por uno nuevo.</p>
 
-  <h3>A3. Qué hago con el acceso a tu código</h3>
+  <h3>B3. Qué hago con el acceso a tu código</h3>
   <ul>
     <li>Lo uso solo para tu auditoría y no lo comparto con terceros.</li>
     <li>Al entregarte el reporte puedes revocar el acceso que me diste. Si quieres que elimine lo que conserve de tu proyecto, escríbeme y lo hago.</li>
     <li>El reporte es para ti. No lo publico ni lo uso como caso sin tu autorización por escrito.</li>
   </ul>
 
-  <h3>A4. Pagos</h3>
+  <h3>B4. Pagos</h3>
   <p>El pago se procesa en la página de <strong>Wompi</strong>. Yo no veo ni guardo los datos de tu tarjeta o cuenta bancaria; los trata Wompi según su propia política de privacidad.</p>
 
-  <h3>A5. Asistente de IA</h3>
-  <p>Cuando el asistente de IA está activo en la portada, lo que escribes en el chat viaja por un Worker de Cloudflare hasta la API de <strong>Claude</strong> (Anthropic), que genera la respuesta.</p>
+  <h3>B5. Asistente de IA</h3>
+  <p>Cuando el asistente de IA está activo en la página de servicios, lo que escribes en el chat viaja por un Worker de Cloudflare hasta la API de <strong>Claude</strong> (Anthropic), que genera la respuesta.</p>
   <ul>
     <li>Mi Worker <strong>no guarda ni registra</strong> tus mensajes. Cada conversación vive en tu navegador y se pierde al cerrar o recargar la página.</li>
     <li>Anthropic procesa el texto para responderte y puede conservarlo según sus propias políticas: <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a>.</li>
     <li>Para limitar el abuso, Cloudflare puede usar tu dirección IP de forma técnica (por ejemplo, para contar cuántas preguntas haces por minuto).</li>
     <li><strong>No escribas</strong> llaves, contraseñas, datos de tarjeta ni información confidencial de tu empresa en el chat. Para eso, escríbeme por correo.</li>
-    <li>Es una IA: puede equivocarse y sus respuestas no son una oferta ni un compromiso. Lo que valen son los precios y condiciones publicados en esta página y en los <a href="/terms">Términos</a>.</li>
+    <li>Es una IA: puede equivocarse y sus respuestas no son una oferta ni un compromiso. Lo que valen son los precios y condiciones publicados en la página de servicios y en los <a href="/terms">Términos</a>.</li>
   </ul>
 
-  <h3>A6. Analítica</h3>
-  <p>Mido visitas y acciones generales (por ejemplo, cuántas personas pulsan "Pagar la auditoría" o abren el asistente) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que <strong>no usa cookies</strong> ni crea perfiles individuales.</p>
-
-  <h3>A7. Servicios de terceros</h3>
-  <ul>
-    <li><strong>Hosting y red:</strong> GitHub Pages y Cloudflare sirven el sitio y pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
-    <li><strong>Tipografías:</strong> se cargan desde Google Fonts, por lo que Google recibe tu dirección IP al abrir la página.</li>
-  </ul>
-
-  <h3>A8. Tus derechos</h3>
-  <p>Puedes pedirme conocer los datos personales que tengo sobre ti, actualizarlos, rectificarlos o eliminarlos, y revocar la autorización para usarlos, según la Ley 1581 de 2012 de Colombia y sus normas complementarias. Escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> y te respondo por el mismo medio.</p>
-
-  <h3>A9. Menores</h3>
-  <p>Los servicios están dirigidos a empresas y profesionales. No recojo datos de menores de forma intencionada.</p>
-
-  <h2 id="juego">Parte B · Juego Pagos Idle</h2>
-
-  <h3>B1. Resumen</h3>
-  <p>El juego no tiene registro ni cuentas. Tu partida se guarda en tu propio navegador y no la recibo. Para mantener el juego gratis uso analítica sin cookies y, cuando están activados, anuncios de Google.</p>
-
-  <h3>B2. Qué se guarda en tu dispositivo</h3>
-  <ul>
-    <li><strong>Tu partida</strong> (saldo, negocios, mejoras, licencias y códigos canjeados), tu <strong>cuenta de la Mesa de trading</strong> (capital virtual, posiciones, historial y logros) y tu <strong>billetera del Casino</strong> (fichas, nivel, estadísticas, fecha en que confirmaste ser mayor de 18 años y pausas que hayas activado) se guardan en el almacenamiento local (<code>localStorage</code>) de tu navegador. Si borras los datos del sitio o cambias de dispositivo, las perderás. No se envían a ningún servidor mío.</li>
-  </ul>
-
-  <h3>B3. Analítica</h3>
-  <p>En el casino, el sitio <strong>no carga anuncios de terceros</strong>. Medimos visitas y acciones generales del juego (por ejemplo, cuántas personas ven un anuncio o abren el pago) con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que <strong>no usa cookies</strong> ni crea perfiles individuales de los visitantes.</p>
-
-  <h3>B4. Anuncios</h3>
-  <p>Cuando los anuncios están activos, el sitio usa los servicios de Google (AdSense y las API de publicidad de Google). Google y sus socios pueden usar cookies e identificadores del dispositivo para mostrar y medir anuncios, incluidos anuncios personalizados según tus visitas a este y otros sitios.</p>
-  <ul>
-    <li>Cómo usa Google la información de los sitios que usan sus servicios: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</li>
-    <li>Puedes desactivar la personalización de anuncios en <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a> o en <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a>.</li>
-    <li>Los anuncios con recompensa son opcionales: solo se muestran si pulsas "Ver anuncio".</li>
-  </ul>
-
-  <h3>B5. Compras en el juego</h3>
-  <p>Si hay productos a la venta (como el Pase Pro), el pago se procesa en la página de <strong>Wompi</strong>. No veo ni guardo datos de tu tarjeta o cuenta. Para entregarte el código de tu compra uso el contacto que dejes al pagar, únicamente para ese fin.</p>
-
-  <h3>B6. Servicios de terceros del juego</h3>
-  <ul>
-    <li>Algunas páginas auxiliares del sitio pueden incluir un formulario de contacto procesado por Formspree.</li>
-  </ul>
+  <h3>B6. Tus derechos</h3>
+  <p>Puedes pedirme conocer, actualizar, rectificar o eliminar los datos que tengo sobre ti, y revocar la autorización para usarlos, según la Ley 1581 de 2012 de Colombia. Escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
 
   <h3>B7. Menores</h3>
-  <p>Pagos Idle no está dirigido a menores de 13 años y no recoge datos de ellos de forma intencionada. El Casino es solo para mayores de 18.</p>
-
-  <h3>B8. Tus derechos en el juego</h3>
-  <p>Puedes borrar tu partida en cualquier momento desde el juego (Tienda → Borrar partida) o limpiando los datos del sitio en tu navegador. Para pedir que elimine el contacto que dejaste en una compra, escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+  <p>Los servicios están dirigidos a empresas y profesionales. No recojo datos de menores de forma intencionada.</p>
 
   <h2>Cambios</h2>
-  <p>Actualizaré esta política si cambia algo real del sitio (por ejemplo, un nuevo servicio de terceros) y cambiaré la fecha de arriba.</p>
+  <p>Actualizaré esta política si cambia algo real del sitio (por ejemplo, un nuevo proveedor) y cambiaré la fecha de arriba.</p>
 </LegalPage>

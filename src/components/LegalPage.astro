@@ -1,93 +1,87 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Sitio from '../layouts/Sitio.astro';
+import { PLATAFORMA } from '../data/plataforma';
 
 interface Props {
   title: string;
   description: string;
   updated: string;
-  /** "juego": páginas del juego Pagos Idle. "sitio": páginas que cubren los servicios y el sitio completo. */
-  variant?: 'juego' | 'sitio';
 }
 
-const { title, description, updated, variant = 'juego' } = Astro.props;
-const sitio = variant === 'sitio';
+const { title, description, updated } = Astro.props;
 ---
 
-<Layout
-  title={`${title} — ${sitio ? 'David López' : 'Pagos Idle'}`}
-  description={description}
-  siteName={sitio ? 'David López' : 'Pagos Idle'}
-  image={sitio ? '/og-servicios.png' : '/og-juego.png'}
-  depth={false}
->
+<Sitio title={`${title} — ${PLATAFORMA.nombre}`} description={description}>
+  <header class="cab">
+    <div class="contenedor cab-in">
+      <a class="marca" href="/"><span class="marca-punto" aria-hidden="true"></span>{PLATAFORMA.nombre}</a>
+      <div class="cab-acciones">
+        <a class="btn btn-ghost" href="/">← Inicio</a>
+      </div>
+    </div>
+  </header>
+
   <main class="legal">
-    {sitio ? <a href="/" class="legal-back">← Volver al inicio</a> : <a href="/juego" class="legal-back">← Volver al juego</a>}
     <h1>{title}</h1>
-    <p class="legal-updated">Última actualización: {updated}</p>
-    <div class="legal-body">
+    <p class="legal-fecha">Última actualización: {updated}</p>
+    <div class="legal-cuerpo">
       <slot />
     </div>
-    <footer class="legal-footer">
-      <a href="/privacy">Privacidad</a>
-      <a href="/terms">Términos</a>
-    </footer>
   </main>
-</Layout>
+
+  <footer class="pie">
+    <div class="contenedor pie-in">
+      <span>© {new Date().getFullYear()} {PLATAFORMA.nombre}</span>
+      <nav aria-label="Pie de página">
+        <a href="/privacy">Privacidad</a>
+        <a href="/terms">Términos</a>
+        <a href={`mailto:${PLATAFORMA.email}`}>Contacto</a>
+      </nav>
+    </div>
+  </footer>
+</Sitio>
 
 <style>
   .legal {
-    position: relative;
-    z-index: 1;
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 2rem 1.25rem 4rem;
+    padding: 40px clamp(16px, 4vw, 32px) 72px;
   }
-  .legal-back {
-    display: inline-block;
-    margin-bottom: 2rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-  .legal-back:hover { color: var(--accent); }
   h1 {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-    margin-bottom: 0.5rem;
+    font-size: clamp(28px, 4.5vw, 40px);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0 0 8px;
   }
-  .legal-updated {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 2rem;
+  .legal-fecha {
+    color: var(--suave);
+    font-size: 14px;
+    margin: 0 0 32px;
   }
-  .legal-body :global(h2) {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    margin: 2rem 0 0.5rem;
+  .legal-cuerpo :global(h2) {
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin: 44px 0 6px;
+    padding-top: 24px;
+    border-top: 1px solid var(--borde);
+    scroll-margin-top: 80px;
   }
-  .legal-body :global(h3) {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    margin: 1.5rem 0 0.4rem;
+  .legal-cuerpo :global(h3) {
+    font-size: 17px;
+    margin: 28px 0 4px;
   }
-  .legal-body :global(p),
-  .legal-body :global(li) {
-    color: var(--text);
-    opacity: 0.85;
-    line-height: 1.75;
-    margin: 0.6rem 0;
+  .legal-cuerpo :global(p),
+  .legal-cuerpo :global(li) {
+    line-height: 1.7;
+    margin: 8px 0;
   }
-  .legal-body :global(ul) { padding-left: 1.4rem; }
-  .legal-body :global(a) { color: var(--accent-light); text-decoration: underline; }
-  .legal-footer {
-    display: flex;
-    gap: 1.25rem;
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+  .legal-cuerpo :global(ul) {
+    padding-left: 22px;
   }
-  .legal-footer a { color: var(--muted); }
+  .legal-cuerpo :global(code) {
+    background: var(--superficie-2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
 </style>
