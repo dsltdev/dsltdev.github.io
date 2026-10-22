@@ -1,7 +1,6 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
 import { OFERTA, cop } from '../data/oferta';
-import { PLATAFORMA, PLANES } from '../data/plataforma';
 
 const auditoria = cop(OFERTA.auditoria.precio);
 const monitoreo = cop(OFERTA.monitoreo.precio);
@@ -9,67 +8,28 @@ const monitoreo = cop(OFERTA.monitoreo.precio);
 
 <LegalPage
   title="Términos de uso"
-  description="Condiciones de uso de la plataforma dsltdev (cuenta, planes, datos y responsabilidades) y de los servicios de auditoría y desarrollo."
+  description="Condiciones de la aplicación personal Mis finanzas y de los servicios de auditoría y desarrollo de dsltdev."
   updated="22 de octubre de 2026"
 >
-  <p>Este documento cubre todo dsltdev.com. La <a href="#plataforma">Parte A</a> son las condiciones de la plataforma para llevar tu negocio. La <a href="#servicios">Parte B</a> son las de mis servicios de auditoría y desarrollo.</p>
+  <p>Este documento cubre todo dsltdev.com. La <a href="#app">Parte A</a> son las condiciones de la aplicación «Mis finanzas». La <a href="#servicios">Parte B</a> son las de mis servicios de auditoría y desarrollo.</p>
 
-  <h2 id="plataforma">Parte A · Plataforma</h2>
+  <h2 id="app">Parte A · Mis finanzas</h2>
 
   <h3>A1. Qué es</h3>
-  <p>dsltdev es una plataforma web para registrar ventas, controlar inventario, organizar clientes y ver el resumen de un negocio. La ofrece {OFERTA.nombre}, {OFERTA.ciudad}. Contacto: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
-  <p>Al crear una cuenta o usar la plataforma aceptas estos términos y la <a href="/privacy">Política de Privacidad</a>.</p>
+  <p>«Mis finanzas» es una herramienta <strong>personal y privada</strong> de {OFERTA.nombre}, {OFERTA.ciudad}. No es un servicio abierto al público ni tiene costo, y el registro de nuevas cuentas está cerrado. Cómo se tratan los datos está en la <a href="/privacy">Política de Privacidad</a>.</p>
 
-  <h3>A2. Tu cuenta y tu negocio</h3>
+  <h3>A2. Lo que no es</h3>
   <ul>
-    <li>Debes ser mayor de 18 años y dar datos verdaderos.</li>
-    <li>Eres responsable de tu contraseña y de lo que se haga con tu cuenta. Avísame si crees que alguien entró sin permiso.</li>
-    <li>Quien crea un negocio es su dueño. El dueño responde por las personas a las que dé acceso y por los permisos que les asigne.</li>
-    <li>Los datos del negocio que registras son tuyos. Yo los uso solo para prestarte el servicio, como se explica en la política de privacidad.</li>
+    <li>No es asesoría financiera, contable ni tributaria. Los saldos, resúmenes y presupuestos son una ayuda para llevar tus cuentas; las decisiones son tuyas.</li>
+    <li>No se conecta a tus bancos ni mueve dinero: todo lo que ves son anotaciones que tú registras.</li>
+    <li>No emite facturas electrónicas.</li>
   </ul>
 
-  <h3>A3. Prueba, planes y precios</h3>
-  <ul>
-    <li>Cada negocio nuevo tiene {PLATAFORMA.pruebaDias} días de prueba, sin tarjeta.</li>
-    <li>
-      Los planes y sus precios son los publicados en la <a href="/#planes">portada</a>, en pesos colombianos y por mes:
-      {PLANES.map((p, i) => <span>{i > 0 ? '; ' : ' '}{p.nombre} {p.precio}</span>)}.
-    </li>
-    <li>Cada plan tiene límites de usuarios y de productos, que se indican en la portada.</li>
-    <li>Si cambio los precios o los planes, te avisaré por correo antes de que el cambio te afecte.</li>
-    <li>El cobro de la suscripción se hará a través de Wompi. Antes del primer cobro te lo informaré y necesitaré tu autorización.</li>
-    <li>Puedes dejar de usar la plataforma cuando quieras. Para cancelar tu suscripción o cerrar tu cuenta, escríbeme por correo.</li>
-  </ul>
+  <h3>A3. Disponibilidad</h3>
+  <p>La aplicación se ofrece «tal cual», sin garantía de disponibilidad continua ni de ausencia de errores. Conviene exportar tus movimientos (CSV) de vez en cuando como respaldo propio. En la medida permitida por la ley, no respondo por pérdidas derivadas de su uso.</p>
 
-  <h3>A4. Uso aceptable</h3>
-  <ul>
-    <li>Usa la plataforma solo para actividades legales y para tu propio negocio.</li>
-    <li>No intentes entrar a datos de otros negocios, vulnerar la seguridad, sobrecargar el servicio ni copiar o revender la plataforma.</li>
-    <li>Puedo suspender una cuenta que incumpla estos términos o ponga en riesgo a otras, avisándote cuando sea posible.</li>
-  </ul>
-
-  <h3>A5. Lo que la plataforma no es</h3>
-  <ul>
-    <li><strong>No emite facturas electrónicas</strong> ni reemplaza tu obligación de facturar ante la DIAN.</li>
-    <li>No es un software contable ni te asesora en impuestos o contabilidad. Los reportes son una ayuda para tu gestión; las decisiones y el cumplimiento legal son tuyos.</li>
-    <li>No procesa los pagos de tus clientes: los métodos de pago que registras en una venta son solo una anotación para tus reportes.</li>
-  </ul>
-
-  <h3>A6. Tus datos de clientes</h3>
-  <p>Si registras datos de tus clientes, eres el responsable de tenerlos de forma legal, incluida su autorización cuando la ley la exija (Ley 1581 de 2012). Yo los trato por tu encargo, para prestarte el servicio.</p>
-
-  <h3>A7. Disponibilidad y cambios</h3>
-  <p>La plataforma se ofrece "tal cual". Me esfuerzo por que funcione bien, pero no garantizo disponibilidad continua ni que esté libre de errores. Puedo mejorar, cambiar o retirar funciones; si un cambio te afecta de forma importante, te avisaré.</p>
-  <p>Te recomiendo guardar por tu cuenta la información que sea crítica para tu negocio. Si necesitas una copia de tus datos, pídemela por correo.</p>
-
-  <h3>A8. Responsabilidad</h3>
-  <p>En la medida permitida por la ley, no respondo por pérdidas indirectas, lucro cesante ni por decisiones que tomes con base en lo que muestra la plataforma. Mi responsabilidad total frente a ti por el uso de la plataforma se limita a lo que hayas pagado por ella en los últimos tres meses.</p>
-
-  <h3>A9. Cambios en estos términos</h3>
-  <p>Si cambio estos términos de forma importante, te avisaré por correo o dentro de la plataforma y cambiaré la fecha de arriba. Seguir usando la plataforma después del cambio significa que lo aceptas.</p>
-
-  <h3>A10. Ley aplicable</h3>
-  <p>Estos términos se rigen por las leyes de Colombia.</p>
+  <h3>A4. Ley aplicable</h3>
+  <p>Estas condiciones se rigen por las leyes de Colombia.</p>
 
   <h2 id="servicios">Parte B · Servicios (auditoría de pagos y desarrollo fintech)</h2>
 

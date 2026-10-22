@@ -1,172 +1,25 @@
 ---
-import Sitio from '../layouts/Sitio.astro';
-import { PLATAFORMA, FUNCIONES, PASOS, PLANES, PREGUNTAS } from '../data/plataforma';
-
-const anio = new Date().getFullYear();
-
-const ld = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: PLATAFORMA.nombre,
-  url: PLATAFORMA.url,
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
-  inLanguage: 'es',
-  description: PLATAFORMA.descripcion,
-  offers: PLANES.map((p) => ({
-    '@type': 'Offer',
-    name: p.nombre,
-    price: p.precio.replace(/[^\d]/g, ''),
-    priceCurrency: 'COP'
-  }))
-};
+import App from '../app/App';
+import '../app/app.css';
 ---
 
-<Sitio ld={ld}>
-  <a class="salto" href="#contenido">Saltar al contenido</a>
-
-  <header class="cab">
-    <div class="contenedor cab-in">
-      <a class="marca" href="/"><span class="marca-punto" aria-hidden="true"></span>{PLATAFORMA.nombre}</a>
-      <nav aria-label="Principal">
-        <a href="#funciones">Funciones</a>
-        <a href="#planes">Planes</a>
-        <a href="#preguntas">Preguntas</a>
-      </nav>
-      <div class="cab-acciones">
-        <a class="btn btn-ghost" href={PLATAFORMA.app}>Entrar</a>
-        <a class="btn btn-pri" href={PLATAFORMA.app}>Probar gratis</a>
-      </div>
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1f1d1a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Mis finanzas</title>
+  </head>
+  <body>
+    <div id="raiz">
+      <App client:only="react" />
     </div>
-  </header>
-
-  <main id="contenido">
-    <section class="hero">
-      <div class="contenedor hero-in">
-        <div>
-          <span class="etiqueta-hero">{PLATAFORMA.pruebaDias} días gratis · sin tarjeta</span>
-          <h1>{PLATAFORMA.titulo}</h1>
-          <p class="sub">
-            Registra tus ventas, sabe qué te queda en bodega y ten a tus clientes a la mano. Hecho para negocios pequeños, en español y en pesos.
-          </p>
-          <div class="hero-cta">
-            <a class="btn btn-pri btn-grande" href={PLATAFORMA.app}>Crear mi cuenta</a>
-            <a class="btn btn-sec btn-grande" href="#planes">Ver planes</a>
-          </div>
-          <p class="nota">Funciona en el navegador, en el celular o el computador.</p>
-        </div>
-
-        <figure class="maqueta" aria-hidden="true" style="margin:0">
-          <div class="maqueta-barra"><i></i><i></i><i></i></div>
-          <div class="maqueta-cuerpo">
-            <div class="maqueta-kpis">
-              <div><span>Ventas de hoy</span><strong>$ 385.000</strong></div>
-              <div><span>Ventas del mes</span><strong>$ 4,2 M</strong></div>
-              <div><span>Stock bajo</span><strong>3</strong></div>
-            </div>
-            <div class="maqueta-filas">
-              <div><span>#128 · Mostrador</span><em>$ 70.000</em></div>
-              <div><span>#127 · Cliente frecuente</span><em>$ 125.000</em></div>
-              <div><span>#126 · Mostrador</span><em>$ 25.000</em></div>
-            </div>
-          </div>
-          <p class="pie-maqueta">Ilustración del panel con datos de ejemplo</p>
-        </figure>
-      </div>
-    </section>
-
-    <section class="seccion seccion-alt" id="funciones">
-      <div class="contenedor">
-        <div class="seccion-cab">
-          <h2>Todo lo que necesitas para llevar tu negocio, sin hojas de cálculo</h2>
-          <p>Lo esencial, bien hecho y conectado: cada venta actualiza tu inventario y tu resumen.</p>
-        </div>
-        <div class="rejilla">
-          {FUNCIONES.map((f) => (
-            <article class="func">
-              <div class="func-icono" aria-hidden="true">{f.icono}</div>
-              <h3>{f.titulo}</h3>
-              <p>{f.texto}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="seccion" id="como-funciona">
-      <div class="contenedor">
-        <div class="seccion-cab">
-          <h2>Empieza en minutos</h2>
-        </div>
-        <ol class="pasos">
-          {PASOS.map((p) => (
-            <li>
-              <h3>{p.titulo}</h3>
-              <p>{p.texto}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <section class="seccion seccion-alt" id="planes">
-      <div class="contenedor">
-        <div class="seccion-cab">
-          <h2>Planes simples, en pesos</h2>
-          <p>Todos incluyen ventas, inventario y clientes. Empiezas con {PLATAFORMA.pruebaDias} días de prueba, sin tarjeta.</p>
-        </div>
-        <div class="planes-sitio">
-          {PLANES.map((p) => (
-            <article class:list={['plan-s', { 'plan-s-dest': 'destacado' in p && p.destacado }]}>
-              <h3>{p.nombre}</h3>
-              <p class="para">{p.para}</p>
-              <div class="precio">{p.precio}<small> COP / mes</small></div>
-              <ul>
-                {p.incluye.map((i) => <li>{i}</li>)}
-              </ul>
-              <a class:list={['btn', 'destacado' in p && p.destacado ? 'btn-pri' : 'btn-sec']} href={PLATAFORMA.app}>Probar {p.nombre}</a>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="seccion" id="preguntas">
-      <div class="contenedor">
-        <div class="seccion-cab">
-          <h2>Preguntas frecuentes</h2>
-        </div>
-        <div class="faq">
-          {PREGUNTAS.map((q) => (
-            <details>
-              <summary>{q.p}</summary>
-              <p>{q.r}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="cierre">
-      <div class="contenedor">
-        <div class="cierre-caja">
-          <h2>Ordena tu negocio esta semana</h2>
-          <p>Crea tu cuenta, carga tus productos y registra tu primera venta hoy mismo.</p>
-          <a class="btn btn-pri btn-grande" href={PLATAFORMA.app}>Crear mi cuenta gratis</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="pie">
-    <div class="contenedor pie-in">
-      <span>© {anio} {PLATAFORMA.nombre}</span>
-      <nav aria-label="Pie de página">
-        <a href="/privacy">Privacidad</a>
-        <a href="/terms">Términos</a>
-        <a href="/servicios">Servicios de desarrollo</a>
-        <a href={`mailto:${PLATAFORMA.email}`}>Contacto</a>
-      </nav>
-    </div>
-  </footer>
-</Sitio>
+  </body>
+</html>

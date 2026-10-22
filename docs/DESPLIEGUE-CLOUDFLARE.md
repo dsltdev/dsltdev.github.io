@@ -4,7 +4,7 @@ El sitio es estático: Astro genera `dist/` y Cloudflare lo sirve como un Worker
 
 > **Estado (22 de octubre de 2026):** dsltdev.com se sirve desde el Worker `dsltdev-sitio` (dominio personalizado en `wrangler.jsonc`). El despliegue es `npm run deploy` desde tu computador. GitHub Actions ya no despliega: se eliminó `deploy.yml` y `public/CNAME`.
 >
-> El panel (`/app/`) se conecta al proyecto de Supabase `dsltdev-plataforma` (São Paulo). Sus dos valores públicos (`PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`) están en `.env.production`, que git ignora: `npm run deploy` lo usa solo. Si falta ese archivo, el panel muestra «El panel abre pronto». El `.env` de desarrollo apunta al Supabase local de Docker y no se usa al compilar para producción.
+> La app se conecta al proyecto de Supabase `dsltdev-plataforma` (São Paulo). Sus dos valores públicos (`PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`) están en `.env.production`, que git ignora: `npm run deploy` lo usa solo. Si falta ese archivo, la app muestra «Aún no está conectada». El `.env` de desarrollo apunta al Supabase local de Docker y no se usa al compilar para producción.
 
 ## Qué hay en el repositorio
 
@@ -35,7 +35,7 @@ El primer despliegue crea el Worker `dsltdev-sitio` y muestra una dirección del
 
 ## Paso 2: revisar la dirección de prueba
 
-- La portada es la landing de la plataforma, `/app/` abre el panel (login), `/servicios` es la landing de servicios, y el blog y los artículos cargan.
+- La portada es la app «Mis finanzas» (muestra el login), `/app/` redirige a `/`, `/servicios` es la landing de servicios, y el blog y los artículos cargan.
 - Las direcciones viejas (`/juego`, `/casino`, `/trading`, `/4d`, `/desk`…) redirigen a la portada.
 - `/blog` redirige a `/blog/` y una dirección inventada muestra la página 404 propia.
 - `/privacy` y `/terms` cargan.

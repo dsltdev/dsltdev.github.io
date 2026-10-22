@@ -20,7 +20,9 @@ export default defineConfig({
     '/desk/fuentes': '/',
     '/desk/matematicas': '/',
     '/desk/sesiones': '/',
-    '/juego-responsable': '/'
+    '/juego-responsable': '/',
+    // El panel ya no vive en /app/: la app está en la raíz.
+    '/app': '/'
   },
   build: {
     inlineStylesheets: 'always'

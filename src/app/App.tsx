@@ -1,36 +1,36 @@
 import { useState } from 'react';
 import { AppProvider, useApp } from './state';
-import { AvisosProvider, Cargando } from './ui';
+import { AvisosProvider, Cargando, ErrorCaja } from './ui';
 import { href, useRuta } from './router';
-import { Auth, CrearNegocio, NuevaClave } from './Auth';
-import { ROLES } from './lib/format';
+import { Auth, NuevaClave } from './Auth';
 import { configurado } from './lib/supabase';
+import { MovimientoForm } from './MovimientoForm';
 import Resumen from './pages/Resumen';
-import Ventas from './pages/Ventas';
-import Productos from './pages/Productos';
-import Inventario from './pages/Inventario';
-import Clientes from './pages/Clientes';
+import Movimientos from './pages/Movimientos';
+import Cuentas from './pages/Cuentas';
+import Categorias from './pages/Categorias';
+import Recurrentes from './pages/Recurrentes';
 import Ajustes from './pages/Ajustes';
 
 const MENU = [
   { ruta: '/', texto: 'Resumen', icono: '◧' },
-  { ruta: '/ventas', texto: 'Ventas', icono: '＄' },
-  { ruta: '/productos', texto: 'Productos', icono: '▣' },
-  { ruta: '/inventario', texto: 'Inventario', icono: '▤' },
-  { ruta: '/clientes', texto: 'Clientes', icono: '☺' },
+  { ruta: '/movimientos', texto: 'Movimientos', icono: '⇅' },
+  { ruta: '/cuentas', texto: 'Cuentas', icono: '▣' },
+  { ruta: '/categorias', texto: 'Categorías', icono: '◔' },
+  { ruta: '/recurrentes', texto: 'Recurrentes', icono: '↻' },
   { ruta: '/ajustes', texto: 'Ajustes', icono: '⚙' }
 ];
 
 function Pagina({ ruta }: { ruta: string }) {
   switch (ruta) {
-    case '/ventas':
-      return <Ventas />;
-    case '/productos':
-      return <Productos />;
-    case '/inventario':
-      return <Inventario />;
-    case '/clientes':
-      return <Clientes />;
+    case '/movimientos':
+      return <Movimientos />;
+    case '/cuentas':
+      return <Cuentas />;
+    case '/categorias':
+      return <Categorias />;
+    case '/recurrentes':
+      return <Recurrentes />;
     case '/ajustes':
       return <Ajustes />;
     default:
@@ -39,33 +39,19 @@ function Pagina({ ruta }: { ruta: string }) {
 }
 
 function Panel() {
-  const { negocio, negocios, elegirNegocio, cerrarSesion, session } = useApp();
+  const { session, cerrarSesion, cuentas } = useApp();
   const ruta = useRuta();
-  const [creando, setCreando] = useState(false);
-  if (!negocio) return null;
-  if (creando) return <CrearNegocio onVolver={() => setCreando(false)} />;
+  const [nuevo, setNuevo] = useState(false);
+  // Al guardar un movimiento se vuelve a montar la página actual para que lea los datos nuevos.
+  const [version, setVersion] = useState(0);
 
   return (
     <div className="panel">
       <aside className="lateral">
-        <a className="marca" href="/">
+        <a className="marca" href={href('/')}>
           <span className="marca-punto" aria-hidden="true" />
-          dsltdev
+          Mis finanzas
         </a>
-        <label className="selector-negocio">
-          <span className="sr">Negocio activo</span>
-          <select
-            value={negocio.id}
-            onChange={(e) => (e.target.value === '__nuevo' ? setCreando(true) : elegirNegocio(e.target.value))}
-          >
-            {negocios.map((n) => (
-              <option key={n.id} value={n.id}>
-                {n.nombre}
-              </option>
-            ))}
-            <option value="__nuevo">+ Nuevo negocio</option>
-          </select>
-        </label>
         <nav aria-label="Principal">
           {MENU.map((m) => (
             <a key={m.ruta} href={href(m.ruta)} className={ruta === m.ruta ? 'activo' : undefined} aria-current={ruta === m.ruta ? 'page' : undefined}>
@@ -76,17 +62,33 @@ function Panel() {
         </nav>
         <div className="lateral-pie">
           <div className="usuario">
-            <strong>{session?.user.user_metadata?.nombre || session?.user.email}</strong>
-            <small>{ROLES[negocio.rol]}</small>
+            <strong>{session?.user.email}</strong>
           </div>
           <button type="button" className="btn btn-sec" onClick={cerrarSesion}>
             Salir
           </button>
         </div>
       </aside>
-      <main className="contenido" key={negocio.id}>
+
+      <main className="contenido" key={`${ruta}-${version}`}>
         <Pagina ruta={ruta} />
       </main>
+
+      {cuentas.length > 0 && (
+        <button type="button" className="fab" onClick={() => setNuevo(true)} aria-label="Nuevo movimiento">
+          <span aria-hidden="true">+</span>
+          <span className="fab-texto">Nuevo movimiento</span>
+        </button>
+      )}
+      {nuevo && (
+        <MovimientoForm
+          onCerrar={() => setNuevo(false)}
+          onGuardado={() => {
+            setNuevo(false);
+            setVersion((v) => v + 1);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -95,28 +97,34 @@ function NoDisponible() {
   return (
     <main className="auth">
       <div className="auth-tarjeta">
-        <a className="marca" href="/">
+        <span className="marca">
           <span className="marca-punto" aria-hidden="true" />
-          dsltdev
-        </a>
-        <h1>El panel abre pronto</h1>
-        <p className="auth-sub">Estamos terminando de conectar el servicio. Vuelve en unos días o escríbenos si quieres que te avisemos.</p>
-        <div className="auth-pie">
-          <a href="/">Volver al inicio</a>
-        </div>
+          Mis finanzas
+        </span>
+        <h1>Aún no está conectada</h1>
+        <p className="auth-sub">Falta conectar la base de datos de esta aplicación.</p>
       </div>
     </main>
   );
 }
 
 function Raiz() {
-  const { session, listo, recuperando, negocio, cargandoNegocios } = useApp();
+  const { session, listo, recuperando, cuentas, cargandoDatos, errorDatos, recargarDatos } = useApp();
   if (!configurado) return <NoDisponible />;
   if (!listo) return <Cargando />;
   if (recuperando) return <NuevaClave />;
   if (!session) return <Auth />;
-  if (cargandoNegocios && !negocio) return <Cargando texto="Cargando tu negocio…" />;
-  if (!negocio) return <CrearNegocio />;
+  if (errorDatos && cuentas.length === 0) {
+    return (
+      <main className="auth">
+        <div className="auth-tarjeta">
+          <h1>No pude cargar tus datos</h1>
+          <ErrorCaja texto={errorDatos} reintentar={() => void recargarDatos()} />
+        </div>
+      </main>
+    );
+  }
+  if (cargandoDatos && cuentas.length === 0) return <Cargando texto="Cargando tus finanzas…" />;
   return <Panel />;
 }
 

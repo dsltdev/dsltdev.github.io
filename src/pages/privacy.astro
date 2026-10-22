@@ -5,62 +5,33 @@ import { OFERTA } from '../data/oferta';
 
 <LegalPage
   title="Política de Privacidad"
-  description="Qué datos trata la plataforma dsltdev (tu cuenta y los datos de tu negocio), cómo se protegen, con quién se comparten y cómo ejercer tus derechos."
+  description="Qué datos guarda la aplicación personal Mis finanzas, dónde se almacenan y cómo ejercer tus derechos; y cómo se tratan los datos de los servicios de auditoría."
   updated="22 de octubre de 2026"
 >
-  <p>Este documento cubre todo dsltdev.com. La <a href="#plataforma">Parte A</a> explica cómo se tratan los datos de quienes usan la plataforma para llevar su negocio. La <a href="#servicios">Parte B</a> explica los datos de quienes consultan o contratan mis servicios de auditoría y desarrollo.</p>
+  <p>Este documento cubre todo dsltdev.com. La <a href="#app">Parte A</a> explica cómo trata los datos la aplicación «Mis finanzas». La <a href="#servicios">Parte B</a> explica los datos de quienes consultan o contratan mis servicios de auditoría y desarrollo.</p>
 
-  <h2 id="plataforma">Parte A · Plataforma</h2>
+  <h2 id="app">Parte A · Mis finanzas</h2>
 
-  <h3>A1. Quién es quién</h3>
-  <p>{OFERTA.nombre}, {OFERTA.ciudad}, ofrece la plataforma. Contacto para cualquier tema de privacidad: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+  <h3>A1. Qué es</h3>
+  <p>«Mis finanzas» es una aplicación <strong>personal y privada</strong> de {OFERTA.nombre}, {OFERTA.ciudad}, para llevar el control de sus propios gastos, pagos y transferencias. No está abierta al público: el registro se cierra con la primera cuenta, y no vende, comparte ni muestra datos a terceros. Contacto: <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>.</p>
+
+  <h3>A2. Qué datos se guardan</h3>
   <ul>
-    <li>Respecto a <strong>los datos de tu cuenta</strong> (quién eres y cómo entras), soy el responsable del tratamiento.</li>
-    <li>Respecto a <strong>los datos de tu negocio</strong> (tus productos, ventas, inventario y, sobre todo, la información de tus clientes), el responsable eres tú, como dueño del negocio. Yo actúo como encargado: los guardo y los muestro para prestarte el servicio, y no los uso para otra cosa.</li>
+    <li><strong>La cuenta de acceso:</strong> el correo y la contraseña (esta última cifrada por el sistema de autenticación; nadie puede verla).</li>
+    <li><strong>Los datos financieros que se registran:</strong> cuentas y saldos, categorías y presupuestos, movimientos (gastos, ingresos y transferencias, con su fecha y nota) y pagos recurrentes.</li>
   </ul>
-  <p>Como responsable de los datos de tus clientes, te corresponde tener su autorización para registrarlos, según la Ley 1581 de 2012.</p>
+  <p>Cada fila queda asociada a la cuenta del dueño y la base de datos solo permite leerla y modificarla a esa cuenta.</p>
 
-  <h3>A2. Qué datos se tratan y para qué</h3>
+  <h3>A3. Dónde se guardan</h3>
   <ul>
-    <li><strong>Cuenta:</strong> tu nombre, tu correo y tu contraseña. La contraseña la guarda el sistema de autenticación de forma cifrada; yo no puedo verla. Se usa para que entres y para escribirte sobre tu cuenta.</li>
-    <li><strong>Datos de tu negocio:</strong> nombre del negocio, productos y servicios, precios, existencias, movimientos de inventario, ventas, métodos de pago registrados en cada venta y las personas de tu equipo con su rol. Se usan para que la plataforma funcione.</li>
-    <li><strong>Datos de tus clientes:</strong> los que decidas registrar (nombre, documento, teléfono, correo, dirección y notas). Se usan solo para mostrártelos a ti y a las personas de tu negocio.</li>
-    <li><strong>Suscripción:</strong> el plan que tienes, su estado y las fechas de prueba y de cobro.</li>
-    <li><strong>Datos técnicos:</strong> tu dirección IP y datos del navegador, que los proveedores de hosting registran por seguridad y funcionamiento.</li>
+    <li><strong>Supabase:</strong> base de datos y autenticación, en servidores ubicados en São Paulo (Brasil).</li>
+    <li><strong>Cloudflare:</strong> sirve el sitio y puede registrar la dirección IP por motivos técnicos y de seguridad.</li>
+    <li><strong>Google Fonts:</strong> sirve la tipografía, por lo que Google recibe la dirección IP al abrir la página.</li>
   </ul>
-  <p>No vendo tus datos ni los de tus clientes, no los uso para publicidad y no los comparto con otros negocios de la plataforma.</p>
+  <p>Para mantener la sesión abierta, la aplicación guarda información en el almacenamiento local (<code>localStorage</code>) del navegador, que se borra al cerrar sesión. No usa cookies de publicidad ni de seguimiento, y dentro de la aplicación no hay analítica.</p>
 
-  <h3>A3. Separación entre negocios</h3>
-  <p>Cada negocio tiene sus datos aislados: las reglas de la base de datos impiden que una cuenta lea o modifique información de un negocio al que no pertenece. Dentro de un negocio, lo que cada persona puede hacer depende de su rol (dueño, administrador o vendedor).</p>
-
-  <h3>A4. Dónde se guardan y con quién se comparten</h3>
-  <p>La plataforma usa proveedores para funcionar. Pueden procesar datos fuera de Colombia, por lo que tu información puede transferirse a otros países.</p>
-  <ul>
-    <li><strong>Supabase:</strong> base de datos y autenticación. Aquí se guardan tu cuenta y los datos de tu negocio, en servidores ubicados en São Paulo (Brasil).</li>
-    <li><strong>Cloudflare y GitHub:</strong> alojan y sirven el sitio; pueden registrar tu dirección IP por motivos técnicos y de seguridad.</li>
-    <li><strong>Wompi:</strong> procesa el cobro de la suscripción cuando esté activo. Yo no veo ni guardo los datos de tu tarjeta o cuenta bancaria; los trata Wompi según su política de privacidad.</li>
-    <li><strong>Google Fonts:</strong> sirve las tipografías, por lo que Google recibe tu dirección IP al abrir una página.</li>
-  </ul>
-  <p>Fuera de estos proveedores, solo comparto datos si una autoridad competente me lo exige por ley.</p>
-
-  <h3>A5. Cookies y almacenamiento en tu navegador</h3>
-  <ul>
-    <li>No uso cookies de publicidad ni de seguimiento.</li>
-    <li>Para mantener tu sesión abierta y recordar qué negocio estabas viendo, el panel guarda información en el almacenamiento local (<code>localStorage</code>) de tu navegador. Se borra al cerrar sesión o al limpiar los datos del sitio.</li>
-    <li>En las páginas públicas (portada, privacidad y términos) mido visitas con <a href="https://plausible.io" target="_blank" rel="noopener">Plausible</a>, que no usa cookies ni crea perfiles individuales. Dentro del panel no hay analítica.</li>
-  </ul>
-
-  <h3>A6. Cuánto tiempo se conservan</h3>
-  <p>Mientras tu cuenta esté activa. Si pides cerrarla, elimino los datos de tu cuenta y de tu negocio, salvo lo que una ley me obligue a conservar. Los respaldos del proveedor pueden mantener copias durante un tiempo limitado antes de borrarse.</p>
-
-  <h3>A7. Seguridad</h3>
-  <p>La conexión con la plataforma va cifrada (HTTPS) y el acceso a los datos está limitado por cuenta, negocio y rol. Ningún sistema es completamente infalible: si ocurre un incidente que afecte tus datos, te lo comunicaré. Cuida tu contraseña y no la compartas; usa una distinta de la de otros sitios.</p>
-
-  <h3>A8. Tus derechos</h3>
-  <p>Puedes pedirme conocer los datos personales que tengo sobre ti, actualizarlos, rectificarlos o eliminarlos, y revocar la autorización para usarlos, según la Ley 1581 de 2012 de Colombia y sus normas complementarias. También puedes pedir una copia de los datos de tu negocio. Escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a> y te respondo por el mismo medio. Si eres cliente de un negocio que usa la plataforma y quieres ejercer tus derechos sobre tus datos, dirígete primero a ese negocio, que es quien los administra.</p>
-
-  <h3>A9. Menores</h3>
-  <p>La plataforma está dirigida a negocios y personas mayores de 18 años. No recojo datos de menores de forma intencionada.</p>
+  <h3>A4. Derechos</h3>
+  <p>Los datos son de su dueño, quien puede consultarlos, corregirlos, exportarlos (hay un botón para descargar los movimientos en CSV) y eliminarlos en cualquier momento. Para cualquier consulta, escribe a <a href={`mailto:${OFERTA.email}`}>{OFERTA.email}</a>, según la Ley 1581 de 2012 de Colombia.</p>
 
   <h2 id="servicios">Parte B · Servicios (auditoría de pagos y desarrollo fintech)</h2>
 

@@ -1,5 +1,5 @@
 import { useState, type SyntheticEvent } from 'react';
-import { supabase, ok } from './lib/supabase';
+import { supabase } from './lib/supabase';
 import { useApp } from './state';
 import { Campo, Entrada, mensajeError } from './ui';
 
@@ -47,7 +47,10 @@ export function Auth() {
         if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
       } else if (modo === 'registro') {
         const { data, error } = await supabase.auth.signUp({ email, password: clave, options: { data: { nombre: nombre.trim() } } });
-        if (error) throw new Error(error.message);
+        if (error) {
+          // El registro se cierra en la base de datos después de la primera cuenta; GoTrue lo muestra como error genérico.
+          throw new Error(/database error saving new user/i.test(error.message) ? 'El registro está cerrado: esta aplicación es privada.' : error.message);
+        }
         // Con confirmación por correo activada no hay sesión todavía.
         if (!data.session) setInfo('Te enviamos un correo para confirmar tu cuenta. Ábrelo y vuelve a entrar.');
       } else {
@@ -63,8 +66,8 @@ export function Auth() {
   }
 
   const titulos: Record<Modo, [string, string]> = {
-    entrar: ['Entrar a tu negocio', 'Ventas, inventario y clientes en un solo lugar.'],
-    registro: ['Crea tu cuenta', '14 días de prueba, sin tarjeta.'],
+    entrar: ['Entrar a tus finanzas', 'Tus gastos, cuentas y pagos en un solo lugar.'],
+    registro: ['Crea tu cuenta', 'App privada: el registro se cierra con la primera cuenta.'],
     olvide: ['Recuperar contraseña', 'Te enviamos un enlace al correo.']
   };
 
@@ -152,56 +155,6 @@ export function NuevaClave() {
           Guardar y entrar
         </button>
       </form>
-    </Marco>
-  );
-}
-
-export function CrearNegocio({ onVolver }: { onVolver?: () => void }) {
-  const { recargarNegocios, cerrarSesion } = useApp();
-  const [nombre, setNombre] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [enviando, setEnviando] = useState(false);
-
-  async function enviar(e: SyntheticEvent) {
-    e.preventDefault();
-    setEnviando(true);
-    setError(null);
-    try {
-      const id = await ok(supabase.rpc('crear_negocio', { p_nombre: nombre }));
-      await recargarNegocios(id as string);
-      onVolver?.();
-    } catch (err) {
-      setError(mensajeError(err));
-      setEnviando(false);
-    }
-  }
-
-  return (
-    <Marco titulo="Crea tu negocio" subtitulo="Es el espacio donde vivirán tus productos, clientes y ventas.">
-      <form onSubmit={enviar} className="form">
-        <Campo etiqueta="Nombre del negocio">
-          <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required minLength={2} maxLength={80} autoFocus />
-        </Campo>
-        {error && (
-          <p className="msg-error" role="alert">
-            {error}
-          </p>
-        )}
-        <button className="btn btn-pri btn-bloque" disabled={enviando}>
-          {enviando ? 'Creando…' : 'Crear negocio'}
-        </button>
-      </form>
-      <div className="auth-pie">
-        {onVolver ? (
-          <button type="button" className="enlace" onClick={onVolver}>
-            Volver
-          </button>
-        ) : (
-          <button type="button" className="enlace" onClick={cerrarSesion}>
-            Cerrar sesión
-          </button>
-        )}
-      </div>
     </Marco>
   );
 }
