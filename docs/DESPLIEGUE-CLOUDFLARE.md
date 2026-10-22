@@ -2,7 +2,9 @@
 
 El sitio es estático: Astro genera `dist/` y Cloudflare lo sirve como un Worker con archivos estáticos. Desplegar es compilar y subir desde tu computador, sin pasar por GitHub Actions.
 
-> Lo dejé preparado y validado en local (`wrangler deploy --dry-run` lee los 65 archivos de `dist/`, y con `wrangler dev` comprobé rutas, 404 y encabezados). **No pude desplegar de verdad**: el entorno donde trabajo no tiene acceso a tu cuenta de Cloudflare ni a su red. Los pasos con tu cuenta los haces tú.
+> **Estado (22 de octubre de 2026):** dsltdev.com se sirve desde el Worker `dsltdev-sitio` (dominio personalizado en `wrangler.jsonc`). El despliegue es `npm run deploy` desde tu computador. GitHub Actions ya no despliega: se eliminó `deploy.yml` y `public/CNAME`.
+>
+> El panel (`/app/`) se compila con `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`. Si faltan, muestra «El panel abre pronto». Para desplegar **sin** el Supabase local, deja esas variables vacías: `PUBLIC_SUPABASE_URL= PUBLIC_SUPABASE_ANON_KEY= npm run deploy`. Con el `.env` local compilaría contra `localhost`.
 
 ## Qué hay en el repositorio
 
@@ -53,9 +55,8 @@ Cloudflare crea el registro DNS y emite el certificado HTTPS. **Desde ese moment
 
 Solo después de comprobar dsltdev.com en vivo:
 
-1. En el repositorio: Settings → Pages → desactiva la publicación (o déjala hasta estar seguro).
-2. Borra `public/CNAME` (solo servía a GitHub Pages).
-3. Desactiva o elimina `.github/workflows/deploy.yml` para que no sigan apareciendo despliegues fallidos.
+1. ✅ Hecho: `public/CNAME` y `.github/workflows/deploy.yml` eliminados.
+2. Pendiente: Settings → Pages → desactiva la publicación. **Antes**, crea en Cloudflare una regla de redirección de `www.dsltdev.com` a `https://dsltdev.com` (Rules → Redirect Rules); hoy ese redireccionamiento lo hace GitHub Pages y se perdería.
 
 El código puede seguir en git: es tu historial y tu respaldo, aunque ya no sea el camino al despliegue.
 

@@ -3,8 +3,11 @@ import { createClient, type PostgrestError } from '@supabase/supabase-js';
 const url = import.meta.env.PUBLIC_SUPABASE_URL as string | undefined;
 const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string | undefined;
 
-if (!url || !key) {
-  console.error('Faltan PUBLIC_SUPABASE_URL y PUBLIC_SUPABASE_ANON_KEY (copia .env.example a .env).');
+/** false si el sitio se compiló sin backend (por ejemplo, un despliegue de prueba): el panel avisa en vez de fallar. */
+export const configurado = Boolean(url && key);
+
+if (!configurado) {
+  console.warn('Faltan PUBLIC_SUPABASE_URL y PUBLIC_SUPABASE_ANON_KEY (copia .env.example a .env).');
 }
 
 export const supabase = createClient(url ?? 'http://localhost:8000', key ?? 'sin-clave', {

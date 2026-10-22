@@ -12,8 +12,7 @@
   },
   // La primera publicación sale solo en la dirección de prueba *.workers.dev.
   "workers_dev": true,
-  "preview_urls": true
-  // El dominio real se conecta DESPUÉS de revisar la dirección de prueba (pasos en la guía).
-  // Al descomentar esto y desplegar, Cloudflare crea el registro DNS y dsltdev.com pasa a servirse desde aquí:
-  // "routes": [{ "pattern": "dsltdev.com", "custom_domain": true }]
+  "preview_urls": true,
+  // Con esta ruta, Cloudflare crea el registro DNS y dsltdev.com se sirve desde este Worker.
+  "routes": [{ "pattern": "dsltdev.com", "custom_domain": true }]
 }

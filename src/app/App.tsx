@@ -4,6 +4,7 @@ import { AvisosProvider, Cargando } from './ui';
 import { href, useRuta } from './router';
 import { Auth, CrearNegocio, NuevaClave } from './Auth';
 import { ROLES } from './lib/format';
+import { configurado } from './lib/supabase';
 import Resumen from './pages/Resumen';
 import Ventas from './pages/Ventas';
 import Productos from './pages/Productos';
@@ -90,8 +91,27 @@ function Panel() {
   );
 }
 
+function NoDisponible() {
+  return (
+    <main className="auth">
+      <div className="auth-tarjeta">
+        <a className="marca" href="/">
+          <span className="marca-punto" aria-hidden="true" />
+          dsltdev
+        </a>
+        <h1>El panel abre pronto</h1>
+        <p className="auth-sub">Estamos terminando de conectar el servicio. Vuelve en unos días o escríbenos si quieres que te avisemos.</p>
+        <div className="auth-pie">
+          <a href="/">Volver al inicio</a>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 function Raiz() {
   const { session, listo, recuperando, negocio, cargandoNegocios } = useApp();
+  if (!configurado) return <NoDisponible />;
   if (!listo) return <Cargando />;
   if (recuperando) return <NuevaClave />;
   if (!session) return <Auth />;
