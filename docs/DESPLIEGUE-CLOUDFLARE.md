@@ -4,7 +4,7 @@ El sitio es estático: Astro genera `dist/` y Cloudflare lo sirve como un Worker
 
 > **Estado (22 de octubre de 2026):** dsltdev.com se sirve desde el Worker `dsltdev-sitio` (dominio personalizado en `wrangler.jsonc`). El despliegue es `npm run deploy` desde tu computador. GitHub Actions ya no despliega: se eliminó `deploy.yml` y `public/CNAME`.
 >
-> El panel (`/app/`) se compila con `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`. Si faltan, muestra «El panel abre pronto». Para desplegar **sin** el Supabase local, deja esas variables vacías: `PUBLIC_SUPABASE_URL= PUBLIC_SUPABASE_ANON_KEY= npm run deploy`. Con el `.env` local compilaría contra `localhost`.
+> El panel (`/app/`) se conecta al proyecto de Supabase `dsltdev-plataforma` (São Paulo). Sus dos valores públicos (`PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`) están en `.env.production`, que git ignora: `npm run deploy` lo usa solo. Si falta ese archivo, el panel muestra «El panel abre pronto». El `.env` de desarrollo apunta al Supabase local de Docker y no se usa al compilar para producción.
 
 ## Qué hay en el repositorio
 
